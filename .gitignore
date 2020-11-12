@@ -11,4 +11,6 @@
 .hg/
 
 /build/
+/site/
 /pom.xml
+

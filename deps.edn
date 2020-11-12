@@ -1,17 +1,22 @@
 {:paths ["src" "resources"]
  :deps {org.clojure/clojure {:mvn/version "1.10.1"}
         stasis/stasis {:mvn/version "2.5.0"}
+        ring/ring-core {:mvn/version "1.8.2"}
+        ring/ring-jetty-adapter {:mvn/version "1.8.2"}
+        integrant/integrant {:mvn/version "0.8.0"}
+        integrant/repl {:mvn/version "0.3.2"}
         }
  :aliases
  {:dev {:extra-paths ["dev"]}
+  :export {:exec-fn stelabrego.stel-codes/export}
+  :serve {:exec-fn stelabrego.stel-codes/serve}
   :test {:extra-paths ["test"]
          :extra-deps {org.clojure/test.check {:mvn/version "1.0.0"}}}
-  :runner
-  {:extra-deps {com.cognitect/test-runner
-                {:git/url "https://github.com/cognitect-labs/test-runner"
-                 :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}}
-   :main-opts ["-m" "cognitect.test-runner"
-               "-d" "test"]}
+  :runner {:extra-deps {com.cognitect/test-runner
+                        {:git/url "https://github.com/cognitect-labs/test-runner"
+                         :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}}
+           :main-opts ["-m" "cognitect.test-runner"
+                       "-d" "test"]}
   :uberjar {:extra-deps {seancorfield/depstar {:mvn/version "1.1.128"}}
             :main-opts ["-m" "hf.depstar.uberjar" "stel-codes.jar"
                         "-C" "-m" "stelabrego.stel-codes"]}}}
