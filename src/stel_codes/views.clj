@@ -2,9 +2,7 @@
   (:require [hiccup.page :as hp]
             [hiccup2.core :refer [html]]
             [hiccup.element :as he]
-            [hiccup.form :as hf]
-            )
-  )
+            [hiccup.form :as hf]))
 
 (defn layout [title & content]
   (->
@@ -26,3 +24,7 @@
           ]
          [:body content])
    (str)))
+
+(defn home-page []
+  (layout "stel.codes"
+          [:h1 "suppy sups"]))

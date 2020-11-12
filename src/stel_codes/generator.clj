@@ -1,10 +1,11 @@
 (ns stel-codes.generator
   (:gen-class)
   (:require [stasis.core :as stasis]
+            [stel-codes.views :as views]
             [ring.adapter.jetty :as jetty]))
 
 (defn get-pages []
-  {"/index.html" "<h1>Welcome!</h1><p>poophi pooooop ddfdf</p>"})
+  {"/index.html" (views/home-page)})
 
 (def target-dir "site")
 
