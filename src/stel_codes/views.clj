@@ -25,6 +25,7 @@
          [:body content])
    (str)))
 
-(defn home-page []
+(defn home-page [context]
   (layout "stel.codes"
-          [:h1 "suppy sups"]))
+          [:h1 "suppy"]
+          (he/image "/assets/background.jpg")))
