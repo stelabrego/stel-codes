@@ -12,6 +12,7 @@
           [:meta {:charset "utf-8"}]
           [:meta {:http-equiv "X-UA-Compatible" :content "IE=edge"}]
           [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
+          (hp/include-css "/assets/reset.css")
           (hp/include-css "/assets/main.css")
           ; [:link {:rel "shortcut icon" :href "/assets/favicon.ico" :type "image/x-icon"}]
           ; (hp/include-css "/assets/minireset.css")
@@ -27,23 +28,23 @@
    (str)))
 
 (defn header []
-[:header
-  [:nav
-   [:a#logoLink
-    {:href "/"} (raw (slurp "resources/svg/code.svg"))]
-   [:a#navName {:href "/"} "Stel Abrego"]
-   [:div#navBar.navBar-closed
-    [:ul.nav-ul-closed
-     [:li [:a {:href "/portfolio"} "Portfolio"]]
-     [:li [:a {:href "/resume"} "Résumé"]]
-     [:li [:a {:href "/tutoring"} "Tutoring"]]
-     [:li [:a {:href "/activism"} "Activism"]]
-     [:li [:a {:href "mailto:stelabrego@icloud.com"} "Contact"]]]]]]
-  )
-
-
+  [:header
+   [:nav
+    (he/link-to {:id "logoLink"} "/" (raw (slurp "resources/svg/code.svg")))
+    (he/link-to {:id "navName"} "/" "stel.codes")
+    [:div#navBar.navBar-closed
+     (he/unordered-list
+      {:class "nav-ul-closed"}
+      [(he/link-to "/portfolio" "Portfolio")
+       (he/link-to "/resume" "Resume")
+       (he/link-to "/tutoring" "Tutoring")
+       (he/mail-to "stel@stel.codes" "E-Mail")])]]])
 
 (defn home-page [context]
   (layout "stel.codes"
-         (header) 
-          ))
+          (header)
+          [:section.slideInUp
+           [:p "programming tutor."]
+           [:p "musician."]
+           [:p "fullstack developer."]
+           [:img.hero-selfie {:src "/assets/img/selfie.jpeg"}]]))

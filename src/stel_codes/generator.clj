@@ -1,6 +1,8 @@
 (ns stel-codes.generator
   (:gen-class)
   (:require [stasis.core :as stasis]
+            [clojure.java.io :as io]
+            [clojure.edn :as edn]
             [stel-codes.views :as views]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.content-type :refer [wrap-content-type]]
@@ -8,13 +10,32 @@
             [optimus.assets :as assets]
             [optimus.optimizations :as optimizations]
             [optimus.strategies :refer [serve-live-assets]]
-            [optimus.export]))
+            [optimus.export])
+  (:import [java.time LocalDate]))
 
 (defn get-assets []
   (assets/load-assets "public" [#"assets/.*"]))
 
+(defn process-raw-content [item]
+  (let [
+        results (re-matches #"(?s)(\{.*\})(?:\W*)(.*)" item)
+        ]
+    results
+    ))
+
+(defn load-content []
+  (let [content-files (.listFiles (io/file "resources/content/"))
+        content-raw (map slurp content-files)]
+
+    (map process-raw-content content-raw)))
+
+(defn get-portfolio-pages []
+  (stasis/slurp-directory "resources/content/portfolio/" #"/.md$"))
+
 (defn get-pages []
-  {"/index.html" (fn [context] (views/home-page context))})
+  (stasis/merge-page-sources
+   {"/index.html" (fn [context] (views/home-page context))
+    "/portfolio.html" (fn [context])}))
 
 (def site-config {})
 
@@ -37,5 +58,6 @@
    (export)))
 
 (comment
+  (load-content)
   (serve)
   (export))
