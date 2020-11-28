@@ -10,44 +10,52 @@
             [optimus.assets :as assets]
             [optimus.optimizations :as optimizations]
             [optimus.strategies :refer [serve-live-assets]]
-            [optimus.export])
+            [optimus.export]
+            [markdown.core :refer [md-to-html-string]])
+
   (:import [java.time LocalDate]))
+
+; (defrecord Page [uri title])
 
 (defn get-assets []
   (assets/load-assets "public" [#"assets/.*"]))
 
-(defn process-raw-content [item]
-  (let [
-        results (re-matches #"(?s)(\{.*\})(?:\W*)(.*)" item)
-        ]
-    results
-    ))
+(defn string->page [content-string]
+  (let [[_whole-string edn-string md-string] (re-matches #"(?s)(\{.*\})(?:\W*)(.*)" content-string)
+        html-string (md-to-html-string md-string)]
+    (->
+     (edn/read-string edn-string)
+     (assoc :body html-string))))
 
-(defn load-content []
-  (let [content-files (.listFiles (io/file "resources/content/"))
-        content-raw (map slurp content-files)]
+(defn generate-markup-pages []
+  (->>
+   (.listFiles (io/file "resources/content/"))
+   (map slurp)
+   (map string->page)))
 
-    (map process-raw-content content-raw)))
+(defn generate-all-pages []
+  (let [markup-pages (generate-markup-pages)]
+    (conj
+     markup-pages
+     {:category :home :uri "/index.html" :markup-pages markup-pages}
+     {:category :project-index :uri "/projects.html" :title "projects" :markup-pages markup-pages}
+     {:category :404 :uri "/404.html" :title "404"})))
 
-(defn get-portfolio-pages []
-  (stasis/slurp-directory "resources/content/portfolio/" #"/.md$"))
-
-(defn get-pages []
-  (stasis/merge-page-sources
-   {"/index.html" (fn [context] (views/home-page context))
-    "/portfolio.html" (fn [context])}))
-
-(def site-config {})
+(defn generate-index []
+  (->>
+   (generate-all-pages)
+   (map #([(:uri %) (fn [_] (views/render-page %))]))
+   (into {})))
 
 (def app (->
-          (stasis/serve-pages get-pages site-config)
+          (stasis/serve-pages generate-index)
           (optimus/wrap get-assets optimizations/all serve-live-assets)
           wrap-content-type))
 
 (defn export
   ([]
    (let [assets (optimizations/all (get-assets) {})
-         pages (get-pages)
+         pages (generate-index)
          target-dir "site"]
      (println "Building site...")
      (stasis/empty-directory! target-dir)

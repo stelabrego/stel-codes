@@ -1,4 +1,5 @@
 { :title "Leftist Event Planning Web App"
+  :uri "/projects/event-planning-app.html"
   :date "2019-11-08"
   :repo "flittermouse"
   :tags ["javascript", "node", "postgres", "redis", "docker", "sass"]
