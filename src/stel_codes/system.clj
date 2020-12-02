@@ -16,4 +16,3 @@
 ;; this is why I'm using integrant here
 (defmethod ig/halt-key! :adapter/jetty [_ server]
   (.stop server))
-

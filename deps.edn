@@ -12,7 +12,8 @@ markdown-clj/markdown-clj {:mvn/version "1.10.5"}
  :aliases
  {:dev {:extra-paths ["dev"]}
   :export {:exec-fn stelabrego.stel-codes/export}
-  :serve {:exec-fn stelabrego.stel-codes/serve}
+  :serve {:exec-fn stelabrego.stel-codes/serve
+          }
   :test {:extra-paths ["test"]
          :extra-deps {org.clojure/test.check {:mvn/version "1.0.0"}}}
   :runner {:extra-deps {com.cognitect/test-runner

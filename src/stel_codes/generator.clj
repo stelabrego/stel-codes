@@ -14,7 +14,6 @@
             [markdown.core :refer [md-to-html-string]])
 
   (:import [java.time LocalDate]))
-
 ; (defrecord Page [uri title])
 
 (defn get-assets []
