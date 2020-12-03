@@ -1,10 +1,9 @@
 { :title "Self Care Android App"
-  :class "project"
+  :uri "/projects/self-care-android-app.html"
   :date "2019-09-25"
   :repo "self-care-android-app"
   :tags ["java" "android"]
-  :slug "self-care-android-app" }
-
+}
 <img src='https://media.giphy.com/media/h6yEGXVM4wGYe2Zohm/giphy.gif' class='mobile-phone'>
 
 Inspired by apps like Reflectly, I created an Android app simply named "Self Care" with a mission to help people with mental illness cope with difficult experiences.

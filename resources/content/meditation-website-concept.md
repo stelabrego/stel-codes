@@ -1,18 +1,11 @@
----
-title: Meditation Website Concept
-date: 2019-03-02T19:17:16.588Z
-repo: meditation-website-concept
-demo: 'https://meditation-website-concept.stelabrego.com'
-tags:
-  - go
-  - javascript
-  - markdown
-  - html
-  - css
-  - netlify cms backend
-slug: meditation-website-concept
-draft: true
----
+{
+:title "Meditation Website Concept"
+:uri "/projects/meditation-website.html"
+:date "2019-03-02"
+:repo "meditation-website-concept"
+:demo "https://meditation-website-concept.stelabrego.com"
+:tags ["go" "javascript" "css"]
+}
 In late 2018, my friend Katy made a Facebook post about how she was looking for guided meditations made by queer people, but she couldn't find any. She asked her queer friends to record guided meditations for her. She asked me to make a website to host the submitted mediations, and I was so excited to take on the project.
 
 I created a hugo-generated static site complete with the Netlfiy CMS backend so Katy could edit the site content easily. I used the Masonry Layout library to dynamically place the meditation tiles on the screen.

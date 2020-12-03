@@ -1,14 +1,10 @@
----
-title: Portfolio Website
-date: 2019-02-27T18:32:20.407Z
-repo: portfolio
-tags:
-  - go
-  - javascript
-  - markdown
-  - css
-  - html
----
+{
+:title "Old Portfolio Website"
+:uri "/projects/old-portfolio.html"
+:date "2019-02-27"
+:repo "portfolio"
+:tags ["go" "javascript" "css"]
+}
 
 <img class='mobile-phone' src='https://media.giphy.com/media/TiO9awohTkrWgza9Gy/giphy.gif'>
 

@@ -37,13 +37,13 @@
     (conj
      markup-pages
      {:category :home :uri "/index.html" :markup-pages markup-pages}
-     {:category :project-index :uri "/projects.html" :title "projects" :markup-pages markup-pages}
+     {:category :project-index :uri "/projects/index.html" :title "projects" :markup-pages markup-pages}
      {:category :404 :uri "/404.html" :title "404"})))
 
 (defn generate-index []
   (->>
    (generate-all-pages)
-   (map #([(:uri %) (fn [_] (views/render-page %))]))
+   (map (fn [page] {(:uri page) (fn [_] (views/render-page page))}))
    (into {})))
 
 (def app (->
@@ -65,6 +65,7 @@
    (export)))
 
 (comment
+  (generate-index)
   (load-content)
   (serve)
   (export))

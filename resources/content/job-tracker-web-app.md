@@ -1,6 +1,6 @@
 {
   :title "Job Tracker Web App"
-  :category :project
+  :uri "/projects/job-tracker.html"
   :date "2019-03-02"
   :repo "job-tracker"
   :tags ["php", "mysql", "javascript"]

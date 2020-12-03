@@ -37,7 +37,7 @@
     [:div#navBar.navBar-closed
      (he/unordered-list
       {:class "nav-ul-closed"}
-      [(he/link-to "/portfolio" "Portfolio")
+      [(he/link-to "/projects" "Projects")
        (he/link-to "/resume" "Resume")
        (he/link-to "/tutoring" "Tutoring")
        (he/mail-to "stel@stel.codes" "E-Mail")])]]])
@@ -45,9 +45,9 @@
 (defn page->view-category [{:keys [uri]}]
   (cond
     (= uri "/index.html") :home
-    (starts-with? uri "/projects/") :project
-    (= uri "/projects.html") :project-index
     (= uri "/404.html") :404
+    (= uri "/projects/index.html") :project-index
+    (starts-with? uri "/projects/") :project
     :else (throw (Exception. (str "Cannot find view for uri:" uri)))))
 
 (defmulti render-page page->view-category)
@@ -67,7 +67,7 @@
            [:h1 (:title page-data)]
            (->>
              (filter #(= :project (page->view-category %)) (:markup-pages page-data))
-             (map #([:h2 (:title %)]))
+             (map (fn [project] [:h2 (:title project)]))
              )
            ]))
 
