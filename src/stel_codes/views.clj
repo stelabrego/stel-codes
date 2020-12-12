@@ -18,6 +18,16 @@
 (defn footer []
   [:footer "Made by stel :)"])
 
+(defn window [title content]
+  [:section.window
+   [:div.top
+    (raw (slurp "resources/svg/bars.svg"))
+    [:h1 title]
+    (raw (slurp "resources/svg/bars.svg"))]
+   [:div.content content]
+   ]
+  )
+
 (defn layout [{:keys [title]} & content]
   (->
    (html {:lang "en"}
@@ -68,7 +78,13 @@
              (map (fn [project] [:h2 (:title project)])))))
 
 (defmethod render-page :home [page-data]
-  (layout page-data))
+  (layout page-data
+          (window "projects" (->>
+             (filter #(= :project (page->view-category %)) (:markup-pages page-data))
+             (map (fn [project] (he/link-to (:uri project) (:title project))))
+             (he/ordered-list)
+             ))
+          ))
 
 (defmethod render-page :404 [page-data]
   (layout page-data

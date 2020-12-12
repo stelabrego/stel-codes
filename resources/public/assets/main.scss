@@ -24,7 +24,7 @@ $palette: (
         darker: #2a303b,
         dark: #3b4351,
         base: #586374,
-        light: #bdbdbd,
+        light: #cfcfcf,
         lighter: #e5e5e5
     ),
     violet: (
@@ -43,14 +43,16 @@ body {
   display: grid;
   grid-template-rows: max-content 1fr max-content;
   font-family: "Lucida Grande";
-  background: url("/assets/img/wallpaper.jpg");
-  background-repeat: round;
-  background-attachment: fixed;
   min-height: 100vh;
+  background-color: #670dbb;
+  background-image: url("/assets/img/wallpaper.svg");
+  background-attachment: fixed;
+  background-size: cover;   
+  background-position: center;
 }
 
 a {
-  color: color(violet, base);
+  color: color(violet, dark);
   text-decoration: none;
 }
 
@@ -65,7 +67,7 @@ a {
 nav {
   @extend %beveled;
   height: 30px;
-  background-color: color(grey, lighter);
+  background-color: color(grey, light);
   display: grid;
   grid-template-columns: max-content 1fr max-content;
   grid-template-areas: "brand . social";
@@ -92,6 +94,35 @@ nav {
     li {
       display: inline-block;
       margin: 0 .7rem;
+    }
+  }
+}
+
+main {
+  padding: 1rem;
+  section.window {
+    @extend %beveled;
+    display: inline-block;
+    // max-width: 600px;
+    // max-height: 400px;
+    padding: 0 .5rem .5rem .5rem;
+    background-color: color(grey, light);
+    .top {
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: space-between;
+      align-items: center;
+      .window-bars {
+        height: 30px;
+        width: 125px;
+      }
+    }
+    .content {
+      padding: .3rem;
+      background-color: color(grey,lighter);
+      ol {
+        list-style-position: inside;
+      }
     }
   }
 }
