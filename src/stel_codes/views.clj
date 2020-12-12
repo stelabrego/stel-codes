@@ -32,15 +32,12 @@
 (defn header []
   [:header
    [:nav
-    (he/link-to {:id "logoLink"} "/" (raw (slurp "resources/svg/code.svg")))
-    (he/link-to {:id "navName"} "/" "stel.codes")
-    [:div#navBar.navBar-closed
+    (he/link-to {:id "brand"} "/" (raw (slurp "resources/svg/rainbow-apple.svg") "stel.codes"))
      (he/unordered-list
-      {:class "nav-ul-closed"}
-      [(he/link-to "/projects" "Projects")
-       (he/link-to "/resume" "Resume")
-       (he/link-to "/tutoring" "Tutoring")
-       (he/mail-to "stel@stel.codes" "E-Mail")])]]])
+       {:id "social"}
+      [(he/link-to "https://github.com/stelcodes" "Github")
+       (he/link-to "https://twitter.com/stel_codes" "Twitter")
+       (he/mail-to "stel@stel.codes" "Email")])]])
 
 (defn page->view-category [{:keys [uri]}]
   (cond
@@ -72,12 +69,7 @@
 
 (defmethod render-page :home [page-data]
   (layout page-data
-          (header)
-          [:section.slideInUp
-           [:p "programming tutor."]
-           [:p "musician."]
-           [:p "fullstack developer."]
-           [:img.hero-selfie {:src "/assets/img/selfie.jpeg"}]]))
+          (header)))
 
 (defmethod render-page :404 [page-data]
   (layout page-data

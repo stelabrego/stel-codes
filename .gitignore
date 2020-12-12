@@ -14,4 +14,5 @@
 /site/
 /pom.xml
 /Session.vim
+*.DS_Store
 
