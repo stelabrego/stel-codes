@@ -63,13 +63,12 @@
 
 (defmethod render-page :project-index [page-data]
   (layout page-data
+          (header)
           [:main
            [:h1 (:title page-data)]
            (->>
              (filter #(= :project (page->view-category %)) (:markup-pages page-data))
-             (map (fn [project] [:h2 (:title project)]))
-             )
-           ]))
+             (map (fn [project] [:h2 (:title project)])))]))
 
 (defmethod render-page :home [page-data]
   (layout page-data

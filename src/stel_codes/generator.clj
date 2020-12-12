@@ -66,6 +66,4 @@
 
 (comment
   (generate-index)
-  (load-content)
-  (serve)
   (export))
