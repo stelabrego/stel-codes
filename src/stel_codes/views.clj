@@ -5,6 +5,19 @@
             [clojure.string :refer [starts-with?]]
             [hiccup.form :as hf]))
 
+(defn header []
+  [:header
+   [:nav
+    (he/link-to {:id "brand"} "/" (raw (slurp "resources/svg/rainbow-apple.svg") "stel.codes"))
+     (he/unordered-list
+       {:id "social"}
+      [(he/link-to "https://github.com/stelcodes" "Github")
+       (he/link-to "https://twitter.com/stel_codes" "Twitter")
+       (he/mail-to "stel@stel.codes" "Email")])]])
+
+(defn footer []
+  [:footer "Made by stel :)"])
+
 (defn layout [{:keys [title]} & content]
   (->
    (html {:lang "en"}
@@ -26,18 +39,8 @@
           ;     :defer "defer",
           ;     :async "async"}])
           ]
-         [:body content])
+         [:body (header) [:main content] (footer)])
    (str)))
-
-(defn header []
-  [:header
-   [:nav
-    (he/link-to {:id "brand"} "/" (raw (slurp "resources/svg/rainbow-apple.svg") "stel.codes"))
-     (he/unordered-list
-       {:id "social"}
-      [(he/link-to "https://github.com/stelcodes" "Github")
-       (he/link-to "https://twitter.com/stel_codes" "Twitter")
-       (he/mail-to "stel@stel.codes" "Email")])]])
 
 (defn page->view-category [{:keys [uri]}]
   (cond
@@ -51,27 +54,22 @@
 
 (defmethod render-page :project [page-data]
   (layout page-data
-          [:main
-           [:h1 (:title page-data)]
-           (when (:tags page-data)
-             [:div.code-tag-container
-              (for [tag (:tags page-data)]
-                [:div.code-tag tag])])]))
+         [:h1 (:title page-data)]
+         (when (:tags page-data)
+           [:div.code-tag-container
+            (for [tag (:tags page-data)]
+              [:div.code-tag tag])])))
 
 (defmethod render-page :project-index [page-data]
   (layout page-data
-          (header)
-          [:main
            [:h1 (:title page-data)]
            (->>
              (filter #(= :project (page->view-category %)) (:markup-pages page-data))
-             (map (fn [project] [:h2 (:title project)])))]))
+             (map (fn [project] [:h2 (:title project)])))))
 
 (defmethod render-page :home [page-data]
-  (layout page-data
-          (header)))
+  (layout page-data))
 
 (defmethod render-page :404 [page-data]
   (layout page-data
-          (header)
           [:h1 "404 ;-;"]))

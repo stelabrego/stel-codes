@@ -24,8 +24,8 @@ $palette: (
         darker: #2a303b,
         dark: #3b4351,
         base: #586374,
-        light: #c3d5ec,
-        lighter: #edf5ff
+        light: #bdbdbd,
+        lighter: #e5e5e5
     ),
     violet: (
         dark: #996ddb,
@@ -41,7 +41,12 @@ $palette: (
 
 body {
   display: grid;
+  grid-template-rows: max-content 1fr max-content;
   font-family: "Lucida Grande";
+  background: url("/assets/img/wallpaper.jpg");
+  background-repeat: round;
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 a {
@@ -49,24 +54,23 @@ a {
   text-decoration: none;
 }
 
-%embossed-heavy {
-  border: 1px solid rgba(0,0,0,0.1);
+%beveled {
   box-shadow: 
-    inset 0 2px 3px rgba(255,255,255,0.3),
-    inset 0 -2px 3px rgba(0,0,0,0.3),
-    0 1px 1px rgba(255,255,255,0.9);
+    // 0 1px 2px #fff, /*bottom external highlight*/
+    // 0 -1px 1px #666, /*top external shadow*/ 
+    inset 0 -1px 5px rgba(0,0,0,0.7), /*bottom internal shadow*/ 
+    inset 0 1px 1px rgba(255,255,255,0.8); /*top internal highlight*/
 }
 
 nav {
-  // @extend %embossed-heavy;
-  background: linear-gradient(to bottom, rgba(230,230,230,1) 0%, rgba(163,163,163,1) 100%);
+  @extend %beveled;
   height: 30px;
-  background-color: color(grey, light);
+  background-color: color(grey, lighter);
   display: grid;
   grid-template-columns: max-content 1fr max-content;
   grid-template-areas: "brand . social";
   align-items: center;
-  box-shadow: 0px 0px 10px 4px rgba(148,148,148,1),-4px -6px 15px 4px rgba(119,119,119,1),5px 6px 15px 3px rgba(165,165,165,1);
+  // box-shadow: 0px 0px 10px 4px rgba(148,148,148,1),-4px -6px 15px 4px rgba(119,119,119,1),5px 6px 15px 3px rgba(165,165,165,1);
   a {
     color: color(black, base);
   }
@@ -87,7 +91,7 @@ nav {
     align-items: center;
     li {
       display: inline-block;
-      margin: 0 1rem;
+      margin: 0 .7rem;
     }
   }
 }
