@@ -30,11 +30,13 @@ $palette: (
     grey: (
         darker: #2a303b,
         dark: #3b4351,
-        base: #586374,
+        base: #687384,
         light: #cfcfcf,
-        lighter: #e5e5e5
+        lighter: #e5e5e5,
+        lightest: #f5f5f5
     ),
     violet: (
+        darker: #674dbb,
         dark: #996ddb,
         base: #c398fe,
         light: #e2ccfe
@@ -51,7 +53,7 @@ body {
   grid-template-rows: max-content 1fr max-content;
   font-family: "Lucida Grande", sans-serif;
   min-height: 100vh;
-  background-color: #670dbb;
+  background-color: color(violet,darker);
   background-image: url("/assets/img/wallpaper.svg");
   background-attachment: fixed;
   background-size: cover;   
@@ -59,7 +61,7 @@ body {
 }
 
 a {
-  color: color(violet, dark);
+  color: color(violet, darker);
   text-decoration: none;
 }
 
@@ -67,24 +69,30 @@ a {
   box-shadow: 
     // 0 1px 2px #fff, /*bottom external highlight*/
     // 0 -1px 1px #666, /*top external shadow*/ 
-    inset 0 -1px 5px rgba(0,0,0,0.7), /*bottom internal shadow*/ 
+    inset 0 -1px 5px rgba(0,0,0,0.4), /*bottom internal shadow*/ 
     inset 0 1px 1px rgba(255,255,255,0.8); /*top internal highlight*/
+  border-radius: 4px;
+}
+
+%text-shadowed {
+  text-shadow: 0 .01em .1em rgba(0, 0, 0, 0.5), 
+               0 -.01em .1em rgba(255, 255, 255, .5);
 }
 
 nav {
   @extend %beveled;
+  @extend %text-shadowed;
   background-color: color(grey, light);
   font-family: 'virtue', sans-serif;
   display: grid;
   grid-template-columns: max-content 1fr max-content;
   grid-template-areas: "brand . social";
   align-items: center;
-  // box-shadow: 0px 0px 10px 4px rgba(148,148,148,1),-4px -6px 15px 4px rgba(119,119,119,1),5px 6px 15px 3px rgba(165,165,165,1);
   a {
     color: color(black, base);
     height: 30px;
     &:hover {
-      background-color: grey;
+      background-color: rgba(0,0,0,.1);
     }
   }
   #brand {
@@ -122,6 +130,7 @@ main {
     padding: 0 .5rem .5rem .5rem;
     background-color: color(grey, light);
     .top {
+      @extend %text-shadowed;
       font-family: 'virtue', sans-serif;
       display: grid;
       grid-auto-flow: column;
@@ -133,13 +142,57 @@ main {
       }
     }
     .content {
+      @extend %beveled;
       padding: .3rem;
       background-color: color(grey,lighter);
       ol {
         list-style-position: inside;
+        li {
+          margin: .7rem;
+          .pitch {
+            color: color(grey, base);
+            font-size: .8rem;
+            margin-left: 1.3rem;
+          }
+          .tags {
+            margin-left: 1rem;
+            .tag {
+              font-size: .8rem;
+              padding: 0 .1rem;
+              // border: 1px solid color(grey, lightest);
+              // border-radius: 30px;
+              margin-left: .1rem;
+              color: color(grey, base);
+            }
+          }
+        }
+      }
+      .more-link {
+        margin: 1rem 1rem 1rem 1.5rem;
+        border: 1px solid color(violet, darker);
+        padding: .3rem;
+        border-radius: 5px;
+        display: block;
+        &:hover {
+          background: color(violet, darker);
+          color: (grey, lighter);
+        }
       }
     }
   }
 }
 
-
+footer{
+  text-align: center;
+  margin: 1rem 0;
+  p {
+    display: inline-block;
+    margin: 0 auto;
+    padding: .5rem;
+    opacity: 0.6;
+    color: color(grey, lightest);
+    text-align: center;
+    border: 1px solid color(grey, lightest);
+    border-radius: 10px;
+  }
+}

@@ -1,5 +1,6 @@
 {
 :title "Web Scraper for the Boycott Wendy's Campaign"
+:pitch "Scraping for a good cause."
 :uri "/projects/python-web-scraper-farmworker-justice.html"
 :date "2019-02-28"
 :repo "boycott-wendys-web-scraper"

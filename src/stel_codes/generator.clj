@@ -25,7 +25,8 @@
         html-string (md-to-html-string md-string)]
     (->
      (edn/read-string edn-string)
-     (assoc :body html-string))))
+     (assoc :body html-string)
+     (update :date (fn [date-string] (LocalDate/parse date-string))))))
 
 (defn generate-markup-pages []
   (->>

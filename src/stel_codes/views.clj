@@ -16,7 +16,7 @@
        (he/mail-to "stel@stel.codes" "Email")])]])
 
 (defn footer []
-  [:footer "Made by stel :)"])
+  [:footer [:p "Made by Stel Abrego with Clojure in Michigan"]])
 
 (defn window [title content]
   [:section.window
@@ -74,16 +74,25 @@
   (layout page-data
            [:h1 (:title page-data)]
            (->>
-             (filter #(= :project (page->view-category %)) (:markup-pages page-data))
+             (:markup-pages page-data)
+             (filter #(= :project (page->view-category %)))
+             (sort-by :date)
              (map (fn [project] [:h2 (:title project)])))))
 
 (defmethod render-page :home [page-data]
   (layout page-data
-          (window "projects" (->>
-             (filter #(= :project (page->view-category %)) (:markup-pages page-data))
-             (map (fn [project] (he/link-to (:uri project) (:title project))))
-             (he/ordered-list)
-             ))
+          (window "projects"
+            (conj
+              (->>
+             (:markup-pages page-data)
+             (filter #(= :project (page->view-category %)) )
+             (map (fn [project]  (list (he/link-to (:uri project) (:title project))
+                                      (when-let [pitch (:pitch project)] [:p.pitch pitch])
+                                      (when-let [tags (:tags project)]
+                                        [:p.tags (for [tag tags] [:span.tag (str "#" tag " ")])]))))
+             (he/ordered-list))
+             (he/link-to {:class "more-link"} "/projects" "More projects ->")
+              ))
           ))
 
 (defmethod render-page :404 [page-data]
