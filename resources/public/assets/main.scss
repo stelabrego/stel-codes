@@ -149,6 +149,9 @@ main {
         list-style-position: inside;
         li {
           margin: .7rem;
+          a:hover {
+            text-decoration: underline solid currentcolor 1px;
+          }
           .pitch {
             color: color(grey, base);
             font-size: .8rem;
@@ -175,7 +178,7 @@ main {
         display: block;
         &:hover {
           background: color(violet, darker);
-          color: (grey, lighter);
+          color: color(grey, lighter);
         }
       }
     }
