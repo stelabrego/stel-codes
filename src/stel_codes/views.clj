@@ -18,7 +18,7 @@
       (he/mail-to "stel@stel.codes" "Email")])]])
 
 (defn footer []
-  [:footer [:p "made by stel abrego with clojure on " (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "miskwaki territory")]])
+  [:footer [:p "made by stel abrego with clojure in " (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "meškwahki territory")]])
 
 (defn window [title content]
   [:section.window
@@ -29,8 +29,7 @@
    [:div.content content]])
 
 (defn tag-html [tags]
-  [:p.tags (for [tag tags] (he/link-to {:class "tag"} (str "/tags/" tag) (str "#" tag " ")))]
-  )
+  [:p.tags (for [tag tags] (he/link-to {:class "tag"} (str "/tags/" tag) (str "#" tag " ")))])
 
 (defn home-content-window [title pages]
   (window
@@ -88,14 +87,12 @@
 (defmethod render-page :project [page-data]
   (layout page-data
           (window (:title page-data)
-                  [:article (raw (:body page-data))
-                   ])))
+                  [:article (raw (:body page-data))])))
 
 (defmethod render-page :tag [page-data]
   (layout page-data
           (window (:title page-data)
-                  (he/unordered-list (map #(he/link-to (:uri %) (:title %)) (:articles page-data)))
-                  )))
+                  (he/unordered-list (map #(he/link-to (:uri %) (:title %)) (:articles page-data))))))
 (defmethod render-page :reading [page-data]
   (layout page-data
           [:h1 (:title page-data)]

@@ -16,9 +16,9 @@
   (:import [java.time LocalDate]))
 ; (defrecord Page [uri title])
 
-(defn in? 
+(defn in?
   "true if coll contains elm"
-  [coll elm]  
+  [coll elm]
   (some #(= elm %) coll))
 
 (defn get-assets []
@@ -49,8 +49,7 @@
        :articles (filter (partial page-has-tag? tag) markup-pages)})))
 
 (comment
-  (generate-tag-pages (generate-markup-pages))
-  )
+  (generate-tag-pages (generate-markup-pages)))
 
 (defn generate-all-pages []
   (let [markup-pages (generate-markup-pages)]
