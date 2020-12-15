@@ -31,6 +31,12 @@
 (defn tag-html [tags]
   [:p.tags (for [tag tags] (he/link-to {:class "tag"} (str "/tags/" tag) (str "#" tag " ")))])
 
+(defn article-listing-html [article]
+  (list (he/link-to (:uri article) (:title article))
+        (when-let [pitch (:pitch article)] [:p.pitch pitch])
+        (when-let [tags (:tags article)]
+          (tag-html tags))))
+
 (defn home-content-window [title pages]
   (window
    title
@@ -41,10 +47,7 @@
      (sort-by :date)
      (reverse)
      (take 5)
-     (map (fn [article] (list (he/link-to (:uri article) (:title article))
-                              (when-let [pitch (:pitch article)] [:p.pitch pitch])
-                              (when-let [tags (:tags article)]
-                                (tag-html tags)))))
+     (map article-listing-html)
      (he/ordered-list))
     (he/link-to {:class "more-link"} (str "/" title) (str "more " title)))))
 
@@ -92,7 +95,8 @@
 (defmethod render-page :tag [page-data]
   (layout page-data
           (window (:title page-data)
-                  (he/unordered-list (map #(he/link-to (:uri %) (:title %)) (:articles page-data))))))
+                  (he/ordered-list (map article-listing-html (:articles page-data))))))
+
 (defmethod render-page :reading [page-data]
   (layout page-data
           [:h1 (:title page-data)]
@@ -117,7 +121,10 @@
     (layout page-data
             (list
              (home-content-window "projects" project-pages)
-             (home-content-window "reading" reading-pages)))))
+             (home-content-window "reading" reading-pages)
+(home-content-window "reading" reading-pages)
+
+             ))))
 
 (defmethod render-page :404 [page-data]
   (layout page-data
