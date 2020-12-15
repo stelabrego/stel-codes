@@ -5,6 +5,8 @@
             [clojure.string :refer [starts-with?]]
             [hiccup.form :as hf]))
 
+(def spy #(do (println "DEBUG:" %) %))
+
 (defn header []
   [:header
    [:nav
@@ -25,6 +27,23 @@
     [:span title]
     (raw (slurp "resources/svg/bars.svg"))]
    [:div.content content]])
+
+(defn home-content-window [title pages]
+  (window
+   title
+   (list
+    (->>
+     pages
+     (spy)
+     (sort-by :date)
+     (reverse)
+     (take 5)
+     (map (fn [project] (list (he/link-to (:uri project) (:title project))
+                              (when-let [pitch (:pitch project)] [:p.pitch pitch])
+                              (when-let [tags (:tags project)]
+                                [:p.tags (for [tag tags] [:span.tag (str "#" tag " ")])]))))
+     (he/ordered-list))
+    (he/link-to {:class "more-link"} (str "/" title) (str "more " title)))))
 
 (defn layout [{:keys [title]} & content]
   (->
@@ -56,11 +75,20 @@
     (= uri "/404.html") :404
     (= uri "/projects/index.html") :project-index
     (starts-with? uri "/projects/") :project
+    (starts-with? uri "/reading/") :reading
     :else (throw (Exception. (str "Cannot find view for uri:" uri)))))
 
 (defmulti render-page page->view-category)
 
 (defmethod render-page :project [page-data]
+  (layout page-data
+          [:h1 (:title page-data)]
+          (when (:tags page-data)
+            [:div.code-tag-container
+             (for [tag (:tags page-data)]
+               [:div.code-tag tag])])))
+
+(defmethod render-page :reading [page-data]
   (layout page-data
           [:h1 (:title page-data)]
           (when (:tags page-data)
@@ -78,21 +106,13 @@
            (map (fn [project] [:h2 (:title project)])))))
 
 (defmethod render-page :home [page-data]
-  (layout page-data
-          (window "projects"
-                  (list
-                   (->>
-                    (:markup-pages page-data)
-                    (filter #(= :project (page->view-category %)))
-                    (sort-by :date)
-                    (reverse)
-                    (take 5)
-                    (map (fn [project] (list (he/link-to (:uri project) (:title project))
-                                              (when-let [pitch (:pitch project)] [:p.pitch pitch])
-                                              (when-let [tags (:tags project)]
-                                                [:p.tags (for [tag tags] [:span.tag (str "#" tag " ")])]))))
-                    (he/ordered-list))
-                   (he/link-to {:class "more-link"} "/projects" "more projects")))))
+  (let [project-pages (filter #(= :project  (page->view-category %)) (:markup-pages page-data))
+        reading-pages (filter #(= :reading  (page->view-category %)) (:markup-pages page-data))]
+    (run! print project-pages)
+    (layout page-data
+            (list
+             (home-content-window "projects" project-pages)
+             (home-content-window "reading" reading-pages)))))
 
 (defmethod render-page :404 [page-data]
   (layout page-data
