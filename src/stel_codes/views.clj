@@ -18,13 +18,13 @@
       (he/mail-to "stel@stel.codes" "Email")])]])
 
 (defn footer []
-  [:footer [:p "made by stel abrego with clojure while living on " (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "stolen miskwaki territory")]])
+  [:footer [:p "made by stel abrego with clojure on " (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "miskwaki territory")]])
 
 (defn window [title content]
   [:section.window
    [:div.top
     (raw (slurp "resources/svg/bars.svg"))
-    [:span title]
+    [:span.title title]
     (raw (slurp "resources/svg/bars.svg"))]
    [:div.content content]])
 
@@ -38,9 +38,9 @@
      (sort-by :date)
      (reverse)
      (take 5)
-     (map (fn [project] (list (he/link-to (:uri project) (:title project))
-                              (when-let [pitch (:pitch project)] [:p.pitch pitch])
-                              (when-let [tags (:tags project)]
+     (map (fn [article] (list (he/link-to (:uri article) (:title article))
+                              (when-let [pitch (:pitch article)] [:p.pitch pitch])
+                              (when-let [tags (:tags article)]
                                 [:p.tags (for [tag tags] [:span.tag (str "#" tag " ")])]))))
      (he/ordered-list))
     (he/link-to {:class "more-link"} (str "/" title) (str "more " title)))))
@@ -82,11 +82,8 @@
 
 (defmethod render-page :project [page-data]
   (layout page-data
-          [:h1 (:title page-data)]
-          (when (:tags page-data)
-            [:div.code-tag-container
-             (for [tag (:tags page-data)]
-               [:div.code-tag tag])])))
+          (window (:title page-data)
+                  (:body page-data))))
 
 (defmethod render-page :reading [page-data]
   (layout page-data

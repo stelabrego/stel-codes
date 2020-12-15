@@ -4,7 +4,6 @@
             [clojure.java.io :as io]
             [clojure.edn :as edn]
             [stel-codes.views :as views]
-            [ring.adapter.jetty :as jetty]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [stelcodes.optimus-sass.core]
             [optimus.prime :as optimus]

@@ -133,12 +133,19 @@ main {
       @extend %text-shadowed;
       font-family: 'virtue', sans-serif;
       display: grid;
+      height: 30px;
       grid-auto-flow: column;
-      justify-content: space-between;
+      grid-template-columns: 1fr max-content 1fr;
+      // justify-content: space-between;
       align-items: center;
-      .window-bars {
-        height: 30px;
-        width: 125px;
+      .title {
+        padding: 0 1rem;
+      }
+      svg {
+        padding-top: 2px;
+        opacity: 0.3;
+        height: 20px;
+        width: 100%;
       }
     }
     .content {
