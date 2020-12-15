@@ -145,6 +145,7 @@ main {
       @extend %beveled;
       padding: .3rem;
       background-color: color(grey,lighter);
+      display: grid;
       ol {
         list-style-position: inside;
         li {
@@ -174,8 +175,11 @@ main {
         margin: 1rem 1rem 1rem 1.5rem;
         border: 1px solid color(violet, darker);
         padding: .3rem;
+        font-size: .8rem;
+        text-align: center;
+        font-family: 'virtue', sans-serif;
+        display: inline;
         border-radius: 5px;
-        display: block;
         &:hover {
           background: color(violet, darker);
           color: color(grey, lighter);
@@ -195,7 +199,10 @@ footer{
     opacity: 0.6;
     color: color(grey, lightest);
     text-align: center;
-    border: 1px solid color(grey, lightest);
-    border-radius: 10px;
+    border-bottom: 1px solid change-color(color(grey, lightest), $alpha: .5);
+    a {
+      color: color(grey, lightest);
+      text-decoration: underline;
+    }
   }
 }
