@@ -28,6 +28,10 @@
     (raw (slurp "resources/svg/bars.svg"))]
    [:div.content content]])
 
+(defn tag-html [tags]
+  [:p.tags (for [tag tags] (he/link-to {:class "tag"} (str "/tags/" tag) (str "#" tag " ")))]
+  )
+
 (defn home-content-window [title pages]
   (window
    title
@@ -41,7 +45,7 @@
      (map (fn [article] (list (he/link-to (:uri article) (:title article))
                               (when-let [pitch (:pitch article)] [:p.pitch pitch])
                               (when-let [tags (:tags article)]
-                                [:p.tags (for [tag tags] [:span.tag (str "#" tag " ")])]))))
+                                (tag-html tags)))))
      (he/ordered-list))
     (he/link-to {:class "more-link"} (str "/" title) (str "more " title)))))
 
@@ -76,6 +80,7 @@
     (= uri "/projects/index.html") :project-index
     (starts-with? uri "/projects/") :project
     (starts-with? uri "/reading/") :reading
+    (starts-with? uri "/tags/") :tag
     :else (throw (Exception. (str "Cannot find view for uri:" uri)))))
 
 (defmulti render-page page->view-category)
@@ -83,8 +88,14 @@
 (defmethod render-page :project [page-data]
   (layout page-data
           (window (:title page-data)
-                  (:body page-data))))
+                  [:article (raw (:body page-data))
+                   ])))
 
+(defmethod render-page :tag [page-data]
+  (layout page-data
+          (window (:title page-data)
+                  (he/unordered-list (map #(he/link-to (:uri %) (:title %)) (:articles page-data)))
+                  )))
 (defmethod render-page :reading [page-data]
   (layout page-data
           [:h1 (:title page-data)]

@@ -9,11 +9,9 @@
 
 <img src='https://media.giphy.com/media/YN8SoLCspZBEUc7k0y/giphy.gif' class='mobile-phone'>
 
-![website](/img/my-delicate-sun-1.jpg)
-
 Inspired by online literary magazines like [Butter Press](https://www.bttrprss.com), I created my own literary magazine website called *[My Delicate Sun](https://literary-magazine-concept.stelabrego.com/)*. The fictional magazine's mission is to publish works of LGBTQIA+ artists. It's built with `go` templating and Hugo, the static site generator. It features custom SVG's, fancy CSS backgrounds, and a fully integrated [forestry.io](https://forestry.io) content management system which makes adding and updating content incredibly easy for a non-technical editor.
 
-## Website Structure
+# Website Structure
 
 I decided *My Delicate Sun* publishes two types of content for their readers. These two data types are:
 
@@ -27,9 +25,9 @@ Internally, the **Issue** and **Spotlight** data types reference two other data 
 
 This way, the editor doesn't have to replicate data between spotlights and issues.
 
-### Example Artist Markdown
+# Example Artist Markdown
 
-{{< highlight md >}}
+```md
 #site/content/artist/emery-davis.md
 
 +++
@@ -37,11 +35,11 @@ image = "/media/emery-davis.jpg"
 title = "Emery Davis"
 +++
 
-{{< /highlight >}}
+```
 
-### Example Artwork Markdown
+# Example Artwork Markdown
 
-{{< highlight md >}}
+```
 #site/content/artwork/flowers.md
 
 +++
@@ -69,11 +67,11 @@ With thoughts of violence in her head,
 A flash of rage and she sees red.  
 Without a pause I turned and fled.
 
-{{< /highlight >}}
+```
 
-### Example Issue Markdown
+# Example Issue Markdown
 
-{{< highlight md >}}
+```md
 #site/content/issues/summer-2019.md
 
 +++
@@ -82,11 +80,10 @@ featuredArt = ["artwork/flowers.md", "artwork/warmth-of-literature.md"]
 title = "Summer 2019"
 +++
 
-{{< /highlight >}}
+```
+# Example Spotlight Markdown
 
-### Example Spotlight Markdown
-
-{{< highlight md >}}
+```md
 #site/content/spotlight/the-tender-art-of-emery.md
 
 +++
@@ -101,9 +98,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praes
 Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. 
 
 Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. 
-{{< /highlight >}}
+```
 
-## Forestry.io Integration
+# Forestry.io Integration
 
 Once I implemented the website structure, I wanted to practice integrating it into a CMS which could be used by a non-technical editor.
 

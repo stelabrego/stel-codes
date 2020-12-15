@@ -16,11 +16,16 @@
   (:import [java.time LocalDate]))
 ; (defrecord Page [uri title])
 
+(defn in? 
+  "true if coll contains elm"
+  [coll elm]  
+  (some #(= elm %) coll))
+
 (defn get-assets []
   (assets/load-assets "public" [#"assets/.*"]))
 
 (defn string->page [content-string]
-  (let [[_whole-string edn-string md-string] (re-matches #"(?s)(\{.*\})(?:\W*)(.*)" content-string)
+  (let [[_whole-string edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
         html-string (md-to-html-string md-string)]
     (->
      (edn/read-string edn-string)
@@ -33,10 +38,24 @@
    (map slurp)
    (map string->page)))
 
+(defn page-has-tag? [tag page]
+  (in? (:tags page) tag))
+
+(defn generate-tag-pages [markup-pages]
+  (let [tags (mapcat :tags markup-pages)]
+    (for [tag tags]
+      {:title (str "#" tag)
+       :uri (str "/tags/" tag "/")
+       :articles (filter (partial page-has-tag? tag) markup-pages)})))
+
+(comment
+  (generate-tag-pages (generate-markup-pages))
+  )
+
 (defn generate-all-pages []
   (let [markup-pages (generate-markup-pages)]
     (conj
-     markup-pages
+     (concat markup-pages (generate-tag-pages markup-pages))
      {:category :home :uri "/index.html" :markup-pages markup-pages}
      {:category :project-index :uri "/projects/index.html" :title "projects" :markup-pages markup-pages}
      {:category :404 :uri "/404.html" :title "404"})))
