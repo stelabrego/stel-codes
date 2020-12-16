@@ -1,6 +1,6 @@
 {
 :title "Literary Magazine Concept Website"
-:location :coding-journal
+:type :project-note
 :date "2019-09-15"
 :repo "literary-magazine-concept"
 :tags ["javascript" "css" "markdown" "css"]

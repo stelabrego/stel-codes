@@ -28,14 +28,13 @@
     (raw (slurp "resources/svg/bars.svg"))]
    [:div.content content]])
 
-(defn tag-html [tags]
+(defn tag-group [tags]
   [:p.tags (for [tag tags] (he/link-to {:class "tag"} (str "/tags/" tag) (str "#" tag " ")))])
 
-(defn article-listing-html [article]
-  (list (he/link-to (:uri article) (:title article))
-        (when-let [pitch (:pitch article)] [:p.pitch pitch])
-        (when-let [tags (:tags article)]
-          (tag-html tags))))
+(defn note-index-item [note]
+  (list (he/link-to (:uri note) (:title note))
+        (when-let [pitch (:pitch note)] [:p.pitch pitch])
+        (when-let [tags (:tags note)] (tag-group tags))))
 
 (defn home-content-window [title more-uri pages]
   (window
@@ -47,7 +46,7 @@
      (sort-by :date)
      (reverse)
      (take 5)
-     (map article-listing-html)
+     (map note-index-item)
      (he/ordered-list))
     (he/link-to {:class "more-link"} more-uri (str "more " title)))))
 
@@ -75,62 +74,36 @@
          [:body (header) [:main content] (footer)])
    (str)))
 
-; (defn page->view-category [{:keys [uri]}]
-;   (cond
-;     (= uri "/index.html") :home
-;     (= uri "/404.html") :404
-;     (= uri "/cool-stuff/index.html") :project-index
-;     (starts-with? uri "/cool-stuff/") :project
-;     (starts-with? uri "/and-reads/") :reading
-;     (starts-with? uri "/tags/") :tag
-;     (starts-with? uri "/and-listens-to/") :podcast
-;     :else (throw (Exception. (str "Cannot find view for uri:" uri)))))
+(defn render-generic [note-data]
+  (layout note-data
+          (window (:title note-data)
+                  [:article (raw (:body note-data))])))
 
-(defmulti render-page :location)
+(defn render-generic-index [note-data]
+  (let [index-notes (or (:index-notes note-data)
+                        (filter #(= (name (:type note-data)) (name (:type %))) (:all-notes note-data)))]
+    (layout note-data
+          (window (:title note-data)
+                  (he/ordered-list (map note-index-item (:index note-data)))))))
 
-(defmethod render-page :coding-journal [page-data]
-  (layout page-data
-          (window (:title page-data)
-                  [:article (raw (:body page-data))])))
+(defmulti render :type)
 
-(defmethod render-page :podcast-journal [page-data]
-  (layout page-data
-          (window (:title page-data)
-                  [:article (raw (:body page-data))])))
+(defmethod render :default [note-data]
+  (if (= "i" (namespace (:type note-data)))
+    (render-generic-index note-data)
+    (render-generic note-data)))
 
-(defmethod render-page :tag [page-data]
-  (layout page-data
-          (window (:title page-data)
-                  (he/ordered-list (map article-listing-html (:articles page-data))))))
-
-(defmethod render-page :reading-journal [page-data]
-  (layout page-data
-          [:h1 (:title page-data)]
-          (when (:tags page-data)
-            [:div.code-tag-container
-             (for [tag (:tags page-data)]
-               [:div.code-tag tag])])))
-
-(defmethod render-page :i/coding-journal [page-data]
-  (layout page-data
-          [:h1 (:title page-data)]
-          (->>
-           (:journal-pages page-data)
-           (filter #(= :coding-journal (:location %)))
-           (sort-by :date)
-           (map (fn [project] [:h2 (:title project)])))))
-
-(defmethod render-page :home [page-data]
-  (let [journal-pages (:journal-pages page-data)
-        coding-journal (filter #(= :coding-journal  (:location %)) journal-pages)
-        reading-journal (filter #(= :reading-journal  (:location %)) journal-pages)
-        podcast-journal (filter #(= :podcast-journal  (:location %)) journal-pages)]
-    (layout page-data
+(defmethod render :home [note-data]
+  (let [all-notes (:all-notes note-data)
+        project-notes (filter #(= :project-note (:type %)) all-notes)
+        learning-notes (filter #(= :learning-note (:type %)) all-notes)
+        blog-notes (filter #(= :blog-note (:type %)) all-notes)]
+    (layout note-data
             (list
-             (home-content-window "coding journal" "/coding-journal/" coding-journal)
-             (home-content-window "book journal" "/book-journal/" reading-journal)
-             (home-content-window "podcast journal" "/podcast-journal/" podcast-journal)))))
+             (home-content-window "coding projects" "/cool-stuff-like/" project-notes)
+             (home-content-window "learning resources" "/and-learns-from/" learning-notes)
+             (home-content-window "blog" "/and-blogs-about/" blog-notes)))))
 
-(defmethod render-page :404 [page-data]
-  (layout page-data
+(defmethod render :404 [note-data]
+  (layout note-data
           [:h1 "404 ;-;"]))

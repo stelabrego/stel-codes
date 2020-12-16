@@ -1,5 +1,5 @@
 { :title "Leftist Event Planning Web App"
-  :location :coding-journal
+  :type :project-note
   :date "2019-11-08"
   :repo "flittermouse"
   :tags ["javascript", "node", "postgres", "redis", "docker", "sass"]

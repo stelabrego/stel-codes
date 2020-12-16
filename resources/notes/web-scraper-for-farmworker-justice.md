@@ -1,7 +1,7 @@
 {
 :title "Web Scraper for the Boycott Wendy's Campaign"
 :pitch "Scraping for a good cause."
-:location :coding-journal
+:type :project-note
 :date "2019-02-28"
 :repo "boycott-wendys-web-scraper"
 :tags ["python" "selenium"]

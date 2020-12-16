@@ -12,8 +12,10 @@
             [optimus.strategies :refer [serve-live-assets]]
             [optimus.export]
             [markdown.core :refer [md-to-html-string]]
-            [camel-snake-kebab.core :as csk])
-
+            [camel-snake-kebab.core :as csk]
+            [clojure.string :as str]
+            [tupelo.core :as t]
+            [tupelo.base64url :refer [encode-str]])
   (:import [java.time LocalDate]))
 ; (defrecord Page [uri title])
 
@@ -25,19 +27,29 @@
 (defn get-assets []
   (assets/load-assets "public" [#"assets/.*"]))
 
-(defn string->page [content-string]
+(defn ->slug [input]
+  (csk/->kebab-case (str/replace (str input) #"[^\w\s]" "")))
+
+(comment
+  (->slug "Wow this is / a weird !!!! ?? title for a note *"))
+
+(defn string->note-data [content-string]
   (let [[_whole-string edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
         html-string (md-to-html-string md-string)]
     (as-> (edn/read-string edn-string) $
       (assoc $ :body html-string)
-      (assoc $ :uri (str "/" (csk/->kebab-case (symbol (:location $))) "/" (csk/->kebab-case (:title $)) "/"))
+      (assoc $ :uri (str "/" (->slug (symbol (:type $))) "/" (->slug (:title $)) "/"))
       (update $ :date (fn [date-string] (LocalDate/parse date-string))))))
 
-(defn generate-journal-pages []
+(defn generate-notes []
   (->>
-   (.listFiles (io/file "resources/content/"))
+   (.listFiles (io/file "resources/notes/"))
    (map slurp)
-   (map string->page)))
+   (map string->note-data)))
+
+(comment
+  (generate-notes)
+  )
 
 (defn tag-in-page? [tag page]
   (in? (:tags page) tag))
@@ -46,27 +58,35 @@
   (let [tags (mapcat :tags journal-pages)]
     (for [tag tags]
       {:title (str "#" tag)
-       :location :tag
+       :type :i/tag
        :uri (str "/tags/" tag "/")
-       :articles (filter (partial tag-in-page? tag))})))
+       :index (filter (partial tag-in-page? tag) journal-pages)})))
 
 (comment
-  (generate-tag-pages (generate-journal-pages)))
+  (generate-tag-pages (generate-notes)))
 
-(defn generate-general-pages [journal-pages]
+(defn generate-general-pages []
   (list
-   {:location :home :uri "/" :journal-pages journal-pages}
-   {:location :404 :uri "/404/" :title "404"}))
+   {:type :home :uri "/"}
+   {:type :i/project-note :title "coding projects" :uri "/cool-stuff-like/"}
+   {:type :404 :uri "/404.html"}))
+
+(comment
+  (generate-general-pages))
 
 (defn generate-index []
-  (let [journal-pages (generate-journal-pages)
+  (let [journal-pages (generate-notes)
         tag-pages (generate-tag-pages journal-pages)
-        general-pages (generate-general-pages journal-pages)]
-    (->>
-   (concat journal-pages tag-pages general-pages)
-   (remove :hidden)
-   (map (fn [page] {(:uri page) (fn [_] (views/render-page page))}))
-   (into {}))))
+        general-pages (generate-general-pages)]
+    (as-> (concat journal-pages tag-pages general-pages) $
+      #_(print $)
+      (map #(assoc % :all-notes $) $)
+      (remove :hidden $)
+      (map (fn [page] {(:uri page) (fn [_] (views/render page))}) $)
+      (into {} $))))
+
+(comment
+  (generate-index))
 
 (def app (->
           (stasis/serve-pages generate-index)

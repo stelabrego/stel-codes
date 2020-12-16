@@ -1,6 +1,6 @@
 {
 :title "Meditation Website Concept"
-:location :coding-journal
+:type :project-note
 :date "2019-03-02"
 :repo "meditation-website-concept"
 :tags ["go" "javascript" "css"]

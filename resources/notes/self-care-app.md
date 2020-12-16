@@ -1,5 +1,5 @@
 { :title "Self Care Android App"
-  :location :coding-journal
+  :type :project-note
   :date "2019-09-25"
   :repo "self-care-android-app"
   :tags ["java" "android"]
