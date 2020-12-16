@@ -148,7 +148,12 @@ main {
     grid-auto-flow: row;
     grid-template-areas: "avatar name"
                          "text   text";
+    grid-template-columns: max-content 1fr;
     grid-column-gap: 3%;
+    grid-row-gap: 3%;
+    justify-self: center;
+    align-content: center;
+    justify-content: center;
     @media (min-width: 500px) {
       grid-template-areas: "avatar name"
                            "avatar   text";
@@ -161,13 +166,39 @@ main {
       width: 150px;
       border-radius: 100%;
       background-color: change-color(color(grey, lightest), $alpha: .2);
+      margin: 0 5px;
+      @media (min-width: 500px) {
+        margin-left: 0 30px;
+      }
     }
     div.text {
       grid-area: text;
+      // max-width: 500px;
       color: color(grey, light);
+      background-color: change-color(color(grey,lightest), $alpha:.1);
+      border-radius: 30px;
       justify-self: start;
+      padding: 1rem;
+      position: relative;
       p {
-        margin: .5rem 0;
+        margin: .5rem .5rem .5rem 1rem;
+        @media (min-width: 500px) {
+          margin: .5rem 0;
+        }
+      }
+      @media (min-width: 500px) {
+        &::after {
+          content: '';
+          display: inline-block;
+          position: absolute;
+          left: 0;
+          top: 30%;
+          border: 17px solid transparent;
+          border-right-color: change-color(color(grey,lightest), $alpha:.1);
+          border-left: 0;
+          // border-bottom: 0;
+          margin-left: -17px;
+        }
       }
     }
     span.name {
@@ -175,6 +206,11 @@ main {
       font-size: 2rem;
       grid-area: name;
       color: color(grey, light);
+      justify-self: start;
+      width: 20px;
+      @media (min-width: 500px) {
+        width: initial;
+      }
 
     }
   }
