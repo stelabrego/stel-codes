@@ -103,7 +103,7 @@
     (layout note-data
             (list
              [:section.welcome
-              (he/image {:class "avatar"} "assets/img/avatar.png")
+              (he/image {:class "avatar"} "/assets/img/avatar.png")
               [:span.name "Stel Abrego"]
               [:div.text
                [:p "Hi! I'm a freelance software engineer with a focus on functional design and web technologies."]
