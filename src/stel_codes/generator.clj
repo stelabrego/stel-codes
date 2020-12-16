@@ -33,12 +33,18 @@
 (comment
   (->slug "Wow this is / a weird !!!! ?? title for a note *"))
 
+(def type-uri {
+      :project-note "/cool-stuff-like/"
+      :learning-note "/and-learns-from/"
+      :blog-note "/and-blogs-about/"
+      })
+
 (defn string->note-data [content-string]
   (let [[_whole-string edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
         html-string (md-to-html-string md-string)]
     (as-> (edn/read-string edn-string) $
       (assoc $ :body html-string)
-      (assoc $ :uri (str "/" (->slug (symbol (:type $))) "/" (->slug (:title $)) "/"))
+      (assoc $ :uri (str ((:type $) type-uri) (->slug (:title $)) "/"))
       (update $ :date (fn [date-string] (LocalDate/parse date-string))))))
 
 (defn generate-notes []
