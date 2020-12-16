@@ -102,6 +102,12 @@
         blog-notes (filter #(= :blog-note (:type %)) all-notes)]
     (layout note-data
             (list
+             [:section.welcome
+              (he/image {:class "avatar"} "assets/img/avatar.png")
+              [:span.name "Stel Abrego"]
+              [:div.text
+               [:p "Hi! I'm a freelance software engineer with a focus on functional design and web technologies."]
+               [:p "Check out my projects, learning resources, and blog posts."]]]
              (home-content-window "coding projects" "/cool-stuff-like/" project-notes)
              (home-content-window "learning resources" "/and-learns-from/" learning-notes)
              (home-content-window "blog" "/and-blogs-about/" blog-notes)))))
