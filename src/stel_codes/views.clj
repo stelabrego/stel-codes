@@ -37,7 +37,7 @@
         (when-let [tags (:tags article)]
           (tag-html tags))))
 
-(defn home-content-window [title pages]
+(defn home-content-window [title more-uri pages]
   (window
    title
    (list
@@ -49,7 +49,7 @@
      (take 5)
      (map article-listing-html)
      (he/ordered-list))
-    (he/link-to {:class "more-link"} (str "/" title) (str "more " title)))))
+    (he/link-to {:class "more-link"} more-uri (str "more " title)))))
 
 (defn layout [{:keys [title]} & content]
   (->
@@ -79,10 +79,11 @@
   (cond
     (= uri "/index.html") :home
     (= uri "/404.html") :404
-    (= uri "/projects/index.html") :project-index
-    (starts-with? uri "/projects/") :project
-    (starts-with? uri "/reading/") :reading
+    (= uri "/cool-stuff/index.html") :project-index
+    (starts-with? uri "/cool-stuff/") :project
+    (starts-with? uri "/and-reads/") :reading
     (starts-with? uri "/tags/") :tag
+    (starts-with? uri "/and-listens-to/") :podcast
     :else (throw (Exception. (str "Cannot find view for uri:" uri)))))
 
 (defmulti render-page page->view-category)
@@ -92,6 +93,10 @@
           (window (:title page-data)
                   [:article (raw (:body page-data))])))
 
+(defmethod render-page :podcast [page-data]
+  (layout page-data
+          (window (:title page-data)
+                  [:article (raw (:body page-data))])))
 (defmethod render-page :tag [page-data]
   (layout page-data
           (window (:title page-data)
@@ -116,15 +121,14 @@
 
 (defmethod render-page :home [page-data]
   (let [project-pages (filter #(= :project  (page->view-category %)) (:markup-pages page-data))
-        reading-pages (filter #(= :reading  (page->view-category %)) (:markup-pages page-data))]
+        reading-pages (filter #(= :reading  (page->view-category %)) (:markup-pages page-data))
+        podcast-pages (filter #(= :podcast  (page->view-category %)) (:markup-pages page-data))]
     (run! print project-pages)
     (layout page-data
             (list
-             (home-content-window "projects" project-pages)
-             (home-content-window "reading" reading-pages)
-(home-content-window "reading" reading-pages)
-
-             ))))
+             (home-content-window "coding projects" "/coding-projects" project-pages)
+             (home-content-window "book journal" "/book-journals" reading-pages)
+             (home-content-window "podcast journal" "/podcast-journals" reading-pages)))))
 
 (defmethod render-page :404 [page-data]
   (layout page-data
