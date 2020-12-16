@@ -75,34 +75,35 @@
          [:body (header) [:main content] (footer)])
    (str)))
 
-(defn page->view-category [{:keys [uri]}]
-  (cond
-    (= uri "/index.html") :home
-    (= uri "/404.html") :404
-    (= uri "/cool-stuff/index.html") :project-index
-    (starts-with? uri "/cool-stuff/") :project
-    (starts-with? uri "/and-reads/") :reading
-    (starts-with? uri "/tags/") :tag
-    (starts-with? uri "/and-listens-to/") :podcast
-    :else (throw (Exception. (str "Cannot find view for uri:" uri)))))
+; (defn page->view-category [{:keys [uri]}]
+;   (cond
+;     (= uri "/index.html") :home
+;     (= uri "/404.html") :404
+;     (= uri "/cool-stuff/index.html") :project-index
+;     (starts-with? uri "/cool-stuff/") :project
+;     (starts-with? uri "/and-reads/") :reading
+;     (starts-with? uri "/tags/") :tag
+;     (starts-with? uri "/and-listens-to/") :podcast
+;     :else (throw (Exception. (str "Cannot find view for uri:" uri)))))
 
-(defmulti render-page page->view-category)
+(defmulti render-page :location)
 
-(defmethod render-page :project [page-data]
+(defmethod render-page :coding-journal [page-data]
   (layout page-data
           (window (:title page-data)
                   [:article (raw (:body page-data))])))
 
-(defmethod render-page :podcast [page-data]
+(defmethod render-page :podcast-journal [page-data]
   (layout page-data
           (window (:title page-data)
                   [:article (raw (:body page-data))])))
+
 (defmethod render-page :tag [page-data]
   (layout page-data
           (window (:title page-data)
                   (he/ordered-list (map article-listing-html (:articles page-data))))))
 
-(defmethod render-page :reading [page-data]
+(defmethod render-page :reading-journal [page-data]
   (layout page-data
           [:h1 (:title page-data)]
           (when (:tags page-data)
@@ -110,25 +111,25 @@
              (for [tag (:tags page-data)]
                [:div.code-tag tag])])))
 
-(defmethod render-page :project-index [page-data]
+(defmethod render-page :i/coding-journal [page-data]
   (layout page-data
           [:h1 (:title page-data)]
           (->>
-           (:markup-pages page-data)
-           (filter #(= :project (page->view-category %)))
+           (:journal-pages page-data)
+           (filter #(= :coding-journal (:location %)))
            (sort-by :date)
            (map (fn [project] [:h2 (:title project)])))))
 
 (defmethod render-page :home [page-data]
-  (let [project-pages (filter #(= :project  (page->view-category %)) (:markup-pages page-data))
-        reading-pages (filter #(= :reading  (page->view-category %)) (:markup-pages page-data))
-        podcast-pages (filter #(= :podcast  (page->view-category %)) (:markup-pages page-data))]
-    (run! print project-pages)
+  (let [journal-pages (:journal-pages page-data)
+        coding-journal (filter #(= :coding-journal  (:location %)) journal-pages)
+        reading-journal (filter #(= :reading-journal  (:location %)) journal-pages)
+        podcast-journal (filter #(= :podcast-journal  (:location %)) journal-pages)]
     (layout page-data
             (list
-             (home-content-window "coding projects" "/coding-projects" project-pages)
-             (home-content-window "book journal" "/book-journals" reading-pages)
-             (home-content-window "podcast journal" "/podcast-journals" reading-pages)))))
+             (home-content-window "coding journal" "/coding-journal/" coding-journal)
+             (home-content-window "book journal" "/book-journal/" reading-journal)
+             (home-content-window "podcast journal" "/podcast-journal/" podcast-journal)))))
 
 (defmethod render-page :404 [page-data]
   (layout page-data

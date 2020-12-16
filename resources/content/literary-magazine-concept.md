@@ -1,10 +1,9 @@
 {
 :title "Literary Magazine Concept Website"
-:uri "/projects/literary-magazine-website.html"
+:location :coding-journal
 :date "2019-09-15"
 :repo "literary-magazine-concept"
-:demo "https://literary-magazine-concept.stelabrego.com/"
-:tags ["go" "javascript" "css" "markdown" "css"]
+:tags ["javascript" "css" "markdown" "css"]
 }
 
 <img src='https://media.giphy.com/media/YN8SoLCspZBEUc7k0y/giphy.gif' class='mobile-phone'>

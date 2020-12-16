@@ -7,7 +7,9 @@
         hiccup/hiccup {:mvn/version "2.0.0-alpha2"}
         optimus/optimus  {:mvn/version "1.0.0-rc3"}
         stelcodes/optimus-sass {:mvn/version "0.1.2-SNAPSHOT"}
-        markdown-clj/markdown-clj {:mvn/version "1.10.5"}}
+        markdown-clj/markdown-clj {:mvn/version "1.10.5"}
+        camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}
+        ring/ring-jetty-adapter {:mvn/version "1.8.2"}}
  :aliases
  {:dev {:extra-paths ["dev"]
         :extra-deps {cljfmt/cljfmt {:mvn/version "0.7.0"}}}

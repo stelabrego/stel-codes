@@ -1,6 +1,6 @@
 {
 :title "Old Portfolio Website"
-:uri "/projects/old-portfolio.html"
+:location :coding-journal
 :date "2019-02-27"
 :repo "portfolio"
 :tags ["go" "javascript" "css"]

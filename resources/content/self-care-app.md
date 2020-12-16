@@ -1,5 +1,5 @@
 { :title "Self Care Android App"
-  :uri "/projects/self-care-android-app.html"
+  :location :coding-journal
   :date "2019-09-25"
   :repo "self-care-android-app"
   :tags ["java" "android"]

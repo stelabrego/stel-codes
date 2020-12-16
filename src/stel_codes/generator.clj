@@ -11,7 +11,8 @@
             [optimus.optimizations :as optimizations]
             [optimus.strategies :refer [serve-live-assets]]
             [optimus.export]
-            [markdown.core :refer [md-to-html-string]])
+            [markdown.core :refer [md-to-html-string]]
+            [camel-snake-kebab.core :as csk])
 
   (:import [java.time LocalDate]))
 ; (defrecord Page [uri title])
@@ -27,43 +28,45 @@
 (defn string->page [content-string]
   (let [[_whole-string edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
         html-string (md-to-html-string md-string)]
-    (->
-     (edn/read-string edn-string)
-     (assoc :body html-string)
-     (update :date (fn [date-string] (LocalDate/parse date-string))))))
+    (as-> (edn/read-string edn-string) $
+      (assoc $ :body html-string)
+      (assoc $ :uri (str "/" (csk/->kebab-case (symbol (:location $))) "/" (csk/->kebab-case (:title $)) "/"))
+      (update $ :date (fn [date-string] (LocalDate/parse date-string))))))
 
-(defn generate-markup-pages []
+(defn generate-journal-pages []
   (->>
    (.listFiles (io/file "resources/content/"))
    (map slurp)
    (map string->page)))
 
-(defn page-has-tag? [tag page]
+(defn tag-in-page? [tag page]
   (in? (:tags page) tag))
 
-(defn generate-tag-pages [markup-pages]
-  (let [tags (mapcat :tags markup-pages)]
+(defn generate-tag-pages [journal-pages]
+  (let [tags (mapcat :tags journal-pages)]
     (for [tag tags]
       {:title (str "#" tag)
+       :location :tag
        :uri (str "/tags/" tag "/")
-       :articles (filter (partial page-has-tag? tag) markup-pages)})))
+       :articles (filter (partial tag-in-page? tag))})))
 
 (comment
-  (generate-tag-pages (generate-markup-pages)))
+  (generate-tag-pages (generate-journal-pages)))
 
-(defn generate-all-pages []
-  (let [markup-pages (generate-markup-pages)]
-    (conj
-     (concat markup-pages (generate-tag-pages markup-pages))
-     {:category :home :uri "/index.html" :markup-pages markup-pages}
-     {:category :project-index :uri "/projects/index.html" :title "projects" :markup-pages markup-pages}
-     {:category :404 :uri "/404.html" :title "404"})))
+(defn generate-general-pages [journal-pages]
+  (list
+   {:location :home :uri "/" :journal-pages journal-pages}
+   {:location :404 :uri "/404/" :title "404"}))
 
 (defn generate-index []
-  (->>
-   (generate-all-pages)
+  (let [journal-pages (generate-journal-pages)
+        tag-pages (generate-tag-pages journal-pages)
+        general-pages (generate-general-pages journal-pages)]
+    (->>
+   (concat journal-pages tag-pages general-pages)
+   (remove :hidden)
    (map (fn [page] {(:uri page) (fn [_] (views/render-page page))}))
-   (into {})))
+   (into {}))))
 
 (def app (->
           (stasis/serve-pages generate-index)
