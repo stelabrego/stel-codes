@@ -16,8 +16,8 @@
  {:dev {:extra-paths ["dev"]
         :extra-deps {cljfmt/cljfmt {:mvn/version "0.7.0"}}}
 
-  :export {:exec-fn stelabrego.stel-codes/export}
-  :serve {:exec-fn stelabrego.stel-codes/serve}
+  :export {:exec-fn stel-codes.generator/export}
+  :serve {:exec-fn stel-codes.generator/serve}
   :test {:extra-paths ["test"]
          :extra-deps {org.clojure/test.check {:mvn/version "1.0.0"}}}
   :runner {:extra-deps {com.cognitect/test-runner
