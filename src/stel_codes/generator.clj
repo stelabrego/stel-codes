@@ -48,8 +48,7 @@
    (map string->note-data)))
 
 (comment
-  (generate-notes)
-  )
+  (generate-notes))
 
 (defn tag-in-page? [tag page]
   (in? (:tags page) tag))
@@ -60,7 +59,7 @@
       {:title (str "#" tag)
        :type :i/tag
        :uri (str "/tags/" tag "/")
-       :index (filter (partial tag-in-page? tag) journal-pages)})))
+       :note-index (filter (partial tag-in-page? tag) journal-pages)})))
 
 (comment
   (generate-tag-pages (generate-notes)))

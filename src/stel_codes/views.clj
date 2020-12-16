@@ -80,11 +80,13 @@
                   [:article (raw (:body note-data))])))
 
 (defn render-generic-index [note-data]
-  (let [index-notes (or (:index-notes note-data)
-                        (filter #(= (name (:type note-data)) (name (:type %))) (:all-notes note-data)))]
+  (let [note-index (or (:note-index note-data)
+                       (filter #(and (nil? (namespace (:type %)))
+                                     (= (name (:type note-data)) (name (:type %))))
+                               (:all-notes note-data)))]
     (layout note-data
-          (window (:title note-data)
-                  (he/ordered-list (map note-index-item (:index note-data)))))))
+            (window (:title note-data)
+                    (he/ordered-list (map note-index-item note-index))))))
 
 (defmulti render :type)
 
