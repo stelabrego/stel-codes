@@ -74,6 +74,7 @@
   (list
    {:type :home :uri "/"}
    {:type :i/project-note :title "coding projects" :uri "/cool-stuff-like/"}
+   {:type :i/learning-note :title "learning resources" :uri "/and-learns-from/"}
    {:type :404 :uri "/404.html"}))
 
 (comment
