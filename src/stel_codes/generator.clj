@@ -112,6 +112,9 @@
   ([_]
    (export)))
 
+(defn -main []
+  (export))
+
 (comment
   (generate-index)
   (export))
