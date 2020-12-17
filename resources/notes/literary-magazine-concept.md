@@ -3,7 +3,7 @@
 :type :project-note
 :date "2019-09-15"
 :repo "literary-magazine-concept"
-:tags ["javascript" "css" "markdown" "css"]
+:tags ["hugo" "javascript" "css"]
 }
 
 <img src='https://media.giphy.com/media/YN8SoLCspZBEUc7k0y/giphy.gif' class='mobile-phone'>
@@ -103,8 +103,8 @@ Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu a
 
 Once I implemented the website structure, I wanted to practice integrating it into a CMS which could be used by a non-technical editor.
 
-![website](/img/my-delicate-sun-cms.jpg)
+<img src="/img/my-delicate-sun-cms.jpg">
 
 [Forestry.io](https://forestry.io) was the perfect choice because they support Hugo static site builds (as well as Jekyll, Gatsby, and others). A cool feature of their UI is the ability to reference other documents within the project. For example, when an editor creates a new **Spotlight** piece, the **Artist** field is displayed as a drop down list which displays the titles of the **Artist** markdown files which exist in the project. The editor chooses one of them, and then their selection is saved as the path to that markdown file. Neat!
 
-![website](/img/my-delicate-sun-cms-2.jpg)
+<img src="/img/my-delicate-sun-cms-2.jpg">

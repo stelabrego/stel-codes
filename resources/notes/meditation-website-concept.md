@@ -3,7 +3,8 @@
 :type :project-note
 :date "2019-03-02"
 :repo "meditation-website-concept"
-:tags ["go" "javascript" "css"]
+:tags ["hugo" "javascript" "css"]
+:hidden true
 }
 In late 2018, my friend Katy made a Facebook post about how she was looking for guided meditations made by queer people, but she couldn't find any. She asked her queer friends to record guided meditations for her. She asked me to make a website to host the submitted mediations, and I was so excited to take on the project.
 
