@@ -17,15 +17,12 @@
             [tupelo.core :as t]
             [tupelo.base64url :refer [encode-str]])
   (:import [java.time LocalDate]))
-; (defrecord Page [uri title])
 
 (defn in?
   "true if coll contains elm"
   [coll elm]
   (some #(= elm %) coll))
 
-(defn get-assets []
-  (assets/load-assets "public" [#"assets/.*"]))
 
 (defn ->slug [input]
   (csk/->kebab-case (str/replace (str input) #"[^\w\s]" "")))
@@ -33,39 +30,41 @@
 (comment
   (->slug "Wow this is / a weird !!!! ?? title for a note *"))
 
-(def type-uri {:project-note "/cool-stuff-like/"
+(def type->uri {:project-note "/cool-stuff-like/"
                :learning-note "/and-learns-from/"
                :blog-note "/and-blogs-about/"})
 
-(defn string->note-data [content-string]
-  (let [[_whole-string edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
+(defn raw-string->note [content-string]
+  (let [[_ edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
         html-string (md-to-html-string md-string)]
     (as-> (edn/read-string edn-string) $
       (assoc $ :body html-string)
-      (assoc $ :uri (str ((:type $) type-uri) (->slug (:title $)) "/"))
+      (assoc $ :uri (str ((:type $) type->uri) (->slug (:title $)) "/"))
       (update $ :date (fn [date-string] (LocalDate/parse date-string))))))
 
 (defn read-notes []
   (->>
    (.listFiles (io/file "resources/notes/"))
    (map slurp)
-   (map string->note-data)))
+   (map raw-string->note)))
 
 (comment
   (read-notes))
 
-(defn tag-in-page? [tag page]
-  (in? (:tags page) tag))
+(defn tag-in-note? [tag note]
+  (in? (:tags note) tag))
 
 (defn generate-tag-pages [notes]
   (let [tags (->>
-              (mapcat :tags notes)
-              (remove :hidden))]
+              notes
+              (remove :hidden)
+              (mapcat :tags)
+              (set))]
     (for [tag tags]
       {:title (str "#" tag)
        :type :i/tag
        :uri (str "/tags/" tag "/")
-       :note-index (filter (partial tag-in-page? tag) notes)})))
+       :note-index (filter (partial tag-in-note? tag) notes)})))
 
 (comment
   (generate-tag-pages (read-notes)))
@@ -92,6 +91,9 @@
 
 (comment
   (generate-index))
+
+(defn get-assets []
+  (assets/load-assets "public" [#"assets/.*"]))
 
 (def app (->
           (stasis/serve-pages generate-index)

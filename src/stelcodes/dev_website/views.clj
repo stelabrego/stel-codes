@@ -42,7 +42,6 @@
    (list
     (->>
      pages
-     (spy)
      (sort-by :date)
      (reverse)
      (take 5)
@@ -83,7 +82,7 @@
   (let [note-index (or (:note-index note-data)
                        (filter #(and (nil? (namespace (:type %)))
                                      (= (name (:type note-data)) (name (:type %))))
-                               (:notes note-data)))]
+                               (remove :hidden (:notes note-data))))]
     (layout note-data
             (window (:title note-data)
                     (he/ordered-list (map note-index-item note-index))))))
@@ -96,7 +95,7 @@
     (render-generic note-data)))
 
 (defmethod render :home [note-data]
-  (let [notes (:notes note-data)
+  (let [notes (remove :hidden (:notes note-data))
         project-notes (filter #(= :project-note (:type %)) notes)
         learning-notes (filter #(= :learning-note (:type %)) notes)
         blog-notes (filter #(= :blog-note (:type %)) notes)]
