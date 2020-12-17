@@ -83,7 +83,7 @@
   (let [note-index (or (:note-index note-data)
                        (filter #(and (nil? (namespace (:type %)))
                                      (= (name (:type note-data)) (name (:type %))))
-                               (:all-notes note-data)))]
+                               (:notes note-data)))]
     (layout note-data
             (window (:title note-data)
                     (he/ordered-list (map note-index-item note-index))))))
@@ -96,10 +96,10 @@
     (render-generic note-data)))
 
 (defmethod render :home [note-data]
-  (let [all-notes (:all-notes note-data)
-        project-notes (filter #(= :project-note (:type %)) all-notes)
-        learning-notes (filter #(= :learning-note (:type %)) all-notes)
-        blog-notes (filter #(= :blog-note (:type %)) all-notes)]
+  (let [notes (:notes note-data)
+        project-notes (filter #(= :project-note (:type %)) notes)
+        learning-notes (filter #(= :learning-note (:type %)) notes)
+        blog-notes (filter #(= :blog-note (:type %)) notes)]
     (layout note-data
             (list
              [:section.welcome
@@ -108,11 +108,10 @@
               [:div.text
                [:p "Hi! I'm a freelance software engineer with a focus on functional design and web technologies."]
                [:p "Check out my projects, learning resources, and blog posts."]
-               [:p "I also do virtual tutoring. Message me for rates and details."]
-               ]]
+               [:p "I also offer virtual tutoring for coding students. Please message me if you're interested."]]]
              (home-content-window "coding projects" "/cool-stuff-like/" project-notes)
              (home-content-window "learning resources" "/and-learns-from/" learning-notes)
-             (home-content-window "blog" "/and-blogs-about/" project-notes)))))
+             (home-content-window "blog" "/and-blogs-about/" blog-notes)))))
 
 (defmethod render :404 [note-data]
   (layout note-data

@@ -33,11 +33,9 @@
 (comment
   (->slug "Wow this is / a weird !!!! ?? title for a note *"))
 
-(def type-uri {
-      :project-note "/cool-stuff-like/"
-      :learning-note "/and-learns-from/"
-      :blog-note "/and-blogs-about/"
-      })
+(def type-uri {:project-note "/cool-stuff-like/"
+               :learning-note "/and-learns-from/"
+               :blog-note "/and-blogs-about/"})
 
 (defn string->note-data [content-string]
   (let [[_whole-string edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
@@ -47,28 +45,30 @@
       (assoc $ :uri (str ((:type $) type-uri) (->slug (:title $)) "/"))
       (update $ :date (fn [date-string] (LocalDate/parse date-string))))))
 
-(defn generate-notes []
+(defn read-notes []
   (->>
    (.listFiles (io/file "resources/notes/"))
    (map slurp)
    (map string->note-data)))
 
 (comment
-  (generate-notes))
+  (read-notes))
 
 (defn tag-in-page? [tag page]
   (in? (:tags page) tag))
 
-(defn generate-tag-pages [journal-pages]
-  (let [tags (mapcat :tags journal-pages)]
+(defn generate-tag-pages [notes]
+  (let [tags (->>
+              (mapcat :tags notes)
+              (remove :hidden))]
     (for [tag tags]
       {:title (str "#" tag)
        :type :i/tag
        :uri (str "/tags/" tag "/")
-       :note-index (filter (partial tag-in-page? tag) journal-pages)})))
+       :note-index (filter (partial tag-in-page? tag) notes)})))
 
 (comment
-  (generate-tag-pages (generate-notes)))
+  (generate-tag-pages (read-notes)))
 
 (defn generate-general-pages []
   (list
@@ -81,11 +81,11 @@
   (generate-general-pages))
 
 (defn generate-index []
-  (let [journal-pages (generate-notes)
-        tag-pages (generate-tag-pages journal-pages)
+  (let [notes (read-notes)
+        tag-pages (generate-tag-pages notes)
         general-pages (generate-general-pages)]
-    (as-> (concat journal-pages tag-pages general-pages) $
-      (map #(assoc % :all-notes $) $)
+    (as-> (concat notes tag-pages general-pages) $
+      (map #(assoc % :notes $) $)
       (remove :hidden $)
       (map (fn [page] {(:uri page) (fn [_] (views/render page))}) $)
       (into {} $))))
