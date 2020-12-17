@@ -1,6 +1,6 @@
-(ns stelabrego.stel-codes-test
+(ns stelcodes.dev-site-test
   (:require [clojure.test :refer :all]
-            [stelabrego.stel-codes :refer :all]))
+            [stelcodes.dev-website :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

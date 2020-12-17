@@ -1,7 +1,7 @@
-(ns stel-codes.system
+(ns stelcodes.dev-website.system
   (:require [integrant.core :as ig]
             [ring.adapter.jetty :as jetty]
-            [stel-codes.generator :as generator]))
+            [stelcodes.dev-website.generator :as generator]))
 
 (def config
   {:adapter/jetty {:handler (ig/ref :handler/app)}

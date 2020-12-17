@@ -1,9 +1,9 @@
-(ns stel-codes.generator
+(ns stelcodes.dev-website.generator
   (:gen-class)
   (:require [stasis.core :as stasis]
             [clojure.java.io :as io]
             [clojure.edn :as edn]
-            [stel-codes.views :as views]
+            [stelcodes.dev-website.views :as views]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [stelcodes.optimus-sass.core]
             [optimus.prime :as optimus]
@@ -85,7 +85,6 @@
         tag-pages (generate-tag-pages journal-pages)
         general-pages (generate-general-pages)]
     (as-> (concat journal-pages tag-pages general-pages) $
-      #_(print $)
       (map #(assoc % :all-notes $) $)
       (remove :hidden $)
       (map (fn [page] {(:uri page) (fn [_] (views/render page))}) $)

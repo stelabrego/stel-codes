@@ -1,4 +1,4 @@
-(ns stel-codes.views
+(ns stelcodes.dev-website.views
   (:require [hiccup.page :as hp]
             [hiccup2.core :refer [html raw]]
             [hiccup.element :as he]
