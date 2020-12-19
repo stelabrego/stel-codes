@@ -37,7 +37,7 @@
         (when-let [tags (:tags note)] (tag-group tags))))
 
 (defn home-content-window [title more-uri pages]
-  (window
+  (let [page-count (count pages)] (window
    title
    (list
     (->>
@@ -46,8 +46,8 @@
      (reverse)
      (take 5)
      (map note-index-item)
-     (he/ordered-list))
-    (he/link-to {:class "more-link"} more-uri (str "more " title)))))
+     (he/unordered-list))
+    (when (> page-count 5) (he/link-to {:class "more-link"} more-uri (str "more " title)))))))
 
 (defn layout [{:keys [title]} & content]
   (->
@@ -85,7 +85,7 @@
                                (remove :hidden (:notes note-data))))]
     (layout note-data
             (window (:title note-data)
-                    (he/ordered-list (map note-index-item note-index))))))
+                    (he/unordered-list (map note-index-item note-index))))))
 
 (defmulti render :type)
 
