@@ -49,7 +49,7 @@
          (take 5)
          (map note-index-item)
          (he/unordered-list))
-        (when (> page-count 5) (he/link-to {:class "more-link"} more-uri (str "more " title))))))))
+        (when (> page-count 5) (he/link-to {:class "more-link"} more-uri "more!")))))))
 
 (defn welcome-section []
   [:section.welcome
