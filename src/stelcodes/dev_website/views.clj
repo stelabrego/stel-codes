@@ -32,22 +32,24 @@
   [:p.tags (for [tag tags] (he/link-to {:class "tag"} (str "/tags/" tag) (str "#" tag " ")))])
 
 (defn note-index-item [note]
-  (list (he/link-to (:uri note) (:title note))
+  (list (he/link-to {:class "title"} (:uri note) (:title note))
         (when-let [pitch (:pitch note)] [:p.pitch pitch])
         (when-let [tags (:tags note)] (tag-group tags))))
 
 (defn home-content-window [title more-uri pages]
-  (let [page-count (count pages)] (window
-   title
-   (list
-    (->>
-     pages
-     (sort-by :date)
-     (reverse)
-     (take 5)
-     (map note-index-item)
-     (he/unordered-list))
-    (when (> page-count 5) (he/link-to {:class "more-link"} more-uri (str "more " title)))))))
+  (let [page-count (count pages)]
+    (when-not (empty? pages)
+      (window
+       title
+       (list
+        (->>
+         pages
+         (sort-by :date)
+         (reverse)
+         (take 5)
+         (map note-index-item)
+         (he/unordered-list))
+        (when (> page-count 5) (he/link-to {:class "more-link"} more-uri (str "more " title))))))))
 
 (defn layout [{:keys [title]} & content]
   (->
@@ -108,9 +110,9 @@
                [:p "Hi! I'm a freelance software engineer with a focus on functional design and web technologies."]
                [:p "Check out my projects, learning resources, and blog posts."]
                [:p "I also offer virtual tutoring for coding students. Please message me if you're interested."]]]
-             (home-content-window "coding projects" "/cool-stuff-like/" project-notes)
-             (home-content-window "learning resources" "/and-learns-from/" learning-notes)
-             (home-content-window "blog" "/and-blogs-about/" blog-notes)))))
+             (home-content-window "my coding projects" "/cool-stuff-like/" project-notes)
+             (home-content-window "my learning resources" "/and-learns-from/" learning-notes)
+             (home-content-window "my blog posts" "/and-blogs-about/" blog-notes)))))
 
 (defmethod render :404 [note-data]
   (layout note-data

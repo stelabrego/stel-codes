@@ -23,7 +23,6 @@
   [coll elm]
   (some #(= elm %) coll))
 
-
 (defn ->slug [input]
   (csk/->kebab-case (str/replace (str input) #"[^\w\s]" "")))
 
@@ -31,8 +30,8 @@
   (->slug "Wow this is / a weird !!!! ?? title for a note *"))
 
 (def type->uri {:project-note "/cool-stuff-like/"
-               :learning-note "/and-learns-from/"
-               :blog-note "/and-blogs-about/"})
+                :learning-note "/and-learns-from/"
+                :blog-note "/and-blogs-about/"})
 
 (defn raw-string->note [content-string]
   (let [[_ edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)

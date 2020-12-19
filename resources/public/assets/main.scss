@@ -196,6 +196,7 @@ main {
     justify-self: center;
     align-content: center;
     justify-content: center;
+    color: color(grey, lighter);
     @media (min-width: 500px) {
       grid-template-areas: "avatar name"
                            "avatar   text";
@@ -216,11 +217,10 @@ main {
     div.text {
       grid-area: text;
       // max-width: 500px;
-      color: color(grey, light);
       background-color: change-color(color(grey,lightest), $alpha:.1);
       border-radius: 30px;
       justify-self: start;
-      padding: 1rem;
+      padding: 1rem 2rem;
       position: relative;
       p {
         margin: .5rem .5rem .5rem 1rem;
@@ -247,7 +247,6 @@ main {
       font-family: 'virtue', sans-serif;
       font-size: 2rem;
       grid-area: name;
-      color: color(grey, light);
       justify-self: start;
       width: 20px;
       @media (min-width: 500px) {
@@ -312,20 +311,25 @@ main {
           a:hover {
             text-decoration: underline solid currentcolor 1px;
           }
+          .title {
+            margin-bottom: .2rem;
+            display: block;
+          }
           .pitch {
             color: color(grey, base);
             font-size: .8rem;
             padding-left: .5rem;
             margin-left: .5rem;
-            border-left: 1px solid color(grey, baselight);
+            border-left: 1px dashed color(grey, baselight);
           }
           .tags {
             padding-left: .5rem;
             margin-left: .5rem;
-            border-left: 1px solid color(grey, baselight);
+            border-left: 1px dashed color(grey, baselight);
             .tag {
               font-size: .8rem;
               display: inline-block;
+              padding-bottom: .2rem;
               // border: 1px solid color(grey, lightest);
               // border-radius: 30px;
               margin-right: .5rem;
@@ -353,8 +357,8 @@ main {
 }
 
 article {
-  max-width: 800px;
-  padding: 1rem;
+  max-width: 1200px;
+  padding: 1rem 4rem;
   img {
     float: right;
     padding: 1rem;
@@ -364,11 +368,18 @@ article {
   }
   h1 {
     font-size: 1.6rem;
+    font-family: 'open_sansbold';
     margin: 1.3rem 0 1rem;
   }
   h2 {
     font-size: 1.3rem;
     margin: 1.1rem 0 1rem;
+  }
+  pre {
+    font-size: 1rem;
+    background: change-color(grey, $alpha: .1);
+    padding: 1rem;
+    border-radius: 5px;
   }
 }
 
