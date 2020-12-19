@@ -51,7 +51,16 @@
          (he/unordered-list))
         (when (> page-count 5) (he/link-to {:class "more-link"} more-uri (str "more " title))))))))
 
-(defn layout [{:keys [title]} & content]
+(defn welcome-section []
+  [:section.welcome
+   (he/image {:class "avatar"} "/assets/img/avatar.png")
+   [:span.name "Stel Abrego"]
+   [:div.text
+    [:p "Hi! I'm a freelance software engineer with a focus on functional design and web technologies."]
+    [:p "Check out my projects, learning resources, and blog posts."]
+    [:p "I also offer virtual tutoring for coding students. Please message me if you're interested."]]])
+
+(defn layout [{:keys [title type]} & content]
   (->
    (html {:lang "en"}
          [:head
@@ -72,7 +81,7 @@
           ;     :defer "defer",
           ;     :async "async"}])
           ]
-         [:body (header) [:main content] (footer)])
+         [:body (header) [:main {:class type} content] (footer)])
    (str)))
 
 (defn render-generic [note-data]
@@ -86,8 +95,10 @@
                                      (= (name (:type note-data)) (name (:type %))))
                                (remove :hidden (:notes note-data))))]
     (layout note-data
-            (window (:title note-data)
-                    (he/unordered-list (map note-index-item note-index))))))
+            (list
+              (welcome-section)
+              (window (:title note-data)
+                    (he/unordered-list (map note-index-item note-index)))))))
 
 (defmulti render :type)
 
@@ -103,13 +114,7 @@
         blog-notes (filter #(= :blog-note (:type %)) notes)]
     (layout note-data
             (list
-             [:section.welcome
-              (he/image {:class "avatar"} "/assets/img/avatar.png")
-              [:span.name "Stel Abrego"]
-              [:div.text
-               [:p "Hi! I'm a freelance software engineer with a focus on functional design and web technologies."]
-               [:p "Check out my projects, learning resources, and blog posts."]
-               [:p "I also offer virtual tutoring for coding students. Please message me if you're interested."]]]
+             (welcome-section)
              (home-content-window "my coding projects" "/cool-stuff-like/" project-notes)
              (home-content-window "my learning resources" "/and-learns-from/" learning-notes)
              (home-content-window "my blog posts" "/and-blogs-about/" blog-notes)))))

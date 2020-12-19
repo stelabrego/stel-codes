@@ -175,7 +175,7 @@ main {
   align-items: center;
   grid-gap: 20px;
   @media (min-width: 1000px) {
-    & {
+    &.home {
       grid-template-areas: "welcome welcome"
                            "projects learning"
                            "blog blog";
