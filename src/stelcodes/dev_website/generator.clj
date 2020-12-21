@@ -11,12 +11,11 @@
             [optimus.optimizations :as optimizations]
             [optimus.strategies :refer [serve-live-assets]]
             [optimus.export]
-            [markdown.core :refer [md-to-html-string]]
             [camel-snake-kebab.core :as csk]
-            [clojure.string :as str]
-            [tupelo.core :as t]
-            [tupelo.base64url :refer [encode-str]])
-  (:import [java.time LocalDate]))
+            [clojure.string :as str])
+  (:import [java.time LocalDate]
+           [org.commonmark.parser Parser]
+           [org.commonmark.renderer.html HtmlRenderer]))
 
 (defn in?
   "true if coll contains elm"
@@ -33,9 +32,14 @@
                 :learning-note "/and-learns-from/"
                 :blog-note "/and-blogs-about/"})
 
+;; https://mrmcc3.github.io/blog/posts/commonmark-in-clojure/
+(def parser (.build (Parser/builder)))
+(def renderer (.build (HtmlRenderer/builder)))
+
 (defn raw-string->note [content-string]
   (let [[_ edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
-        html-string (md-to-html-string md-string)]
+        document (.parse parser md-string)
+        html-string (.render renderer document)]
     (as-> (edn/read-string edn-string) $
       (assoc $ :body html-string)
       (assoc $ :uri (str ((:type $) type->uri) (->slug (:title $)) "/"))

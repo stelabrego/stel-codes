@@ -10,6 +10,7 @@
         markdown-clj/markdown-clj {:mvn/version "1.10.5"}
         camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}
         ring/ring-jetty-adapter {:mvn/version "1.8.2"}
+        com.atlassian.commonmark/commonmark {:mvn/version "0.16.1"}
         com.cemerick/url {:mvn/version "0.1.1"}
         tupelo/tupelo {:mvn/version "20.12.03b"}}
  :aliases
