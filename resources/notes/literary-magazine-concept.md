@@ -6,11 +6,12 @@
 :tags ["hugo" "javascript" "css"]
 }
 
-<img src='https://media.giphy.com/media/YN8SoLCspZBEUc7k0y/giphy.gif' class='mobile-phone'>
+![iphone](https://media.giphy.com/media/YN8SoLCspZBEUc7k0y/giphy.gif)
 
 Inspired by online literary magazines like [Butter Press](https://www.bttrprss.com), I created my own literary magazine website called *[My Delicate Sun](https://literary-magazine-concept.stelabrego.com/)*. The fictional magazine's mission is to publish works of LGBTQIA+ artists. It's built with `go` templating and Hugo, the static site generator. It features custom SVG's, fancy CSS backgrounds, and a fully integrated [forestry.io](https://forestry.io) content management system which makes adding and updating content incredibly easy for a non-technical editor.
 
-# Website Structure
+Website Structure
+===========================
 
 I decided *My Delicate Sun* publishes two types of content for their readers. These two data types are:
 
@@ -24,7 +25,8 @@ Internally, the **Issue** and **Spotlight** data types reference two other data 
 
 This way, the editor doesn't have to replicate data between spotlights and issues.
 
-# Example Artist Markdown
+Example Artist Markdown
+===========================
 
 ```md
 #site/content/artist/emery-davis.md
@@ -36,7 +38,8 @@ title = "Emery Davis"
 
 ```
 
-# Example Artwork Markdown
+Example Artwork Markdown
+===============================
 
 ```
 #site/content/artwork/flowers.md
@@ -68,7 +71,8 @@ Without a pause I turned and fled.
 
 ```
 
-# Example Issue Markdown
+Example Issue Markdown
+==============================
 
 ```md
 #site/content/issues/summer-2019.md
@@ -80,7 +84,8 @@ title = "Summer 2019"
 +++
 
 ```
-# Example Spotlight Markdown
+Example Spotlight Markdown
+================================
 
 ```md
 #site/content/spotlight/the-tender-art-of-emery.md
@@ -99,12 +104,13 @@ Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praes
 Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. 
 ```
 
-# Forestry.io Integration
+Forestry.io Integration
+================================
 
 Once I implemented the website structure, I wanted to practice integrating it into a CMS which could be used by a non-technical editor.
 
-<img src="/img/my-delicate-sun-cms.jpg">
+![cms](/assets/img/my-delicate-sun-cms.jpg)
 
 [Forestry.io](https://forestry.io) was the perfect choice because they support Hugo static site builds (as well as Jekyll, Gatsby, and others). A cool feature of their UI is the ability to reference other documents within the project. For example, when an editor creates a new **Spotlight** piece, the **Artist** field is displayed as a drop down list which displays the titles of the **Artist** markdown files which exist in the project. The editor chooses one of them, and then their selection is saved as the path to that markdown file. Neat!
 
-<img src="/img/my-delicate-sun-cms-2.jpg">
+![cms2](/assets/img/my-delicate-sun-cms-2.jpg)

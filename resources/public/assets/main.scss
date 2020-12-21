@@ -309,7 +309,8 @@ main {
         li {
           padding: .7rem;
           border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.8);
-          &:nth-child(even) {
+          &:last-child {
+            border-bottom: none;
           }
           a:hover {
             text-decoration: underline solid currentcolor 1px;
@@ -325,20 +326,20 @@ main {
             margin-left: .5rem;
             border-left: 1px dashed color(grey, baselight);
           }
-          .tags {
-            padding-left: .5rem;
-            margin-left: .5rem;
-            border-left: 1px dashed color(grey, baselight);
-            .tag {
-              font-size: .8rem;
-              display: inline-block;
-              padding-bottom: .2rem;
-              // border: 1px solid color(grey, lightest);
-              // border-radius: 30px;
-              margin-right: .5rem;
-              color: color(grey, base);
-            }
-          }
+        }
+      }
+      .tags {
+        padding-left: .5rem;
+        margin-left: .5rem;
+        border-left: 1px dashed color(grey, baselight);
+        .tag {
+          font-size: .8rem;
+          display: inline-block;
+          padding-bottom: .2rem;
+          // border: 1px solid color(grey, lightest);
+          // border-radius: 30px;
+          margin-right: .5rem;
+          color: color(grey, base);
         }
       }
       .more-link {
@@ -360,11 +361,15 @@ main {
 }
 
 article {
+  display: grid;
+  grid-template-areas: "header" "content";
   max-width: 1200px;
   padding: 1rem 4rem;
   img {
-    float: right;
-    padding: 1rem;
+    margin: 1rem;
+    display:block;
+    align-self: center;
+    border-radius: 5px;
   }
   p {
     margin: 1rem 0;

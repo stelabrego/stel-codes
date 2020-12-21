@@ -87,7 +87,12 @@
 (defn render-generic [note-data]
   (layout note-data
           (window (:title note-data)
-                  [:article (raw (:body note-data))])))
+                  [:article
+                   [:header
+                     [:h1 (:title note-data)]
+                     (when (not-empty (:tags note-data)) (tag-group (:tags note-data)))]
+                     (when (:repo note-data) [:span (he/link-to (str "https://github.com/stelcodes/" (:repo note-data)) "🔧 Source Code")])
+                   (raw (:body note-data))])))
 
 (defn render-generic-index [note-data]
   (let [note-index (or (:note-index note-data)
