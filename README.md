@@ -11,8 +11,14 @@ This code uses Stasis, a clojure library that provides pieces of a static site g
 ## Usage
 
 Export the site:
+```
+clj -X:export
+```
 
-    $ clojure -M -m stelcodes.dev-website.generator
+Start the development server:
+```
+clj -X:serve
+```
 
 
 Copyright © 2020 Stel Abrego
