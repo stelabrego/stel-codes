@@ -1,4 +1,4 @@
-stelcodes.dev-website
+stel's developer website
 ============================
 This website is intended to promote my professional software developer career. I decided to make a static website that looked like an Mac OS 9 desktop. I'm happy with the result. I loved using Stasis to create my own static site generator. I ported this site from a Hugo project I made while I was taking classes at college. So I wanted to see if I could recreate the great parts about Hugo in Clojure while also enjoying the absolute luxury of writing html with Hiccup. I literally can't go back to writing raw html strings in templating languages anymore. I'm spoiled. 😇
 
@@ -17,7 +17,7 @@ clj -X:export
 
 Start the development server:
 ```
-clj -X:serve
+clj -M:dev:repl
 ```
 
 Copyright © 2020 Stel Abrego

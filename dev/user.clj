@@ -11,6 +11,8 @@
 (def reset repl/reset)
 (def reset-all repl/reset-all)
 
+(go)
+
 (comment
   (go)
   (reset)

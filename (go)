@@ -1,0 +1,7 @@
+nREPL server started on port 57298 on host localhost - nrepl://localhost:57298
+nREPL 0.8.3
+Clojure 1.10.1
+OpenJDK 64-Bit Server VM 15.0.1+9
+Interrupt: Control+C
+Exit:      Control+D or (exit) or (quit)
+user=> 
