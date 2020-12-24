@@ -128,4 +128,3 @@ driver.close()
 
 With these email addresses, Washtenaw Solidarity with Farmworkers collected hundreds of signatures for a petition presented to the university's Board of Regents and Board of Trustees. Ultimately, the Wendy's on campus [decided not to renew their contract](https://www.metrotimes.com/table-and-bar/archives/2019/02/18/university-of-michigan-cuts-ties-with-wendys-restaurant) due to the political pressure brought forth by the boycott. Washtenaw Solidarity with Farmworkers also persuaded the Ann Arbor City Council to [urge Ann Arbor residents](https://www.wxyz.com/ann-arbor-city-council-urges-boycott-of-wendys-hamburgers-over-fair-food-program) to support the boycott as well. Dr. Kim Daley, the leader of Washtenaw Solidarity with Farmworkers, gave an excellent interview about all these events on local television.
 
-{{< yt CBHuGUtL2SQ >}}
