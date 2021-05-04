@@ -1,7 +1,7 @@
 (ns user
   (:require [integrant.repl :as repl]
             ; [integrant.core :as ig]
-            [stelcodes.dev-website.system :as system]
+            [stelcodes.dev-blog.system :as system]
             [cljfmt.main :as cljfmt]))
 
 (repl/set-prep! (fn [] system/config))

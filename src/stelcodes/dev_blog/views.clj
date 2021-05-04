@@ -1,4 +1,4 @@
-(ns stelcodes.dev-website.views
+(ns stelcodes.dev-blog.views
   (:require [hiccup.page :as hp]
             [hiccup2.core :refer [html raw]]
             [hiccup.element :as he]
@@ -89,9 +89,9 @@
           (window (:title note-data)
                   [:article
                    [:header
-                     [:h1 (:title note-data)]
-                     (when (not-empty (:tags note-data)) (tag-group (:tags note-data)))]
-                     (when (:repo note-data) [:span (he/link-to (str "https://github.com/stelcodes/" (:repo note-data)) "🔧 Source Code")])
+                    [:h1 (:title note-data)]
+                    (when (not-empty (:tags note-data)) (tag-group (:tags note-data)))]
+                   (when (:repo note-data) [:span (he/link-to (str "https://github.com/stelcodes/" (:repo note-data)) "🔧 Source Code")])
                    (raw (:body note-data))])))
 
 (defn render-generic-index [note-data]
@@ -101,9 +101,9 @@
                                (remove :hidden (:notes note-data))))]
     (layout note-data
             (list
-              (welcome-section)
-              (window (:title note-data)
-                    (he/unordered-list (map note-index-item note-index)))))))
+             (welcome-section)
+             (window (:title note-data)
+                     (he/unordered-list (map note-index-item note-index)))))))
 
 (defmulti render :type)
 

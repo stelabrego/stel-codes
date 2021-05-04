@@ -1,9 +1,9 @@
-(ns stelcodes.dev-website.generator
+(ns stelcodes.dev-blog.generator
   (:gen-class)
   (:require [stasis.core :as stasis]
             [clojure.java.io :as io]
             [clojure.edn :as edn]
-            [stelcodes.dev-website.views :as views]
+            [stelcodes.dev-blog.views :as views]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [stelcodes.optimus-sass.core]
             [optimus.prime :as optimus]
