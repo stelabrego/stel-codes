@@ -20,13 +20,12 @@
 (defn footer []
   [:footer [:p "made by stel abrego with clojure in " (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "meškwahki territory")]])
 
-(defn window [title content]
-  [:section.window
-   [:div.top
-    (raw (slurp "resources/svg/bars.svg"))
-    [:span.title title]
-    (raw (slurp "resources/svg/bars.svg"))]
-   [:div.content content]])
+(defn window [title content] [:section.window
+                              [:div.top
+                               (raw (slurp "resources/svg/bars.svg"))
+                               [:span.title title]
+                               (raw (slurp "resources/svg/bars.svg"))]
+                              [:div.content content]])
 
 (defn tag-group [tags]
   [:p.tags (for [tag tags] (he/link-to {:class "tag"} (str "/tags/" tag) (str "#" tag " ")))])
@@ -35,6 +34,17 @@
   (list (he/link-to {:class "title"} (:uri note) (:title note))
         (when-let [pitch (:pitch note)] [:p.pitch pitch])
         (when-let [tags (:tags note)] (tag-group tags))))
+
+(comment
+  "old types"
+  :note [:uri :title :pitch :tags :type :hidden :repo :body]
+  "now I'm going to write out the new types in psuedo spec"
+  :general-information [:introduction :twitter-uri :github-uri]
+  :blog-post           [:id :date-created :date-updated :sort :status :tags :title :subtitle :body]
+  :educational-media   [:id :date-created :date-updated :sort :status :tags :title :subtitle :body :rating]
+  :coding-projects     [:id :date-created :date-updated :sort :status :tags :title :subtitle :body :production_uri :repository_uri]
+  )
+
 
 (defn home-content-window [title more-uri pages]
   (let [page-count (count pages)]
