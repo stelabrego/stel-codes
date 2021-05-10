@@ -2,6 +2,7 @@
   (:require [hiccup.page :as hp]
             [hiccup2.core :refer [html raw]]
             [hiccup.element :as he]
+            [stelcodes.dev-blog.state :as state]
             [clojure.string :refer [starts-with?]]
             [hiccup.form :as hf]))
 
@@ -20,31 +21,29 @@
 (defn footer []
   [:footer [:p "made by stel abrego with clojure in " (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "meškwahki territory")]])
 
-(defn window [title content] [:section.window
-                              [:div.top
-                               (raw (slurp "resources/svg/bars.svg"))
-                               [:span.title title]
-                               (raw (slurp "resources/svg/bars.svg"))]
-                              [:div.content content]])
+(defn window [title body] [:section.window
+                           [:div.top
+                            (raw (slurp "resources/svg/bars.svg"))
+                            [:span.title title]
+                            (raw (slurp "resources/svg/bars.svg"))]
+                           [:div.content body]])
 
 (defn tag-group [tags]
-  [:p.tags (for [tag tags] (he/link-to {:class "tag"} (str "/tags/" tag) (str "#" tag " ")))])
+  [:p.tags (for [tag tags] (he/link-to {:class "tag"} (state/tag-name->index-uri tag) (str "#" tag " ")))])
 
-(defn note-index-item [note]
-  (list (he/link-to {:class "title"} (:uri note) (:title note))
-        (when-let [pitch (:pitch note)] [:p.pitch pitch])
-        (when-let [tags (:tags note)] (tag-group tags))))
+(defn window-list-item [item]
+  (list (he/link-to {:class "title"} (:uri item) (:title item))
+        (when-let [subtitle (:subtitle item)] [:p.pitch subtitle])
+        (when-let [tags (:tags item)] (tag-group tags))))
 
 (comment
   "old types"
   :note [:uri :title :pitch :tags :type :hidden :repo :body]
   "now I'm going to write out the new types in psuedo spec"
   :general-information [:introduction :twitter-uri :github-uri]
-  :blog-post           [:id :date-created :date-updated :sort :status :tags :title :subtitle :body]
-  :educational-media   [:id :date-created :date-updated :sort :status :tags :title :subtitle :body :rating]
-  :coding-projects     [:id :date-created :date-updated :sort :status :tags :title :subtitle :body :production_uri :repository_uri]
-  )
-
+  :blog-post           [:id :date-created :date-updated :sort :status :tags :slug :title :subtitle :body]
+  :educational-media   [:id :date-created :date-updated :sort :status :tags :slug :title :subtitle :body :rating]
+  :coding-projects     [:id :date-created :date-updated :sort :status :tags :slug :title :subtitle :body :production_uri :repository_uri])
 
 (defn home-content-window [title more-uri pages]
   (let [page-count (count pages)]
@@ -57,7 +56,7 @@
          (sort-by :date)
          (reverse)
          (take 5)
-         (map note-index-item)
+         (map window-list-item)
          (he/unordered-list))
         (when (> page-count 5) (he/link-to {:class "more-link"} more-uri "more!")))))))
 
@@ -94,46 +93,43 @@
          [:body (header) [:main {:class type} content] (footer)])
    (str)))
 
-(defn render-generic [note-data]
-  (layout note-data
-          (window (:title note-data)
+(defn render-generic [page]
+  (layout page
+          (window (:title page)
                   [:article
                    [:header
-                    [:h1 (:title note-data)]
-                    (when (not-empty (:tags note-data)) (tag-group (:tags note-data)))]
-                   (when (:repo note-data) [:span (he/link-to (str "https://github.com/stelcodes/" (:repo note-data)) "🔧 Source Code")])
-                   (raw (:body note-data))])))
+                    [:h1 (:title page)]
+                    (when (not-empty (:tags page)) (tag-group (:tags page)))]
+                   (when (:repo page) [:span (he/link-to (str "https://github.com/stelcodes/" (:repo page)) "🔧 Source Code")])
+                   (raw (:body page))])))
 
-(defn render-generic-index [note-data]
-  (let [note-index (or (:note-index note-data)
-                       (filter #(and (nil? (namespace (:type %)))
-                                     (= (name (:type note-data)) (name (:type %))))
-                               (remove :hidden (:notes note-data))))]
-    (layout note-data
+(defn render-generic-index [page]
+  (let [indexed-pages (:indexed-pages page)]
+    (layout page
             (list
              (welcome-section)
-             (window (:title note-data)
-                     (he/unordered-list (map note-index-item note-index)))))))
+             (window (:title page)
+                     (he/unordered-list (map window-list-item indexed-pages)))))))
 
 (defmulti render :type)
 
-(defmethod render :default [note-data]
-  (if (= "i" (namespace (:type note-data)))
-    (render-generic-index note-data)
-    (render-generic note-data)))
+(defmethod render :default [page all-pages]
+  (render-generic page))
 
-(defmethod render :home [note-data]
-  (let [notes (remove :hidden (:notes note-data))
-        project-notes (filter #(= :project-note (:type %)) notes)
-        learning-notes (filter #(= :learning-note (:type %)) notes)
-        blog-notes (filter #(= :blog-note (:type %)) notes)]
-    (layout note-data
+(defmethod render :index [page all-pages]
+  (render-generic-index page))
+
+(defmethod render :home [page all-pages]
+  (let [coding-project-pages (:coding-projects all-pages)
+        educational-media-pages (:educational-media all-pages)
+        blog-post-pages (:blog-posts all-pages)]
+    (layout page
             (list
              (welcome-section)
-             (home-content-window "my coding projects" "/cool-stuff-like/" project-notes)
-             (home-content-window "my learning resources" "/and-learns-from/" learning-notes)
-             (home-content-window "my blog posts" "/and-blogs-about/" blog-notes)))))
+             (when coding-project-pages (home-content-window "my coding projects" "/coding-projects/" coding-project-pages))
+             (when educational-media-pages (home-content-window "my learning resources" "/and-learns-from/" educational-media-pages))
+             (when blog-post-pages (home-content-window "my blog posts" "//" blog-post-pages))))))
 
-(defmethod render :404 [note-data]
-  (layout note-data
+(defmethod render :404 [page all-pages]
+  (layout page
           [:h1 "404 ;-;"]))

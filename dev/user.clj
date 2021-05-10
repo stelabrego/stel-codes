@@ -1,5 +1,6 @@
 (ns user
   (:require [integrant.repl :as repl]
+            [clojure.repl :refer [doc find-doc apropos source]]
             ; [integrant.core :as ig]
             [stelcodes.dev-blog.system :as system]
             [cljfmt.main :as cljfmt]))
