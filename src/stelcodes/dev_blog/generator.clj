@@ -11,32 +11,29 @@
             [optimus.assets :as assets]
             [optimus.optimizations :as optimizations]
             [optimus.strategies :refer [serve-live-assets]]
-            [optimus.export]
-            )
-  )
+            [optimus.export]))
 
 (def general-pages
-  (list
-   {:type :home :uri "/"}
-   {:type :404 :uri "/404.html"}))
+  (list {:type :home, :uri "/"} {:type :404, :uri "/404.html"}))
 
-(defn generate-index []
-    (let [pages (concat general-pages (state/get-pages))
-          grouped-pages (group-by :type pages)]
-      (->>
-      (map (fn [page] {(:uri page) (fn [_] (views/render page grouped-pages))}) pages)
-      (into {}))))
+(defn generate-index
+  []
+  (let [pages (concat general-pages (state/get-pages))
+        grouped-pages (group-by :type pages)]
+    (->> (map (fn [page]
+                {(:uri page) (fn [_] (views/render page grouped-pages))})
+           pages)
+         (into {}))))
 
 (comment
   (generate-index))
 
-(defn get-assets []
-  (assets/load-assets "public" [#"assets/.*"]))
+(defn get-assets [] (assets/load-assets "public" [#"assets/.*"]))
 
-(def app (->
-          (stasis/serve-pages generate-index)
-          (optimus/wrap get-assets optimizations/all serve-live-assets)
-          wrap-content-type))
+(def app
+  (-> (stasis/serve-pages generate-index)
+      (optimus/wrap get-assets optimizations/all serve-live-assets)
+      wrap-content-type))
 
 (defn export
   ([]
@@ -48,11 +45,9 @@
      (optimus.export/save-assets assets target-dir)
      (stasis/export-pages site-index target-dir {:optimus-assets assets})
      (println (str "Build successful.\nLocated in: " target-dir))))
-  ([_]
-   (export)))
+  ([_] (export)))
 
-(defn -main []
-  (export))
+(defn -main [] (export))
 
 (comment
   (generate-index)
