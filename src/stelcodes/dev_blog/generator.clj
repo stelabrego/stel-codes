@@ -12,47 +12,8 @@
             [optimus.optimizations :as optimizations]
             [optimus.strategies :refer [serve-live-assets]]
             [optimus.export]
-            [camel-snake-kebab.core :as csk]
-            [clojure.string :as str])
-  (:import [java.time LocalDate]
-           [org.commonmark.parser Parser]
-           [org.commonmark.renderer.html HtmlRenderer]))
-
-; (defn ->slug [input]
-;   (csk/->kebab-case (str/replace (str input) #"[^\w\s]" "")))
-
-; (comment
-;   (->slug "Wow this is / a weird !!!! ?? title for a note *"))
-
-; (def type->uri {:project-note "/cool-stuff-like/"
-;                 :learning-note "/and-learns-from/"
-;                 :blog-note "/and-blogs-about/"})
-
-;; https://mrmcc3.github.io/blog/posts/commonmark-in-clojure/
-; (def parser (.build (Parser/builder)))
-; (def renderer (.build (HtmlRenderer/builder)))
-
-; (defn raw-string->note [content-string]
-;   (let [[_ edn-string md-string] (re-matches #"(?s)(\{.*?\})(?:\s*)(.*)" content-string)
-;         document (.parse parser md-string)
-;         html-string (.render renderer document)]
-;     (as-> (edn/read-string edn-string) $
-;       (assoc $ :body html-string)
-;       (assoc $ :uri (str ((:type $) type->uri) (->slug (:title $)) "/"))
-;       (update $ :date (fn [date-string] (LocalDate/parse date-string))))))
-
-; (defn read-notes []
-;   (->>
-;    (.listFiles (io/file "resources/notes/"))
-;    (map slurp)
-;    (map raw-string->note)))
-
-; (comment
-;   (read-notes))
-
-
-; (comment
-;   (generate-tag-pages (read-notes)))
+            )
+  )
 
 (def general-pages
   (list

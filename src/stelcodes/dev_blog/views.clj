@@ -19,7 +19,7 @@
       (he/mail-to "stel@stel.codes" "Email")])]])
 
 (defn footer []
-  [:footer [:p "made by stel abrego with clojure in " (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "meškwahki territory")]])
+  [:footer [:p "made by stel abrego with clojure on occupied " (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "meškwahki land")]])
 
 (defn window [title body] [:section.window
                            [:div.top
@@ -62,7 +62,7 @@
 
 (defn welcome-section []
   [:section.welcome
-   (he/image {:class "avatar"} "/assets/img/avatar.png")
+   (he/image {:class "avatar"} "/assets/img/selfie3.jpg")
    [:span.name "Stel Abrego"]
    [:div.text
     [:p "Hi! I'm a freelance software engineer with a focus on functional design and web technologies."]

@@ -9,7 +9,7 @@
 
 (def go repl/go)
 (def halt repl/halt)
-(def reset repl/reset)
+(def reset (fn [] (repl/halt) (repl/reset)))
 (def reset-all repl/reset-all)
 
 (go)
