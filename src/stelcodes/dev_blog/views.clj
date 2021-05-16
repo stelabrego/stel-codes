@@ -139,23 +139,36 @@
 
 (defmethod render :index [page all-pages] (render-generic-index page))
 
+(defn get-index-uri-for-pages
+  [pages]
+  (->> pages
+       (first)
+       (:uri)
+       (re-find #"^/[^\/]*/")))
+
 (defmethod render :home
   [page all-pages]
-  (let [coding-project-pages (:coding-projects all-pages)
+  (let [coding-projects-pages (:coding-projects all-pages)
+        coding-projects-index-uri (get-index-uri-for-pages
+                                    coding-projects-pages)
         educational-media-pages (:educational-media all-pages)
-        blog-post-pages (:blog-posts all-pages)]
-    (layout
-      page
-      (list (welcome-section)
-            (when coding-project-pages
-              (home-content-window "my coding projects"
-                                   "/coding-projects/"
-                                   coding-project-pages))
-            (when educational-media-pages
-              (home-content-window "my learning resources"
-                                   "/and-learns-from/"
-                                   educational-media-pages))
-            (when blog-post-pages
-              (home-content-window "my blog posts" "//" blog-post-pages))))))
+        educational-media-index-uri (get-index-uri-for-pages
+                                      educational-media-pages)
+        blog-posts-pages (:blog-posts all-pages)
+        blog-posts-index-uri (get-index-uri-for-pages blog-posts-pages)]
+    (layout page
+            (list (welcome-section)
+                  (when coding-projects-pages
+                    (home-content-window "my coding projects"
+                                         coding-projects-index-uri
+                                         coding-projects-pages))
+                  (when educational-media-pages
+                    (home-content-window "my learning resources"
+                                         educational-media-index-uri
+                                         educational-media-pages))
+                  (when blog-posts-pages
+                    (home-content-window "my blog posts"
+                                         blog-posts-index-uri
+                                         blog-posts-pages))))))
 
 (defmethod render :404 [page all-pages] (layout page [:h1 "404 ;-;"]))
