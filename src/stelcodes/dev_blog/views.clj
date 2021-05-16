@@ -10,15 +10,17 @@
 
 (defn header
   []
-  [:header
-   [:nav
-    (he/link-to {:id "brand"}
-                "/"
-                (raw (slurp "resources/svg/rainbow-apple.svg") "stel.codes"))
-    (he/unordered-list {:id "social"}
-                       [(he/link-to "https://github.com/stelcodes" "Github")
-                        (he/link-to "https://twitter.com/stel_codes" "Twitter")
-                        (he/mail-to "stel@stel.codes" "Email")])]])
+  (let [{:keys [twitter-uri github-uri email-address]}
+          (state/get-general-information)]
+    [:header
+     [:nav
+      (he/link-to {:id "brand"}
+                  "/"
+                  (raw (slurp "resources/svg/rainbow-apple.svg") "stel.codes"))
+      (he/unordered-list {:id "social"}
+                         [(he/link-to github-uri "Github")
+                          (he/link-to twitter-uri "Twitter")
+                          (he/mail-to email-address "Email")])]]))
 
 (defn footer
   []
@@ -77,14 +79,9 @@
 
 (defn welcome-section
   []
-  [:section.welcome (he/image {:class "avatar"} "/assets/img/selfie3.jpg")
-   [:span.name "Stel Abrego"]
-   [:div.text
-    [:p
-     "Hi! I'm a freelance software engineer with a focus on functional design and web technologies."]
-    [:p "Check out my projects, learning resources, and blog posts."]
-    [:p
-     "I also offer virtual tutoring for coding students. Please message me if you're interested."]]])
+  (let [{:keys [introduction]} (state/get-general-information)]
+    [:section.welcome (he/image {:class "avatar"} "/assets/img/avatar.png")
+     [:span.name "Stel Abrego, Software Developer"] (raw introduction)]))
 
 (defn layout
   [{:keys [title type]} & content]
@@ -141,10 +138,11 @@
 
 (defn get-index-uri-for-pages
   [pages]
-  (->> pages
-       (first)
-       (:uri)
-       (re-find #"^/[^\/]*/")))
+  (when pages
+    (->> pages
+         (first)
+         (:uri)
+         (re-find #"^/[^\/]*/"))))
 
 (defmethod render :home
   [page all-pages]

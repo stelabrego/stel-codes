@@ -213,7 +213,6 @@ main {
       grid-area: avatar;
       width: 150px;
       border-radius: 30px;
-      background-color: change-color(color(grey, lightest), $alpha: .2);
       margin: 0 5px;
       @media (min-width: 500px) {
         margin-left: 0 30px;

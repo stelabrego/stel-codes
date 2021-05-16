@@ -15,6 +15,7 @@
 (go)
 
 (comment
+  (halt)
   (go)
   (reset)
   (reset-all)
