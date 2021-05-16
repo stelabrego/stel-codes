@@ -5,6 +5,8 @@
             [camel-snake-kebab.core :as csk]
             [clojure.string :as string]))
 
+(def spy #(do (println "DEBUG:" %) %))
+
 (def db-spec
   {:dbtype "postgresql",
    :dbname "dev_blog",
@@ -30,6 +32,23 @@
             (sql/query db-conn ["SELECT * FROM coding_projects"]))
           (map #(assoc % :type :educational-media)
             (sql/query db-conn ["SELECT * FROM educational_media"]))))
+
+(defn get-raw-files [] (sql/query db-conn ["SELECT * FROM directus_files"]))
+
+(defn get-cdn-uri-for-uuid
+  [uuid]
+  (->> (get-raw-files)
+       (some #(when (= uuid (:id %)) %))
+       (:filename-disk)
+       (str "https://s3.stel.codes/")))
+
+(comment)
+
+(defn convert-image-uuid-to-uri
+  [image-key page]
+  (if-let [uuid (image-key page)]
+    (assoc page image-key (get-cdn-uri-for-uuid uuid))
+    page))
 
 (defn convert-status-to-keyword
   [page]
@@ -57,6 +76,7 @@
   (->> (get-raw-pages)
        (map convert-status-to-keyword)
        (map convert-tags-to-list)
+       (map (partial convert-image-uuid-to-uri :header-image))
        (map add-uri-to-page)
        (filter published?)))
 
@@ -120,4 +140,6 @@
   (get-section-index-pages)
   (get-tag-index-pages)
   (get-pages)
+  (get-raw-files)
+  (type (:id (first (get-raw-files))))
   (get-raw-pages))
