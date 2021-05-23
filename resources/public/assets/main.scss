@@ -148,9 +148,12 @@ nav {
     padding: 0 .7rem;
     grid-auto-flow: column;
     align-content:center;
-    svg {
-      width: 20px;
+    img {
+      width: 30px;
       margin-right: .5rem;
+    }
+    span {
+      padding-top: 2px;
     }
   }
   #social {

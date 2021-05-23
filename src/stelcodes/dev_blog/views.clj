@@ -16,7 +16,8 @@
      [:nav
       (he/link-to {:id "brand"}
                   "/"
-                  (raw (slurp "resources/svg/rainbow-apple.svg") "stel.codes"))
+                  (he/image "https://s3.stel.codes/nixos-logo.png")
+                  [:span "stel.codes"])
       (he/unordered-list {:id "social"}
                          [(he/link-to github-uri "Github")
                           (he/link-to twitter-uri "Twitter")
@@ -80,7 +81,7 @@
 (defn welcome-section
   []
   (let [{:keys [introduction]} (state/get-general-information)]
-    [:section.welcome (he/image {:class "avatar"} "/assets/img/avatar.png")
+    [:section.welcome (he/image {:class "avatar"} "https://s3.stel.codes/avatar.png")
      [:span.name "Stel Abrego, Software Developer"] (raw introduction)]))
 
 (defn layout
