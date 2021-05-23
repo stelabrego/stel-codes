@@ -1,8 +1,6 @@
 (ns stelcodes.dev-blog.generator
   (:gen-class)
   (:require [stasis.core :as stasis]
-            [clojure.java.io :as io]
-            [clojure.edn :as edn]
             [stelcodes.dev-blog.views :as views]
             [stelcodes.dev-blog.state :as state]
             [ring.middleware.content-type :refer [wrap-content-type]]

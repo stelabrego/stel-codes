@@ -1,31 +1,31 @@
-{:paths ["src" "resources"]
- :deps {org.clojure/clojure {:mvn/version "1.10.1"}
-        stasis/stasis {:mvn/version "2.5.0"}
-        ring/ring-core {:mvn/version "1.8.2"}
-        integrant/integrant {:mvn/version "0.8.0"}
-        integrant/repl {:mvn/version "0.3.2"}
-        hiccup/hiccup {:mvn/version "2.0.0-alpha2"}
-        optimus/optimus  {:mvn/version "1.0.0-rc3"}
-        stelcodes/optimus-sass {:mvn/version "0.1.2-SNAPSHOT"}
-        markdown-clj/markdown-clj {:mvn/version "1.10.5"}
-        camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}
-        ring/ring-jetty-adapter {:mvn/version "1.8.2"}
-        com.atlassian.commonmark/commonmark {:mvn/version "0.16.1"}
-        com.cemerick/url {:mvn/version "0.1.1"}
-        org.postgresql/postgresql {:mvn/version "42.2.17.jre7"}
-        seancorfield/next.jdbc {:mvn/version "1.1.588"}
-        tupelo/tupelo {:mvn/version "20.12.03b"}}
- :aliases
- {:dev {:extra-paths ["dev"]
-        :extra-deps {cljfmt/cljfmt {:mvn/version "0.7.0"}}}
-  :repl {:main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]" "--interactive"]
-         :extra-deps {nrepl/nrepl {:mvn/version "0.8.3"}
-                      cider/cider-nrepl {:mvn/version "0.25.2"}}}
-  :export {:exec-fn stelcodes.dev-blog.generator/export}
-  :test {:extra-paths ["test"]
-         :extra-deps {org.clojure/test.check {:mvn/version "1.0.0"}}}
-  :runner {:extra-deps {com.cognitect/test-runner
-                        {:git/url "https://github.com/cognitect-labs/test-runner"
-                         :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}}
-           :main-opts ["-m" "cognitect.test-runner"
-                       "-d" "test"]}}}
+{:aliases
+   {:export {:exec-fn stelcodes.dev-blog.generator/export},
+    :repl {:extra-deps {cider/cider-nrepl {:mvn/version "0.25.2"},
+                        nrepl/nrepl {:mvn/version "0.8.3"}},
+           :extra-paths ["dev"],
+           :main-opts ["-m" "nrepl.cmdline" "--middleware"
+                       "[cider.nrepl/cider-middleware]" "--interactive"]},
+    :runner {:extra-deps {com.cognitect/test-runner
+                            {:git/url
+                               "https://github.com/cognitect-labs/test-runner",
+                             :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}},
+             :main-opts ["-m" "cognitect.test-runner" "-d" "test"]},
+    :test {:extra-deps {org.clojure/test.check {:mvn/version "1.0.0"}},
+           :extra-paths ["test"]}},
+ :deps {camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"},
+        com.atlassian.commonmark/commonmark {:mvn/version "0.16.1"},
+        com.cemerick/url {:mvn/version "0.1.1"},
+        hiccup/hiccup {:mvn/version "2.0.0-alpha2"},
+        integrant/integrant {:mvn/version "0.8.0"},
+        integrant/repl {:mvn/version "0.3.2"},
+        markdown-clj/markdown-clj {:mvn/version "1.10.5"},
+        optimus/optimus {:mvn/version "1.0.0-rc3"},
+        org.clojure/clojure {:mvn/version "1.10.1"},
+        org.postgresql/postgresql {:mvn/version "42.2.17.jre7"},
+        ring/ring-core {:mvn/version "1.8.2"},
+        ring/ring-jetty-adapter {:mvn/version "1.8.2"},
+        seancorfield/next.jdbc {:mvn/version "1.1.588"},
+        stasis/stasis {:mvn/version "2.5.0"},
+        stelcodes/optimus-sass {:mvn/version "0.1.2-SNAPSHOT"},
+        tupelo/tupelo {:mvn/version "20.12.03b"}},
+ :paths ["src" "resources"]}
