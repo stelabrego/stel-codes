@@ -1,7 +1,5 @@
 {:aliases
-   {:dev-sass {:replace-deps {stelcodes/optimus-sass {:local/root
-                                                        "../optimus-sass"}}},
-    :export {:exec-fn stelcodes.dev-blog.generator/export},
+   {:export {:exec-fn stelcodes.dev-blog.generator/export},
     :jar {:exec-args {:aot true,
                       :artifact-id "dev-blog",
                       :compile-ns :all,
