@@ -24,7 +24,7 @@
    :coding-projects (sql/query db-conn ["SELECT * FROM coding_projects"]),
    :educational-media (sql/query db-conn ["SELECT * FROM educational_media"])})
 
-(defn get-raw-pages
+(defn get-raw-cms-pages
   []
   (concat (map #(assoc % :type :blog-posts)
             (sql/query db-conn ["SELECT * FROM blog_posts"]))
@@ -71,14 +71,13 @@
 
 (defn published? [page] (= (:status page) :published))
 
-(defn get-formatted-pages
+(defn get-processed-cms-pages
   []
-  (->> (get-raw-pages)
+  (->> (get-raw-cms-pages)
        (map convert-status-to-keyword)
        (map convert-tags-to-list)
        (map (partial convert-image-uuid-to-uri :header-image))
-       (map add-uri-to-page)
-       (filter published?)))
+       (map add-uri-to-page)))
 
 (defn kebab-case->title-case
   [s]
@@ -87,9 +86,8 @@
        (string/join " ")))
 
 (defn get-section-index-pages
-  []
-  (let [pages (get-formatted-pages)
-        section-map (group-by :type pages)]
+  [pages]
+  (let [section-map (group-by :type pages)]
     (for [[page-type pages] section-map]
       (let [page-type-str (name page-type)
             title (kebab-case->title-case page-type-str)]
@@ -98,8 +96,7 @@
          :type :index,
          :indexed-pages pages}))))
 
-(comment
-  (get-section-index-pages))
+(comment)
 
 (defn in? "true if coll contains elm" [coll elm] (some #(= elm %) coll))
 
@@ -110,9 +107,8 @@
 (defn page-has-tag? [tag page] (in? (:tags page) tag))
 
 (defn get-tag-index-pages
-  []
-  (let [pages (get-formatted-pages)
-        tags (->> pages
+  [pages]
+  (let [tags (->> pages
                   (mapcat :tags)
                   (set))]
     (for [tag tags]
@@ -121,11 +117,24 @@
        :uri (tag-name->index-uri tag),
        :indexed-pages (filter (partial page-has-tag? tag) pages)})))
 
-(defn get-pages
+(def general-pages
+  (list {:type :home, :uri "/"} {:type :404, :uri "/404.html"}))
+
+(defn get-published-pages
   []
-  (concat (get-formatted-pages)
-          (get-section-index-pages)
-          (get-tag-index-pages)))
+  (let [cms-pages (filter published? (get-processed-cms-pages))]
+    (concat general-pages
+            cms-pages
+            (get-section-index-pages cms-pages)
+            (get-tag-index-pages cms-pages))))
+
+(defn get-preview-pages
+  []
+  (let [cms-pages (get-processed-cms-pages)]
+    (concat general-pages
+            cms-pages
+            (get-section-index-pages cms-pages)
+            (get-tag-index-pages cms-pages))))
 
 (defn get-general-information
   []
