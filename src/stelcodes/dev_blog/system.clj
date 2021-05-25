@@ -1,18 +1,19 @@
 (ns stelcodes.dev-blog.system
   (:require [integrant.core :as integrant]
             [ring.adapter.jetty :as jetty]
+            [ring.middleware.resource :refer [wrap-resource]]
             [stasis.core :as stasis]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [stelcodes.dev-blog.generator :as generator]
             [stelcodes.dev-blog.state :as state]))
 
-(def config
-  {:adapter/jetty {:handler (integrant/ref :handler/app)}, :handler/app nil})
-
-(defn development-ring-app
-  []
+(def development-ring-app
   (-> (stasis/serve-pages #(generator/generate-index (state/get-preview-pages)))
+      (wrap-resource "public")
       wrap-content-type))
+
+(def config
+  {:adapter/jetty {:handler development-ring-app}})
 
 (defmethod integrant/init-key :adapter/jetty
   [_ deps]
@@ -20,8 +21,4 @@
 
 ;; this is why I'm using integrant here
 (defmethod integrant/halt-key! :adapter/jetty [_ server] (.stop server))
-
-(defmethod integrant/init-key :handler/app
-  [_ _]
-  (generator/development-ring-app))
 
