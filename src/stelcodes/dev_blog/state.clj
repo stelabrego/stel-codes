@@ -5,15 +5,15 @@
             [camel-snake-kebab.core :as csk]
             [clojure.string :as string]))
 
-(def spy #(do (println "DEBUG:" %) %))
-
 (def db-spec
   {:dbtype "postgresql",
    :dbname "dev_blog",
    :host "127.0.0.1",
    :port 5432,
    :user "static_site_builder"})
+
 (def db-source (jdbc/get-datasource db-spec))
+
 (def db-conn
   (jdbc/with-options db-source
                      {:builder-fn result-set/as-unqualified-kebab-maps}))
@@ -143,12 +143,6 @@
       (assoc :type :general-information)))
 
 (comment
-  (map convert-status-to-keyword (get-formatted-pages))
   (get-general-information)
-  (get-formatted-pages)
-  (get-section-index-pages)
-  (get-tag-index-pages)
-  (get-pages)
   (get-raw-files)
-  (type (:id (first (get-raw-files))))
-  (get-raw-pages))
+  (type (:id (first (get-raw-files)))))

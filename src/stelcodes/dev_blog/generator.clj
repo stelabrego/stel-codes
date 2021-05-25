@@ -1,15 +1,9 @@
 (ns stelcodes.dev-blog.generator
-  (:gen-class)
   (:require [stasis.core :as stasis]
             [stelcodes.dev-blog.views :as views]
             [stelcodes.dev-blog.state :as state]
-            [ring.middleware.content-type :refer [wrap-content-type]]
-            [stelcodes.optimus-sass.core]
-            [optimus.prime :as optimus]
-            [optimus.assets :as assets]
-            [optimus.optimizations :as optimizations]
-            [optimus.strategies :refer [serve-live-assets]]
-            [optimus.export]
+            [clojure.java.io :refer [resource file]]
+            [me.raynes.fs :refer [copy-dir]]
             [taoensso.timbre :as timbre :refer [info]]))
 
 (defn generate-index
@@ -20,21 +14,17 @@
                 {(:uri page) (fn [_] (views/render page grouped-pages))}))
          (into {}))))
 
-(defn get-assets [] (assets/load-assets "public" [#"assets/.*"]))
-
-(defn development-ring-app
-  []
-  (-> (stasis/serve-pages #(generate-index (state/get-preview-pages)))
-      (optimus/wrap get-assets optimizations/all serve-live-assets)
-      wrap-content-type))
+(comment
+  (stasis/slurp-resources "public" #"")
+  (generate-index (state/get-published-pages)))
 
 (defn generic-export
   ([site-index target-dir]
-   (let [assets (optimizations/all (get-assets) {})]
+   (let [assets (file (resource "public/assets"))]
      (info "Building site...")
      (stasis/empty-directory! target-dir)
-     (optimus.export/save-assets assets target-dir)
-     (stasis/export-pages site-index target-dir {:optimus-assets assets})
+     (stasis/export-pages site-index target-dir)
+     (copy-dir assets target-dir)
      (info "Build successful")
      (info (str "Located in " target-dir)))))
 

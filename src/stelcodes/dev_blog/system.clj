@@ -1,10 +1,18 @@
 (ns stelcodes.dev-blog.system
   (:require [integrant.core :as integrant]
             [ring.adapter.jetty :as jetty]
-            [stelcodes.dev-blog.generator :as generator]))
+            [stasis.core :as stasis]
+            [ring.middleware.content-type :refer [wrap-content-type]]
+            [stelcodes.dev-blog.generator :as generator]
+            [stelcodes.dev-blog.state :as state]))
 
 (def config
   {:adapter/jetty {:handler (integrant/ref :handler/app)}, :handler/app nil})
+
+(defn development-ring-app
+  []
+  (-> (stasis/serve-pages #(generator/generate-index (state/get-preview-pages)))
+      wrap-content-type))
 
 (defmethod integrant/init-key :adapter/jetty
   [_ deps]
