@@ -41,3 +41,5 @@
         stasis/stasis {:mvn/version "2.5.0"},
         stelcodes/optimus-sass {:mvn/version "0.1.3"}},
  :paths ["src" "resources"]}
+
+;; sass --no-source-map resources/scss/main.scss:resources/public/assets/css/main.css
