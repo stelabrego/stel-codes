@@ -12,8 +12,7 @@
       (wrap-resource "public")
       wrap-content-type))
 
-(def config
-  {:adapter/jetty {:handler development-ring-app}})
+(def config {:adapter/jetty {:handler development-ring-app}})
 
 (defmethod integrant/init-key :adapter/jetty
   [_ deps]

@@ -2,7 +2,7 @@
    {:export {:exec-fn stelcodes.dev-blog.generator/export},
     :jar {:exec-args {:aot true,
                       :artifact-id "dev-blog",
-                      :compile-ns [stelcodes.dev-blog] ,
+                      :compile-ns [stelcodes.dev-blog],
                       :group-id "codes.stel",
                       :jar "codes.stel.dev-blog.jar",
                       :jar-type :uber,
