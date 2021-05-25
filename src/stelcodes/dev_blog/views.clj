@@ -87,28 +87,28 @@
 
 (defn layout
   [{:keys [title type]} & content]
-  (->
-    (html
-      {:lang "en"}
-      [:head [:title (if title (str title " | stel.codes") "stel.codes")]
-       [:meta {:charset "utf-8"}]
-       [:meta {:http-equiv "X-UA-Compatible", :content "IE=edge"}]
-       [:meta
-        {:name "viewport", :content "width=device-width, initial-scale=1.0"}]
-       (hp/include-css "/assets/reset.css") (hp/include-css "/assets/main.css")
-       ; [:link {:rel "shortcut icon" :href "/assets/favicon.ico" :type
-       ; "image/x-icon"}]
-       ; (hp/include-css "/assets/minireset.css")
-       ; (hp/include-css "/assets/main.css")
-       ; (if (= (System/getenv "PROD") "true")
-       ;   [:script
-       ;    {:src "https://plausible.io/js/plausible.js",
-       ;     :data-domain "cuter-news.herokuapp.com",
-       ;     :defer "defer",
-       ;     :async "async"}])
-      ]
-      [:body (header) [:main {:class type} content] (footer)])
-    (str)))
+  (-> (html
+        {:lang "en"}
+        [:head [:title (if title (str title " | stel.codes") "stel.codes")]
+         [:meta {:charset "utf-8"}]
+         [:meta {:http-equiv "X-UA-Compatible", :content "IE=edge"}]
+         [:meta
+          {:name "viewport", :content "width=device-width, initial-scale=1.0"}]
+         (hp/include-css "/assets/style/reset.css")
+         (hp/include-css "/assets/style/main.css")
+         ; [:link {:rel "shortcut icon" :href "/assets/favicon.ico" :type
+         ; "image/x-icon"}]
+         ; (hp/include-css "/assets/minireset.css")
+         ; (hp/include-css "/assets/main.css")
+         ; (if (= (System/getenv "PROD") "true")
+         ;   [:script
+         ;    {:src "https://plausible.io/js/plausible.js",
+         ;     :data-domain "cuter-news.herokuapp.com",
+         ;     :defer "defer",
+         ;     :async "async"}])
+        ]
+        [:body (header) [:main {:class type} content] (footer)])
+      (str)))
 
 (defn render-generic
   [page]
