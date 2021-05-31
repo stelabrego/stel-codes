@@ -10,8 +10,7 @@
   [pages]
   (let [grouped-pages (group-by :type pages)]
     (->> pages
-         (map (fn [page]
-                {(:uri page) (fn [_] (views/render page grouped-pages))}))
+         (map (fn [page] {(:uri page) (fn [_] (views/render page grouped-pages))}))
          (into {}))))
 
 (comment
@@ -28,15 +27,9 @@
      (info "Build successful")
      (info (str "Located in " target-dir)))))
 
-(defn export-published
-  []
-  (generic-export (generate-index (state/get-published-pages))
-                  "/www/dev-blog-published"))
+(defn export-published [] (generic-export (generate-index (state/get-published-pages)) "/www/dev-blog-published"))
 
-(defn export-preview
-  []
-  (generic-export (generate-index (state/get-preview-pages))
-                  "/www/dev-blog-preview"))
+(defn export-preview [] (generic-export (generate-index (state/get-preview-pages)) "/www/dev-blog-preview"))
 
 (defn export ([] (export-published) (export-preview)) ([_] (export)))
 

@@ -5,18 +5,11 @@
             [camel-snake-kebab.core :as csk]
             [clojure.string :as string]))
 
-(def db-spec
-  {:dbtype "postgresql",
-   :dbname "dev_blog",
-   :host "127.0.0.1",
-   :port 5432,
-   :user "static_site_builder"})
+(def db-spec {:dbtype "postgresql", :dbname "dev_blog", :host "127.0.0.1", :port 5432, :user "static_site_builder"})
 
 (def db-source (jdbc/get-datasource db-spec))
 
-(def db-conn
-  (jdbc/with-options db-source
-                     {:builder-fn result-set/as-unqualified-kebab-maps}))
+(def db-conn (jdbc/with-options db-source {:builder-fn result-set/as-unqualified-kebab-maps}))
 
 (defn pages
   []
@@ -26,12 +19,9 @@
 
 (defn get-raw-cms-pages
   []
-  (concat (map #(assoc % :type :blog-posts)
-            (sql/query db-conn ["SELECT * FROM blog_posts"]))
-          (map #(assoc % :type :coding-projects)
-            (sql/query db-conn ["SELECT * FROM coding_projects"]))
-          (map #(assoc % :type :educational-media)
-            (sql/query db-conn ["SELECT * FROM educational_media"]))))
+  (concat (map #(assoc % :type :blog-posts) (sql/query db-conn ["SELECT * FROM blog_posts"]))
+          (map #(assoc % :type :coding-projects) (sql/query db-conn ["SELECT * FROM coding_projects"]))
+          (map #(assoc % :type :educational-media) (sql/query db-conn ["SELECT * FROM educational_media"]))))
 
 (defn get-raw-files [] (sql/query db-conn ["SELECT * FROM directus_files"]))
 
@@ -64,10 +54,7 @@
 
 (defn add-uri-to-page
   [page]
-  (let [type-str (name (:type page))
-        slug (:slug page)
-        uri (str "/" type-str "/" slug "/")]
-    (assoc page :uri uri)))
+  (let [type-str (name (:type page)) slug (:slug page) uri (str "/" type-str "/" slug "/")] (assoc page :uri uri)))
 
 (defn published? [page] (= (:status page) :published))
 
@@ -91,18 +78,13 @@
     (for [[page-type pages] section-map]
       (let [page-type-str (name page-type)
             title (kebab-case->title-case page-type-str)]
-        {:title title,
-         :uri (str "/" page-type-str "/"),
-         :type :index,
-         :indexed-pages pages}))))
+        {:title title, :uri (str "/" page-type-str "/"), :type :index, :indexed-pages pages}))))
 
 (comment)
 
 (defn in? "true if coll contains elm" [coll elm] (some #(= elm %) coll))
 
-(defn tag-name->index-uri
-  [tag]
-  (as-> tag $ (string/lower-case $) (csk/->kebab-case $) (str "/tags/" $ "/")))
+(defn tag-name->index-uri [tag] (as-> tag $ (string/lower-case $) (csk/->kebab-case $) (str "/tags/" $ "/")))
 
 (defn page-has-tag? [tag page] (in? (:tags page) tag))
 
@@ -117,24 +99,17 @@
        :uri (tag-name->index-uri tag),
        :indexed-pages (filter (partial page-has-tag? tag) pages)})))
 
-(def general-pages
-  (list {:type :home, :uri "/"} {:type :404, :uri "/404.html"}))
+(def general-pages (list {:type :home, :uri "/"} {:type :404, :uri "/404.html"}))
 
 (defn get-published-pages
   []
   (let [cms-pages (filter published? (get-processed-cms-pages))]
-    (concat general-pages
-            cms-pages
-            (get-section-index-pages cms-pages)
-            (get-tag-index-pages cms-pages))))
+    (concat general-pages cms-pages (get-section-index-pages cms-pages) (get-tag-index-pages cms-pages))))
 
 (defn get-preview-pages
   []
   (let [cms-pages (get-processed-cms-pages)]
-    (concat general-pages
-            cms-pages
-            (get-section-index-pages cms-pages)
-            (get-tag-index-pages cms-pages))))
+    (concat general-pages cms-pages (get-section-index-pages cms-pages) (get-tag-index-pages cms-pages))))
 
 (defn get-general-information
   []

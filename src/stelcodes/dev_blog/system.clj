@@ -14,9 +14,7 @@
 
 (def config {:adapter/jetty {:handler development-ring-app}})
 
-(defmethod integrant/init-key :adapter/jetty
-  [_ deps]
-  (jetty/run-jetty (:handler deps) {:port 3000, :join? false}))
+(defmethod integrant/init-key :adapter/jetty [_ deps] (jetty/run-jetty (:handler deps) {:port 3000, :join? false}))
 
 ;; this is why I'm using integrant here
 (defmethod integrant/halt-key! :adapter/jetty [_ server] (.stop server))
