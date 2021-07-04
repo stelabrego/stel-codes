@@ -1,7 +1,7 @@
-(ns stelcodes.dev-blog.webhook
+(ns codes.stel.dev-blog.webhook
   (:require [org.httpkit.server :refer [run-server]]
             [taoensso.timbre :as timbre :refer [info]]
-            [stelcodes.dev-blog.generator :refer [export]]))
+            [codes.stel.dev-blog.generator :refer [export]]))
 
 (def port 1201)
 

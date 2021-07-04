@@ -1,12 +1,9 @@
-(ns stelcodes.dev-blog.views
+(ns codes.stel.dev-blog.views
   (:require [hiccup.page :as hp]
             [hiccup2.core :refer [html raw]]
             [hiccup.element :as he]
-            [stelcodes.dev-blog.state :as state]
-            [clojure.string :refer [starts-with?]]
-            [hiccup.form :as hf]))
+            [codes.stel.dev-blog.state :as state]))
 
-(def spy #(do (println "DEBUG:" %) %))
 
 (defn header
   []

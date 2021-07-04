@@ -1,7 +1,7 @@
-(ns stelcodes.dev-blog.generator
+(ns codes.stel.dev-blog.generator
   (:require [stasis.core :as stasis]
-            [stelcodes.dev-blog.views :as views]
-            [stelcodes.dev-blog.state :as state]
+            [codes.stel.dev-blog.views :as views]
+            [codes.stel.dev-blog.state :as state]
             [clojure.java.io :refer [resource file]]
             [me.raynes.fs :refer [copy-dir]]
             [taoensso.timbre :as timbre :refer [info]]))

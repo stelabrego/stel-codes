@@ -1,4 +1,4 @@
-(ns stelcodes.dev-blog.state
+(ns codes.stel.dev-blog.state
   (:require [next.jdbc.sql :as sql]
             [next.jdbc :as jdbc]
             [next.jdbc.result-set :as result-set]
