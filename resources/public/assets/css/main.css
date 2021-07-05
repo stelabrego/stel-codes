@@ -230,7 +230,7 @@ main section.welcome div.text p {
     content: "";
     display: inline-block;
     position: absolute;
-    left: 0;
+    left: 0.5;
     top: 30%;
     border: 17px solid transparent;
     border-right-color: rgba(245, 245, 245, 0.1);
