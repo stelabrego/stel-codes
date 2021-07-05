@@ -5,6 +5,7 @@
             [next.jdbc.result-set :as result-set]
             [codes.stel.dev-blog.config :refer [config]]
             [camel-snake-kebab.core :as csk]
+            [markdown.core :refer [md-to-html-string]]
             [clojure.string :as string])
   (:import (com.zaxxer.hikari HikariDataSource)))
 
@@ -58,6 +59,14 @@
     (assoc page :tags (string/split tags #","))
     page))
 
+(defn convert-body-md-to-html
+  [page]
+  (if-let [body (:body page)]
+    (assoc page :body (md-to-html-string body))
+    page))
+
+(comment (convert-body-md-to-html {:body "#Test\n\n- this\n- should\n- become a list!"}))
+
 (defn add-uri-to-page
   [page]
   (let [type-str (name (:type page)) slug (:slug page) uri (str "/" type-str "/" slug "/")] (assoc page :uri uri)))
@@ -69,6 +78,7 @@
   (->> (get-raw-cms-pages)
        (map convert-status-to-keyword)
        (map convert-tags-to-list)
+       (map convert-body-md-to-html)
        (map (partial convert-image-uuid-to-uri :header-image))
        (map add-uri-to-page)))
 
@@ -125,5 +135,6 @@
 
 (comment
   (get-general-information)
+  (get-published-pages)
   (get-raw-files)
   (type (:id (first (get-raw-files)))))
