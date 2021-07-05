@@ -164,11 +164,13 @@ main {
   padding: 1rem;
   display: grid;
   grid-auto-flow: row;
+  grid-gap: 20px;
+}
+main.home {
   grid-template-areas: "welcome" "projects" "learning" "blog";
   justify-items: stretch;
   justify-content: center;
   align-items: center;
-  grid-gap: 20px;
 }
 @media (min-width: 1000px) {
   main.home {
@@ -178,7 +180,7 @@ main {
     grid-gap: 30px;
   }
 }
-main section.welcome {
+main.home section.welcome {
   grid-area: welcome;
   display: grid;
   grid-auto-flow: row;
@@ -193,23 +195,23 @@ main section.welcome {
   align-items: center;
 }
 @media (min-width: 500px) {
-  main section.welcome {
+  main.home section.welcome {
     grid-template-areas: "avatar name" "avatar   text";
     grid-template-columns: max-content minmax(min-content, 1fr);
   }
 }
-main section.welcome img.avatar {
+main.home section.welcome img.avatar {
   grid-area: avatar;
   width: 150px;
   border-radius: 30px;
   margin: 0 5px;
 }
 @media (min-width: 500px) {
-  main section.welcome img.avatar {
+  main.home section.welcome img.avatar {
     margin-left: 0 30px;
   }
 }
-main section.welcome div.text {
+main.home section.welcome div.text {
   grid-area: text;
   background-color: rgba(245, 245, 245, 0.1);
   border-radius: 30px;
@@ -217,16 +219,16 @@ main section.welcome div.text {
   padding: 1rem 2rem;
   position: relative;
 }
-main section.welcome div.text p {
+main.home section.welcome div.text p {
   margin: 0.5rem 0.5rem 0.5rem 1rem;
 }
 @media (min-width: 500px) {
-  main section.welcome div.text p {
+  main.home section.welcome div.text p {
     margin: 0.5rem 0;
   }
 }
 @media (min-width: 500px) {
-  main section.welcome div.text::after {
+  main.home section.welcome div.text::after {
     content: "";
     display: inline-block;
     position: absolute;
@@ -238,7 +240,7 @@ main section.welcome div.text p {
     margin-left: -17px;
   }
 }
-main section.welcome span.name {
+main.home section.welcome span.name {
   font-family: "virtue", sans-serif;
   font-size: 2rem;
   grid-area: name;
@@ -246,7 +248,7 @@ main section.welcome span.name {
   width: 20px;
 }
 @media (min-width: 500px) {
-  main section.welcome span.name {
+  main.home section.welcome span.name {
     width: initial;
   }
 }
