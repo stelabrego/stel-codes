@@ -89,10 +89,11 @@
           (welcome-section)
           (window (state/kebab-case->title-case (name (:type page)))
                   [:article
-                   [:header [:h1 (:title page)] (when (not-empty (:tags page)) (tag-group (:tags page)))
+                   [:header (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
+                    (when (not-empty (:tags page)) (tag-group (:tags page)))
                     (when (:repo page)
-                      [:span (he/link-to (str "https://github.com/stelcodes/" (:repo page)) "🔧 Source Code")])
-                    (when-let [img (:header-image page)] (he/image img))] (raw (:body page))])))
+                      [:span (he/link-to (str "https://github.com/stelcodes/" (:repo page)) "🔧 Source Code")])]
+                   (raw (:body page))])))
 
 (defn render-generic-index
   [page]

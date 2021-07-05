@@ -348,7 +348,7 @@ article {
   grid-template-areas: "header" "content";
   justify-self: center;
   max-width: 900px;
-  padding: 1rem 4rem;
+  padding: 1rem 4rem 3rem;
   @media (max-width: 800px) {
     & {
       padding: 1rem 1rem;
