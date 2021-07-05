@@ -137,7 +137,7 @@ nav a:hover {
 nav #brand {
   grid-area: brand;
   display: grid;
-  padding: 0 0.7rem;
+  padding: 0 0.5rem;
   grid-auto-flow: column;
   align-content: center;
 }
@@ -165,6 +165,11 @@ main {
   display: grid;
   grid-auto-flow: row;
   grid-gap: 20px;
+}
+@media (max-width: 800px) {
+  main {
+    padding: 0.2rem;
+  }
 }
 main.home {
   grid-template-areas: "welcome" "projects" "learning" "blog";
@@ -252,28 +257,28 @@ main.home section.welcome span.name {
     width: initial;
   }
 }
-main section.window {
-  display: inline-block;
-  padding: 0 0.5rem 0.5rem 0.5rem;
-  background-color: #d8d8d8;
-}
 @media (min-width: 1000px) {
-  main section.window:nth-of-type(1) {
+  main.home section.window:nth-of-type(1) {
     grid-area: welcome;
   }
-  main section.window:nth-of-type(2) {
+  main.home section.window:nth-of-type(2) {
     grid-area: projects;
   }
-  main section.window:nth-child(3) {
+  main.home section.window:nth-child(3) {
     grid-area: learning;
     align-self: center;
     margin: 2rem 0;
   }
-  main section.window:nth-child(4) {
+  main.home section.window:nth-child(4) {
     grid-area: blog;
     align-self: start;
     justify-self: center;
   }
+}
+main section.window {
+  display: inline-block;
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  background-color: #d8d8d8;
 }
 main section.window .top {
   font-family: "virtue", sans-serif;
