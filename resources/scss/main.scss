@@ -348,6 +348,11 @@ article {
   grid-template-areas: "header" "content";
   max-width: 700px;
   padding: 1rem 4rem;
+  @media (max-width: 800px) {
+    & {
+      padding: 1rem 1rem;
+    }
+  }
   img {
     // margin: 1rem;
     max-width: 100%;

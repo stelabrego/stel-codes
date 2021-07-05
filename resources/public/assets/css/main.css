@@ -358,6 +358,11 @@ article {
   max-width: 700px;
   padding: 1rem 4rem;
 }
+@media (max-width: 800px) {
+  article {
+    padding: 1rem 1rem;
+  }
+}
 article img {
   max-width: 100%;
   max-height: 500px;
