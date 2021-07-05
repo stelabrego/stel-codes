@@ -1,20 +1,24 @@
 (ns user
-  (:require [integrant.repl :as repl]
-            [clojure.repl :refer [doc find-doc apropos source]]
-            ; [integrant.core :as ig]
-            [codes.stel.dev-blog.system :as system]))
+  (:require [clojure.repl :refer [doc find-doc apropos source]]
+            [ring.middleware.resource :refer [wrap-resource]]
+            [stasis.core :as stasis]
+            [ring.middleware.content-type :refer [wrap-content-type]]
+            [codes.stel.dev-blog.generator :as generator]
+            [codes.stel.dev-blog.state :as state]
+            [org.httpkit.server :refer [run-server]]
+            [taoensso.timbre :as timbre :refer [info]]
+            [codes.stel.dev-blog.config :refer [config]]))
 
-(repl/set-prep! (fn [] system/config))
+(defn dev-app
+  []
+  (-> (stasis/serve-pages #(generator/generate-index (state/get-preview-pages)))
+      (wrap-resource "public")
+      wrap-content-type))
 
-(def go repl/go)
-(def halt repl/halt)
-(def reset (fn [] (repl/halt) (repl/reset)))
-(def reset-all repl/reset-all)
+(defn start
+  []
+  (let [dev-config (:dev config)
+        dev-port (:port dev-config)]
+    (info "Starting dev server on port " dev-port)
+    (run-server (dev-app) dev-config)))
 
-(go)
-
-(comment
-  (halt)
-  (go)
-  (reset)
-  (reset-all))

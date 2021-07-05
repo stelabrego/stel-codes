@@ -34,5 +34,6 @@
 (defn export ([] (export-published) (export-preview)) ([_] (export)))
 
 (comment
+  (export)
   (export-published)
   (export-preview))

@@ -1,9 +1,15 @@
 (ns codes.stel.dev-blog.state
   (:require [next.jdbc.sql :as sql]
             [next.jdbc :as jdbc]
+            [next.jdbc.connection :refer [->pool]]
             [next.jdbc.result-set :as result-set]
+            [codes.stel.dev-blog.config :refer [config]]
             [camel-snake-kebab.core :as csk]
-            [clojure.string :as string]))
+            [clojure.string :as string])
+  (:import (com.zaxxer.hikari HikariDataSource)))
+
+(def datasource
+  (jdbc/with-options (->pool HikariDataSource (config :db-spec)) {:builder-fn result-set/as-unqualified-kebab-maps}))
 
 (def db-spec {:dbtype "postgresql", :dbname "dev_blog", :host "127.0.0.1", :port 5432, :user "static_site_builder"})
 
