@@ -14,11 +14,7 @@
                          [(he/link-to github-uri "Github") (he/link-to twitter-uri "Twitter")
                           (he/mail-to email-address "Email")])]]))
 
-(defn footer
-  []
-  [:footer
-   [:p "made by stel abrego with clojure on occupied "
-    (he/link-to "https://native-land.ca/maps/territories/meskwahki%c2%b7asa%c2%b7hina-fox/" "meškwahki land")]])
+(defn footer [] [:footer [:p "Stel Abrego 2021"]])
 
 (defn window
   [title body]
@@ -90,6 +86,7 @@
 (defn render-generic
   [page]
   (layout page
+          (welcome-section)
           (window (state/kebab-case->title-case (name (:type page)))
                   [:article
                    [:header [:h1 (:title page)] (when (not-empty (:tags page)) (tag-group (:tags page)))

@@ -1,3 +1,5 @@
 {:min-bb-version "0.4.0",
- :tasks {repl (shell "rlwrap clojure -M:repl"),
-         sass (shell "npx sass --no-source-map --watch resources/scss:resources/public/assets/css")}}
+ :tasks {export (shell "clojure -X:export"),
+         repl (shell "rlwrap clojure -M:repl"),
+         sass (shell "npx sass --no-source-map --watch resources/scss:resources/public/assets/css"),
+         webhook (shell "clojure -X:webhook")}}
