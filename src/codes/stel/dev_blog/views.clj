@@ -2,6 +2,7 @@
   (:require [hiccup.page :as hp]
             [hiccup2.core :refer [html raw]]
             [hiccup.element :as he]
+            [codes.stel.dev-blog.config :refer [config]]
             [codes.stel.dev-blog.state :as state]))
 
 
@@ -68,18 +69,23 @@
             [:head [:title (if title (str title " | stel.codes") "stel.codes")] [:meta {:charset "utf-8"}]
              [:meta {:http-equiv "X-UA-Compatible", :content "IE=edge"}]
              [:meta {:name "viewport", :content "width=device-width, initial-scale=1.0"}]
-             (hp/include-css "/assets/css/main.css")
-             ; [:link {:rel "shortcut icon" :href "/assets/favicon.ico" :type
-             ; "image/x-icon"}]
-             ; (hp/include-css "/assets/minireset.css")
-             ; (hp/include-css "/assets/main.css")
-             ; (if (= (System/getenv "PROD") "true")
-             ;   [:script
-             ;    {:src "https://plausible.io/js/plausible.js",
-             ;     :data-domain "cuter-news.herokuapp.com",
-             ;     :defer "defer",
-             ;     :async "async"}])
-            ]
+             ;; Icons
+             [:link {:href "/assets/icons/apple-touch-icon.png", :sizes "180x180", :rel "apple-touch-icon"}]
+             [:link {:href "/assets/icons/favicon-32x32.png", :sizes "32x32", :type "image/png", :rel "icon"}]
+             [:link {:href "/assets/icons/favicon-16x16.png", :sizes "16x16", :type "image/png", :rel "icon"}]
+             [:link {:href "/assets/icons/site.webmanifest", :rel "manifest"}]
+             [:link {:color "#5bbad5", :href "/assets/icons/safari-pinned-tab.svg", :rel "mask-icon"}]
+             [:link {:href "/assets/icons/favicon.ico", :rel "shortcut icon"}]
+             [:meta {:content "#da532c", :name "msapplication-TileColor"}]
+             [:meta {:content "/assets/icons/browserconfig.xml", :name "msapplication-config"}]
+             [:meta {:content "#ffffff", :name "theme-color"}] (hp/include-css "/assets/css/main.css")
+             ;; Analytics
+             (when (:prod config)
+               [:script
+                {:src "https://plausible.io/js/plausible.js",
+                 :data-domain "stel.codes",
+                 :defer "defer",
+                 :async "async"}])]
             [:body (header) [:main {:class type} content] (footer)])
       (str)))
 
