@@ -65,7 +65,8 @@
     (assoc page :body (md-to-html-string body))
     page))
 
-(comment (convert-body-md-to-html {:body "#Test\n\n- this\n- should\n- become a list!"}))
+(comment
+  (convert-body-md-to-html {:body "#Test\n\n- this\n- should\n- become a list!"}))
 
 (defn add-uri-to-page
   [page]
