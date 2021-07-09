@@ -53,7 +53,7 @@ $palette: (
 body {
   display: grid;
   grid-template-rows: max-content minmax(min-content, 1fr) max-content;
-  font-family: "Lucida Grande", sans-serif;
+  font-family: "Verdana", sans-serif;
   min-height: 100vh;
   background-color: color(violet,darker);
   background-image: url("/assets/img/wallpaper.svg");
@@ -64,7 +64,6 @@ body {
 
 a {
   color: color(violet, darker);
-  text-decoration: none;
 }
 
 pre {
@@ -100,6 +99,7 @@ nav {
   a {
     color: color(black, base);
     height: 30px;
+    text-decoration: none;
     &:hover {
       background-color: rgba(0,0,0,.1);
     }
@@ -233,26 +233,28 @@ main {
             display: block;
           }
           .pitch {
-            color: color(grey, base);
+            color: color(grey, dark);
             font-size: .8rem;
             padding-left: .5rem;
             margin-left: .5rem;
-            border-left: 1px dashed color(grey, baselight);
+            border-left: 1px dashed color(grey, dark);
           }
         }
       }
       .tags {
         padding-left: .5rem;
         margin-left: .5rem;
-        border-left: 1px dashed color(grey, baselight);
+        border-left: 1px dashed color(grey, dark);
         .tag {
-          font-size: .8rem;
           display: inline-block;
           padding-bottom: .2rem;
           // border: 1px solid color(grey, lightest);
           // border-radius: 30px;
           margin-right: .5rem;
-          color: color(grey, base);
+        }
+        &, a {
+          color: color(grey, dark);
+          font-size: .8rem;
         }
       }
       .more-link {
@@ -344,8 +346,6 @@ section.welcome {
 }
 
 article {
-  display: grid;
-  grid-template-areas: "header" "content";
   justify-self: center;
   max-width: 900px;
   padding: 1rem 4rem 3rem;
@@ -362,6 +362,22 @@ article {
     align-self: center;
     border-radius: 5px;
   }
+  .top-links {
+    display: inline-block;
+    background: color(violet,darker);
+    border-radius: 15px;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+    
+    span {
+      margin: 0.6rem;
+      display: inline-block;
+    }
+
+    a {
+      color: color(grey, lightest);
+    }
+  }
   p {
     margin: 0 0 1rem;
     line-height: 2;
@@ -373,6 +389,9 @@ article {
   h2 {
     font-size: 1.8rem;
     margin: 1.1rem 0 1rem;
+  }
+  h1, h2, h3 {
+    font-weight: 600;
   }
   pre {
     font-size: 1rem;
