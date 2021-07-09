@@ -25,7 +25,7 @@
 
 (defn tag-group
   [tags]
-  [:p.tags (for [tag tags] (he/link-to {:class "tag"} (state/tag-name->index-uri tag) (str "#" tag " ")))])
+  [:p.tags (for [tag tags] (list "#" (he/link-to {:class "tag"} (state/tag-name->index-uri tag) tag)))])
 
 (defn window-list-item
   [item]
@@ -89,15 +89,15 @@
 
 (defn render-generic
   [page]
-  (layout page
-          (welcome-section)
-          (window (state/kebab-case->title-case (name (:type page)))
-                  [:article
-                   [:header (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
-                    (when (not-empty (:tags page)) (tag-group (:tags page)))
-                    (when-let [repo (:repository-uri page)]
-                      [:span (he/link-to repo "🧙 Open Source Code Repo")])]
-                   (raw (:body page))])))
+  (layout
+    page
+    (welcome-section)
+    (window
+      (state/kebab-case->title-case (name (:type page)))
+      [:article (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
+       (when (not-empty (:tags page)) (tag-group (:tags page)))
+       [:div.top-links (when-let [repo (:repository-uri page)] [:span "🧙 " (he/link-to repo "Open Source Code Repo")])
+        (when-let [prod (:production-uri page)] [:span "🌙 " (he/link-to prod "Live App Demo")])] (raw (:body page))])))
 
 (defn render-generic-index
   [page]
