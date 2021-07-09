@@ -10,6 +10,7 @@
   ([]
    (let [http-config (:http config)
          port (:port http-config)]
+     (export)
      (info (str "Listening for webhooks on port " port))
      (run-server app http-config)))
   ([_] (listen)))
