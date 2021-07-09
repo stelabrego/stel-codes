@@ -44,6 +44,7 @@ $palette: (
         light: #e2ccfe
     ),
     blue: (
+        darker: #496FBC,
         dark: #537dd5,
         base: #8baafe,
         light: #c9d4fd
@@ -63,7 +64,7 @@ body {
 }
 
 a {
-  color: color(violet, darker);
+  color: color(blue, darker);
 }
 
 pre {
@@ -102,6 +103,7 @@ nav {
     text-decoration: none;
     &:hover {
       background-color: rgba(0,0,0,.1);
+      color: initial;
     }
   }
   #brand {
@@ -347,6 +349,7 @@ section.welcome {
 
 article {
   justify-self: center;
+  display: grid;
   max-width: 900px;
   padding: 1rem 4rem 3rem;
   @media (max-width: 800px) {
@@ -361,9 +364,12 @@ article {
     display:block;
     align-self: center;
     border-radius: 5px;
+    justify-self: center;
   }
   .top-links {
     display: inline-block;
+    width: max-content;
+    justify-self: start;
     background: color(violet,darker);
     border-radius: 15px;
     padding: 0 1rem;
@@ -398,6 +404,15 @@ article {
     background: change-color(grey, $alpha: .1);
     padding: 1rem;
     border-radius: 5px;
+  }
+  .circles {
+    display: inline-block;
+    justify-self: center;
+    svg {
+      fill: color(violet, light);
+      margin: 0 1rem;
+      stroke-opacity: 0;
+    }
   }
 }
 

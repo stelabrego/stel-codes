@@ -101,7 +101,7 @@ body {
 }
 
 a {
-  color: #674dbb;
+  color: #496FBC;
 }
 
 pre {
@@ -133,6 +133,7 @@ nav a {
 }
 nav a:hover {
   background-color: rgba(0, 0, 0, 0.1);
+  color: initial;
 }
 nav #brand {
   grid-area: brand;
@@ -359,6 +360,7 @@ section.welcome span.name {
 
 article {
   justify-self: center;
+  display: grid;
   max-width: 900px;
   padding: 1rem 4rem 3rem;
 }
@@ -374,9 +376,12 @@ article img {
   display: block;
   align-self: center;
   border-radius: 5px;
+  justify-self: center;
 }
 article .top-links {
   display: inline-block;
+  width: max-content;
+  justify-self: start;
   background: #674dbb;
   border-radius: 15px;
   padding: 0 1rem;
@@ -409,6 +414,15 @@ article pre {
   background: rgba(128, 128, 128, 0.1);
   padding: 1rem;
   border-radius: 5px;
+}
+article .circles {
+  display: inline-block;
+  justify-self: center;
+}
+article .circles svg {
+  fill: #e2ccfe;
+  margin: 0 1rem;
+  stroke-opacity: 0;
 }
 
 footer {

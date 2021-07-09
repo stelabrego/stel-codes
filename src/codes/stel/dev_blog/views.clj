@@ -89,15 +89,15 @@
 
 (defn render-generic
   [page]
-  (layout
-    page
-    (welcome-section)
-    (window
-      (state/kebab-case->title-case (name (:type page)))
-      [:article (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
-       (when (not-empty (:tags page)) (tag-group (:tags page)))
-       [:div.top-links (when-let [repo (:repository-uri page)] [:span "🧙 " (he/link-to repo "Open Source Code Repo")])
-        (when-let [prod (:production-uri page)] [:span "🌙 " (he/link-to prod "Live App Demo")])] (raw (:body page))])))
+  (layout page
+          (welcome-section)
+          (window (state/kebab-case->title-case (name (:type page)))
+                  [:article (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
+                   (when (not-empty (:tags page)) (tag-group (:tags page)))
+                   [:div.top-links
+                    (when-let [repo (:repository-uri page)] [:span "🧙 " (he/link-to repo "Open Source Code Repo")])
+                    (when-let [prod (:production-uri page)] [:span "🌙 " (he/link-to prod "Live App Demo")])]
+                   (raw (:body page)) [:div.circles (take 3 (repeat (raw (slurp "resources/svg/circle.svg"))))]])))
 
 (defn render-generic-index
   [page]
