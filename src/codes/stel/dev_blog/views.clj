@@ -95,8 +95,8 @@
                   [:article
                    [:header (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
                     (when (not-empty (:tags page)) (tag-group (:tags page)))
-                    (when (:repo page)
-                      [:span (he/link-to (str "https://github.com/stelcodes/" (:repo page)) "🔧 Source Code")])]
+                    (when-let [repo (:repository-uri page)]
+                      [:span (he/link-to repo "🧙 Open Source Code Repo")])]
                    (raw (:body page))])))
 
 (defn render-generic-index
