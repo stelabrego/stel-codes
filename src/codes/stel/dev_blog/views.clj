@@ -30,7 +30,7 @@
 (defn window-list-item
   [item]
   (list (he/link-to {:class "title"} (:uri item) (:title item))
-        (when-let [subtitle (:subtitle item)] [:p.pitch subtitle])
+        (when-let [subtitle (:subtitle item)] [:p.subtitle subtitle])
         (when-let [tags (:tags item)] (tag-group tags))))
 
 (comment
@@ -93,6 +93,7 @@
           (welcome-section)
           (window (state/kebab-case->title-case (name (:type page)))
                   [:article (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
+                   (when-let [subtitle (:subtitle page)] [:p.subtitle subtitle])
                    (when (not-empty (:tags page)) (tag-group (:tags page)))
                    (let [repo (:repository-uri page)
                          prod (:production-uri page)
