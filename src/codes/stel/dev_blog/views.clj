@@ -60,7 +60,7 @@
 (defn welcome-section
   []
   (let [{:keys [introduction]} (state/get-general-information)]
-    [:section.welcome (he/image {:class "avatar"} "https://s3.stel.codes/avatar.png")
+    [:section.welcome (he/image {:class "avatar"} "https://s3.stel.codes/avatar-small.png")
      [:span.name "Stel Abrego, Software Developer"] (raw introduction)]))
 
 (defn layout
