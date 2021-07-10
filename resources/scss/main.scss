@@ -373,7 +373,7 @@ article {
     background: color(violet,darker);
     border-radius: 15px;
     padding: 0 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     
     span {
       margin: 0.6rem;
@@ -404,12 +404,17 @@ article {
     background: change-color(grey, $alpha: .1);
     padding: 1rem;
     border-radius: 5px;
+    overflow: auto;
+  }
+  ul {
+    margin-bottom: 1rem;
   }
   .circles {
     display: inline-block;
+    margin: 2rem 0 1rem;
     justify-self: center;
     svg {
-      fill: color(violet, light);
+      fill: color(blue, light);
       margin: 0 1rem;
       stroke-opacity: 0;
     }

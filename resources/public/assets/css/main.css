@@ -385,7 +385,7 @@ article .top-links {
   background: #674dbb;
   border-radius: 15px;
   padding: 0 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 article .top-links span {
   margin: 0.6rem;
@@ -414,13 +414,18 @@ article pre {
   background: rgba(128, 128, 128, 0.1);
   padding: 1rem;
   border-radius: 5px;
+  overflow: auto;
+}
+article ul {
+  margin-bottom: 1rem;
 }
 article .circles {
   display: inline-block;
+  margin: 2rem 0 1rem;
   justify-self: center;
 }
 article .circles svg {
-  fill: #e2ccfe;
+  fill: #c9d4fd;
   margin: 0 1rem;
   stroke-opacity: 0;
 }
