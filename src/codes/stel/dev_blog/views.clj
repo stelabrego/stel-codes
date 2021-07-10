@@ -50,7 +50,7 @@
     (when-not (empty? pages)
       (window title
               (list (->> pages
-                         (sort-by :date)
+                         (sort-by :sort)
                          (reverse)
                          (take 5)
                          (map window-list-item)
