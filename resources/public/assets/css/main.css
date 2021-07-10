@@ -424,6 +424,11 @@ article pre {
   border-radius: 5px;
   overflow: auto;
 }
+article code {
+  background: rgba(128, 128, 128, 0.1);
+  border-radius: 5px;
+  padding: 0 0.2rem;
+}
 article ul {
   margin-bottom: 1rem;
 }
