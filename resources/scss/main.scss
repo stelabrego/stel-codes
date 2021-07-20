@@ -224,7 +224,7 @@ main {
         list-style-position: inside;
         li {
           padding: .7rem;
-          border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.8);
+          border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.5);
           &:last-child {
             border-bottom: none;
           }
