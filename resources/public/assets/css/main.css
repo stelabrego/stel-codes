@@ -233,12 +233,19 @@ main section.window .content {
   background-color: #efefef;
   display: grid;
 }
+main section.window .content blockquote {
+  background: rgba(128, 128, 128, 0.1);
+  font-family: monospace;
+  margin: 0.2rem;
+  border-left: 5px solid #c398fe;
+  padding: 0.5rem;
+}
 main section.window .content ul {
   list-style-position: inside;
 }
 main section.window .content ul li {
   padding: 0.7rem;
-  border-bottom: 1px solid rgba(175, 175, 175, 0.2);
+  border-bottom: 1px solid rgba(175, 175, 175, 0.5);
 }
 main section.window .content ul li:last-child {
   border-bottom: none;
