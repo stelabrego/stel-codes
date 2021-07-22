@@ -97,10 +97,13 @@
                    (when (not-empty (:tags page)) (tag-group (:tags page)))
                    (let [repo (:repository-uri page)
                          prod (:production-uri page)
-                         display-top-links? (or repo prod)]
+                         media-source (:media-source page)
+                         display-top-links? (or repo prod media-source)]
                      (when display-top-links?
                        [:div.top-links (when repo [:span "🧙 " (he/link-to repo "Open Source Code Repo")])
-                        (when prod [:span "🌙 " (he/link-to prod "Live App Demo")])])) (raw (:body page))
+                        (when prod [:span "🌙 " (he/link-to prod "Live App Demo")])
+                        (when media-source [:span "🧑‍🎓 " (he/link-to media-source "Find it here!")])
+                        ])) (raw (:body page))
                    [:div.circles (take 3 (repeat (raw (slurp "resources/svg/circle.svg"))))]])))
 
 (defn render-generic-index
