@@ -138,9 +138,9 @@
       page
       (list (welcome-section)
             (when coding-projects-pages
-              (home-content-window "my coding projects" coding-projects-index-uri coding-projects-pages))
+              (home-content-window "coding projects" coding-projects-index-uri coding-projects-pages))
             (when educational-media-pages
-              (home-content-window "my learning resources" educational-media-index-uri educational-media-pages))
-            (when blog-posts-pages (home-content-window "my blog posts" blog-posts-index-uri blog-posts-pages))))))
+              (home-content-window "educational media" educational-media-index-uri educational-media-pages))
+            (when blog-posts-pages (home-content-window "blog posts" blog-posts-index-uri blog-posts-pages))))))
 
 (defmethod render :404 [page all-pages] (layout page [:h1 "404 ;-;"]))
