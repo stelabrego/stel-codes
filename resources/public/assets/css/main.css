@@ -236,7 +236,7 @@ main section.window .content {
 main section.window .content blockquote {
   background: rgba(128, 128, 128, 0.1);
   font-family: monospace;
-  margin: 0.2rem;
+  margin: 0.5rem 0.2rem 1rem 0.2rem;
   border-left: 5px solid #c398fe;
   padding: 0.5rem;
 }
