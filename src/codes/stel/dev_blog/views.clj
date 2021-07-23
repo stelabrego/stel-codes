@@ -91,7 +91,7 @@
   [page]
   (layout page
           (welcome-section)
-          (window (state/kebab-case->title-case (name (:type page)))
+          (window (state/kebab-case->lower-case (name (:type page)))
                   [:article (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
                    (when-let [subtitle (:subtitle page)] [:p.subtitle subtitle])
                    (when (not-empty (:tags page)) (tag-group (:tags page)))
