@@ -89,6 +89,14 @@
        (map string/capitalize)
        (string/join " ")))
 
+(defn kebab-case->lower-case
+  [s]
+  (->> (string/split s #"-")
+       (map string/lower-case)
+       (string/join " ")))
+
+(comment (kebab-case->lower-case "Hi-There"))
+
 (defn get-section-index-pages
   [pages]
   (let [section-map (group-by :type pages)]
