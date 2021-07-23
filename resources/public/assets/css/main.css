@@ -234,7 +234,7 @@ main section.window .content {
   display: grid;
 }
 main section.window .content blockquote {
-  background: rgba(128, 128, 128, 0.1);
+  background: #e3e3e3;
   font-family: monospace;
   margin: 0.5rem 0.2rem 1rem 0.2rem;
   border-left: 5px solid #c398fe;
@@ -427,13 +427,14 @@ article h1, article h2, article h3 {
 }
 article pre {
   font-size: 1rem;
-  background: rgba(128, 128, 128, 0.1);
+  background: #e3e3e3;
   padding: 1rem;
   border-radius: 5px;
   overflow: auto;
+  margin: 0.2rem 0.1rem 1rem 0.1rem;
 }
 article code {
-  background: rgba(128, 128, 128, 0.1);
+  background: #e3e3e3;
   border-radius: 5px;
   padding: 0 0.2rem;
 }
