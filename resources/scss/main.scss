@@ -298,7 +298,9 @@ section.welcome {
   justify-self: center;
   align-content: center;
   justify-content: center;
-  color: color(grey, lighter);
+  &, section.welcome a {
+    color: color(grey, lighter);
+  }
   @media (min-width: 500px) {
     grid-template-areas: "avatar name"
                          "avatar   text";
