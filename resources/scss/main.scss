@@ -298,7 +298,7 @@ section.welcome {
   justify-self: center;
   align-content: center;
   justify-content: center;
-  &, section.welcome a {
+  &, & a {
     color: color(grey, lighter);
   }
   @media (min-width: 500px) {

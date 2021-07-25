@@ -304,8 +304,10 @@ section.welcome {
   justify-self: center;
   align-content: center;
   justify-content: center;
-  color: #efefef;
   align-items: center;
+}
+section.welcome, section.welcome a {
+  color: #efefef;
 }
 @media (min-width: 500px) {
   section.welcome {
