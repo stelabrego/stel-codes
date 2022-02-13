@@ -1,0 +1,42 @@
+{:general
+ {:twitter "https://twitter.com/stelstuff"
+  :github "https://github.com/stelcodes"
+  :email "stel@stel.codes"}
+ :blog-posts
+ [{:status :published
+   :sort 10
+   :title "Using Directus as a CMS for my Blog"
+   :subtitle "A flexible SQL DB interface that really shines ✨"
+   :slug "using-directus-cms"
+   :tags ["clojure" "nixos"]
+   :header-image ""
+   :content "directus-blog.md"
+   }]
+ :coding-projects
+ [{:status :published
+   :prod "https://news.stel.codes"
+   :repo "https://github.com/stelcodes/functional-news"
+   :title "Functional News (λn)"
+   :sort 20
+   :slug "functional-news"
+   :header-image ""
+   :tags ["clojure" "java" "scss"]
+   :content "functional-news.md"}
+  {:status :published
+   :sort 10
+   :prod "https://stel.codes"
+   :repo "https://github.com/stelcodes/dev-blog"
+   :title "Developer Blog"
+   :slug "developer-blog"
+   :header-image ""
+   :tags ["clojure" "java" "scss"]
+   :content "developer-blog.md"}
+  {:status :published
+   :sort 0
+   :prod nil
+   :repo "https://github.com/stelcodes/self-care-android-app"
+   :title "Self Care Android App"
+   :slug "self-care-android-app"
+   :header-image ""
+   :tags ["java" "android"]
+   :content "self-care-android-app.md"}]}
