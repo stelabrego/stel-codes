@@ -1,42 +1,72 @@
-{:general
- {:twitter "https://twitter.com/stelstuff"
-  :github "https://github.com/stelcodes"
-  :email "stel@stel.codes"}
- :blog-posts
- [{:status :published
-   :sort 10
-   :title "Using Directus as a CMS for my Blog"
-   :subtitle "A flexible SQL DB interface that really shines ✨"
-   :slug "using-directus-cms"
-   :tags ["clojure" "nixos"]
-   :header-image ""
-   :content "directus-blog.md"
-   }]
- :coding-projects
- [{:status :published
-   :prod "https://news.stel.codes"
-   :repo "https://github.com/stelcodes/functional-news"
-   :title "Functional News (λn)"
-   :sort 20
-   :slug "functional-news"
-   :header-image ""
-   :tags ["clojure" "java" "scss"]
-   :content "functional-news.md"}
-  {:status :published
-   :sort 10
-   :prod "https://stel.codes"
-   :repo "https://github.com/stelcodes/dev-blog"
-   :title "Developer Blog"
-   :slug "developer-blog"
-   :header-image ""
-   :tags ["clojure" "java" "scss"]
-   :content "developer-blog.md"}
-  {:status :published
-   :sort 0
-   :prod nil
-   :repo "https://github.com/stelcodes/self-care-android-app"
-   :title "Self Care Android App"
-   :slug "self-care-android-app"
-   :header-image ""
-   :tags ["java" "android"]
-   :content "self-care-android-app.md"}]}
+{:blog-posts [{:content "using-directus-cms.md",
+               :header-image "https://s3.stel.codes/d34014fb-a41f-41ed-b8ee-540a0dd35640.jpeg",
+               :slug "using-directus-cms",
+               :sort 10,
+               :status :published,
+               :subtitle "A flexible SQL DB interface that really shines ✨",
+               :tags ["clojure" "nixos"],
+               :title "Using Directus as a CMS for my Blog"}
+              {:content "babashka-postgresql-backups.md",
+               :header-image "https://s3.stel.codes/e0122757-8024-44bc-aa9b-aee8948a8b25.jpeg",
+               :slug "babashka-tasks-for-postgresql-backups",
+               :sort 20,
+               :status :published,
+               :subtitle "Why write a Bash script when you can use Clojure?!",
+               :tags ["clojure" "babashka"],
+               :title "Creating Babashka tasks for postgresql backups"}
+              {:content "i3-or-sway-nixos.md",
+               :header-image "https://s3.stel.codes/4f795c40-8170-4d50-be64-2e29c50d294b.png",
+               :slug "i3-or-sway-why-not-both",
+               :sort 0,
+               :status :published,
+               :subtitle "How to setup a dual i3 + sway environment on NixOS",
+               :tags ["nixos" "i3" "sway" "linux"],
+               :title "i3 or Sway? Why not Both?"}],
+ :coding-projects [{:content "functional-news.md",
+                    :header-image "https://s3.stel.codes/42a71161-9162-44da-940a-23e94374834f.jpeg",
+                    :prod "https://news.stel.codes",
+                    :repo "https://github.com/stelcodes/functional-news",
+                    :slug "functional-news",
+                    :sort 20,
+                    :status :published,
+                    :tags ["clojure" "java" "scss"],
+                    :title "Functional News (λn)"}
+                   {:content "developer-blog.md",
+                    :header-image "https://s3.stel.codes/2dd474b0-a397-4782-9e40-78834e604a18.png",
+                    :prod "https://stel.codes",
+                    :repo "https://github.com/stelcodes/dev-blog",
+                    :slug "developer-blog",
+                    :sort 10,
+                    :status :published,
+                    :tags ["clojure" "java" "scss"],
+                    :title "Developer Blog"}
+                   {:content "self-care-android-app.md",
+                    :header-image "https://s3.stel.codes/70958400-950d-4bec-8fc0-062561fe9276.gif",
+                    :prod nil,
+                    :repo "https://github.com/stelcodes/self-care-android-app",
+                    :slug "self-care-android-app",
+                    :sort 0,
+                    :status :published,
+                    :tags ["java" "android"],
+                    :title "Self Care Android App"}],
+ :educational-resources
+ [{:content "getting-clojure-russ-olsen.md",
+   :header-image "https://s3.stel.codes/83436048-b161-4298-be01-2c7bd007f8b6.jpeg",
+   :slug "getting-clojure",
+   :sort 20,
+   :status :published,
+   :subtitle "A truly excellent introduction to Clojure",
+   :tags ["clojure" "java"],
+   :title "Getting Clojure by Russ Olsen"}
+  {:content "grid-layout-css-eric-meyer.md",
+   :header-image "https://s3.stel.codes/4a5d0d74-a8ba-48df-97a3-ef09df00a504.jpeg",
+   :slug "grid-layout-in-css",
+   :sort 10,
+   :source "https://www.oreilly.com/library/view/grid-layout-in/9781491930205",
+   :status :published,
+   :subtitle "A great reference for the ultimate CSS layout module",
+   :tags ["css" "scss"],
+   :title "Grid Layout in CSS by Eric Meyer"}],
+ :general {:email "stel@stel.codes",
+           :github "https://github.com/stelcodes",
+           :twitter "https://twitter.com/stelstuff"}}
