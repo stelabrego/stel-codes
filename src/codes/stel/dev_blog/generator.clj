@@ -7,7 +7,7 @@
             [taoensso.timbre :as timbre :refer [info]]))
 
 (defn generate-index
-  ([] (generate-index (state/realize-prod-site)))
+  ([] (generate-index (state/realize-site)))
   ([{:keys [articles tag-indicies category-indicies] :as realized-site}]
    (->> [{:uri "/" :category :home} {:uri "/404" :category :404}]
         (concat articles tag-indicies category-indicies)
@@ -28,7 +28,7 @@
      (info (str "Located in " target-dir)))))
 
 (defn export-prod []
-  (generic-export (generate-index (state/realize-prod-site)) "/dist/dev"))
+  (generic-export (generate-index (state/realize-site)) "/dist/dev"))
 
 (defn export-dev []
   (generic-export (generate-index (state/realize-dev-site)) "/dist/prod"))
