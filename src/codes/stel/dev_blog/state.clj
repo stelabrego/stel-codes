@@ -72,6 +72,16 @@
                                 (md-to-html-string (slurp resource))
                                 (throw (ex-info "Missing resource" {:article article})))))))
 
+(defn id->uri [{:keys [articles tag-indicies category-indicies]} id]
+  (->> (concat articles tag-indicies category-indicies)
+       (filter #(= id (:id %)))
+       (first)
+       (:uri)))
+
+(comment
+ (concat [1 2 3])
+ (id->uri {:articles [{:id :poop :uri "/poop"}]} :poop))
+
 (defn realize-site
   "Creates fully realized site datastructure with or without drafts."
   ([] (realize-site (get-config) true))
@@ -87,6 +97,8 @@
        ;; Add tag indicies
        (assoc $ :tag-indicies (create-tag-indices $))
        ;; Add category indicies
-       (assoc $ :category-indicies (create-category-indices $)))))
+       (assoc $ :category-indicies (create-category-indices $))
+       ;; Add function to get uri of any page easily
+       (assoc $ :id->uri (partial $ id->uri)))))
 
 (comment (realize-site))
