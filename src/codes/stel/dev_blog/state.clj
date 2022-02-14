@@ -30,7 +30,7 @@
                   (mapcat :tags)
                   (set))]
     (for [tag tags]
-      (let [article-has-tag? (fn [article] (some #(= % tag) (:tags article)))]
+      (let [article-has-tag? (fn [article] (some #{tag} (:tags article)))]
         {:title (str "#" (name tag)),
          :id tag
          :category :index
@@ -72,15 +72,14 @@
                                 (md-to-html-string (slurp resource))
                                 (throw (ex-info "Missing resource" {:article article})))))))
 
-(defn id->uri [{:keys [articles tag-indicies category-indicies]} id]
+(defn id->info [{:keys [articles tag-indicies category-indicies]} id]
   (->> (concat articles tag-indicies category-indicies)
        (filter #(= id (:id %)))
-       (first)
-       (:uri)))
+       (first)))
 
 (comment
  (concat [1 2 3])
- (id->uri {:articles [{:id :poop :uri "/poop"}]} :poop))
+ (id->info {:articles [{:id :poop :uri "/poop"}]} :poop))
 
 (defn realize-site
   "Creates fully realized site datastructure with or without drafts."
@@ -99,6 +98,6 @@
        ;; Add category indicies
        (assoc $ :category-indicies (create-category-indices $))
        ;; Add function to get uri of any page easily
-       (assoc $ :id->uri (partial $ id->uri)))))
+       (assoc $ :id->info (partial $ id->info)))))
 
 (comment (realize-site))
