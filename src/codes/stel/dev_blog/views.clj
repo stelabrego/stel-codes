@@ -127,20 +127,23 @@
          (re-find #"^/[^\/]*/"))))
 
 (defmethod render :home
-  [page all-pages]
-  (let [coding-projects-pages (:coding-projects all-pages)
-        coding-projects-index-uri (get-index-uri-for-pages coding-projects-pages)
-        educational-media-pages (:educational-media all-pages)
-        educational-media-index-uri (get-index-uri-for-pages educational-media-pages)
-        blog-posts-pages (:blog-posts all-pages)
-        blog-posts-index-uri (get-index-uri-for-pages blog-posts-pages)]
+  [page {:keys [articles] :as realized-site}]
+  (let [
+        ;; coding-projects-pages (:coding-projects all-pages)
+        ;; coding-projects-index-uri (get-index-uri-for-pages coding-projects-pages)
+        ;; educational-media-pages (:educational-media all-pages)
+        ;; educational-media-index-uri (get-index-uri-for-pages educational-media-pages)
+        ;; blog-posts-pages (:blog-posts all-pages)
+        ;; blog-posts-index-uri (get-index-uri-for-pages blog-posts-pages)
+        {:keys [blog-posts educational-media coding-projects]} (group-by :category articles)
+        ]
     (layout
       page
       (list (welcome-section)
-            (when coding-projects-pages
-              (home-content-window "coding projects" coding-projects-index-uri coding-projects-pages))
-            (when educational-media-pages
-              (home-content-window "educational media" educational-media-index-uri educational-media-pages))
-            (when blog-posts-pages (home-content-window "blog posts" blog-posts-index-uri blog-posts-pages))))))
+            (when coding-projects
+              (home-content-window "coding projects" (-> realized-site :tag-indicies ) coding-projects))
+            (when educational-media
+              (home-content-window "educational media" educational-media-index-uri educational-media))
+            (when blog-posts (home-content-window "blog posts" blog-posts-index-uri blog-posts))))))
 
 (defmethod render :404 [page all-pages] (layout page [:h1 "404 ;-;"]))
