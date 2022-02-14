@@ -1,149 +1,85 @@
 (ns codes.stel.dev-blog.state
-  (:require [next.jdbc.sql :as sql]
-            [next.jdbc :as jdbc]
-            [next.jdbc.connection :refer [->pool]]
-            [next.jdbc.result-set :as result-set]
-            [codes.stel.dev-blog.config :refer [config]]
+  (:require [clojure.java.io :as io]
+            [codes.stel.dev-blog.config :refer [config get-config]]
             [camel-snake-kebab.core :as csk]
             [markdown.core :refer [md-to-html-string]]
-            [clojure.string :as string])
-  (:import (com.zaxxer.hikari HikariDataSource)))
-
-(def datasource
-  (jdbc/with-options (->pool HikariDataSource (config :db-spec)) {:builder-fn result-set/as-unqualified-kebab-maps}))
-
-(def db-spec {:dbtype "postgresql", :dbname "dev_blog", :host "127.0.0.1", :port 5432, :user "static_site_builder"})
-
-(def db-source (jdbc/get-datasource db-spec))
-
-(def db-conn (jdbc/with-options db-source {:builder-fn result-set/as-unqualified-kebab-maps}))
-
-(defn pages
-  []
-  {:blog-posts (sql/query db-conn ["SELECT * FROM blog_posts"]),
-   :coding-projects (sql/query db-conn ["SELECT * FROM coding_projects"]),
-   :educational-media (sql/query db-conn ["SELECT * FROM educational_media"])})
-
-(defn get-raw-cms-pages
-  []
-  (concat (map #(assoc % :type :blog-posts) (sql/query db-conn ["SELECT * FROM blog_posts"]))
-          (map #(assoc % :type :coding-projects) (sql/query db-conn ["SELECT * FROM coding_projects"]))
-          (map #(assoc % :type :educational-media) (sql/query db-conn ["SELECT * FROM educational_media"]))))
-
-(defn get-raw-files [] (sql/query db-conn ["SELECT * FROM directus_files"]))
-
-(defn get-cdn-uri-for-uuid
-  [uuid]
-  (->> (get-raw-files)
-       (some #(when (= uuid (:id %)) %))
-       (:filename-disk)
-       (str "https://s3.stel.codes/")))
-
-(comment)
-
-(defn convert-image-uuid-to-uri
-  [image-key page]
-  (if-let [uuid (image-key page)]
-    (assoc page image-key (get-cdn-uri-for-uuid uuid))
-    page))
-
-(defn convert-status-to-keyword
-  [page]
-  (if-let [status (:status page)]
-    (assoc page :status (keyword status))
-    page))
-
-(defn convert-tags-to-list
-  [page]
-  (if-let [tags (:tags page)]
-    (assoc page :tags (string/split tags #","))
-    page))
-
-(defn convert-body-md-to-html
-  [page]
-  (if-let [body (:body page)]
-    (assoc page :body (md-to-html-string body))
-    page))
-
-(comment
-  (convert-body-md-to-html {:body "#Test\n\n- this\n- should\n- become a list!"}))
-
-(defn add-uri-to-page
-  [page]
-  (let [type-str (name (:type page)) slug (:slug page) uri (str "/" type-str "/" slug "/")] (assoc page :uri uri)))
-
-(defn published? [page] (= (:status page) :published))
-
-(defn get-processed-cms-pages
-  []
-  (->> (get-raw-cms-pages)
-       (map convert-status-to-keyword)
-       (map convert-tags-to-list)
-       (map convert-body-md-to-html)
-       (map (partial convert-image-uuid-to-uri :header-image))
-       (map add-uri-to-page)))
+            [clojure.string :as string]))
 
 (defn kebab-case->title-case
   [s]
-  (->> (string/split s #"-")
+  (->> (string/split (name s) #"-")
        (map string/capitalize)
        (string/join " ")))
 
+(comment
+ (string/split (name :educational-media) #"-")
+ (kebab-case->title-case :educational-media))
+
 (defn kebab-case->lower-case
   [s]
-  (->> (string/split s #"-")
+  (->> (string/split (name s) #"-")
        (map string/lower-case)
        (string/join " ")))
 
-(comment (kebab-case->lower-case "Hi-There"))
+(defn tag-name->index-uri [tag] (as-> tag $ (name $) (string/lower-case $) (csk/->kebab-case $) (str "/tags/" $ "/")))
 
-(defn get-section-index-pages
-  [pages]
-  (let [section-map (group-by :type pages)]
-    (for [[page-type pages] section-map]
-      (let [page-type-str (name page-type)
-            title (kebab-case->title-case page-type-str)]
-        {:title title, :uri (str "/" page-type-str "/"), :type :index, :indexed-pages pages}))))
-
-(comment)
-
-(defn in? "true if coll contains elm" [coll elm] (some #(= elm %) coll))
-
-(defn tag-name->index-uri [tag] (as-> tag $ (string/lower-case $) (csk/->kebab-case $) (str "/tags/" $ "/")))
-
-(defn page-has-tag? [tag page] (in? (:tags page) tag))
-
-(defn get-tag-index-pages
-  [pages]
-  (let [tags (->> pages
+(defn create-tag-indices
+  ([] (create-tag-indices (config)))
+  ([{:keys [articles] :as _config}]
+  (let [tags (->> articles
                   (mapcat :tags)
                   (set))]
     (for [tag tags]
-      {:title (str "#" tag),
-       :type :index,
-       :uri (tag-name->index-uri tag),
-       :indexed-pages (filter (partial page-has-tag? tag) pages)})))
+      (let [article-has-tag? (fn [article] (some #(= % tag) (:tags article)))]
+        {:title (str "#" (name tag)),
+         :id tag
+         :category :index
+         :uri (str "/tags/" (name tag) "/"),
+         :indexed-articles (->>
+                            articles
+                            (filter article-has-tag?)
+                            (map :id))})))))
 
-(def general-pages (list {:type :home, :uri "/"} {:type :404, :uri "/404.html"}))
+(defn create-category-indices
+  ([] (create-category-indices (config)))
+  ([{:keys [articles] :as _config}]
+  (let [categories (->> articles
+                        (map :category)
+                        (set))]
+    (for [category categories]
+      {:title (kebab-case->title-case category),
+       :id category
+       :category :index
+       :uri (str "/" (name category) "/"),
+       :indexed-articles (->>
+                          articles
+                          (filter #(= category (:category %)))
+                          (map :id))}))))
 
-(defn get-published-pages
-  []
-  (let [cms-pages (filter published? (get-processed-cms-pages))]
-    (concat general-pages cms-pages (get-section-index-pages cms-pages) (get-tag-index-pages cms-pages))))
+(defn realize-articles
+  "Adds :uri and :render-markdown kv pairs to each article map in articles vector"
+  [articles]
+  (for [{:keys [category content id] :as article} articles]
+    (assoc article
+           :uri (str "/" (name category) "/" (name id) "/")
+           ;; I could render right here or I could just add a render function.
+           ;; Having a render function makes it much easier to inspect the full
+           ;; map output of this function in the repl
+           :render-markdown (fn render-markdown []
+                              (if-let [content-resource (io/resource content)]
+                                (md-to-html-string (slurp content-resource))
+                                (throw (ex-info "Missing content" {:article article})))))))
 
-(defn get-preview-pages
-  []
-  (let [cms-pages (get-processed-cms-pages)]
-    (concat general-pages cms-pages (get-section-index-pages cms-pages) (get-tag-index-pages cms-pages))))
+(defn realize-site
+  "Creates fully realized site datastructure."
+  ([] (realize-site (get-config)))
+  ([config]
+   (-> config
+       (update :articles realize-articles)
+       ;; Add tag indicies
+       (assoc :tag-indicies (create-tag-indices config))
+       ;; Add category indicies
+       (assoc :category-indicies (create-category-indices config)))))
 
-(defn get-general-information
-  []
-  (-> (sql/query db-conn ["SELECT * FROM general_information"])
-      (first)
-      (assoc :type :general-information)))
+(comment (realize-site))
 
-(comment
-  (get-general-information)
-  (get-published-pages)
-  (get-raw-files)
-  (type (:id (first (get-raw-files)))))
