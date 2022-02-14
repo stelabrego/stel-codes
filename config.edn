@@ -1,82 +1,87 @@
 {:articles [
             ;; Blog Posts
-            {:content "markdown/using-directus-cms.md",
+            {:resource-path "markdown/using-directus-cms.md",
              :category :blog-posts,
              :header-image "https://s3.stel.codes/d34014fb-a41f-41ed-b8ee-540a0dd35640.jpeg",
              :id :using-directus-cms
              :sort 10,
-             :status :published,
+             :draft? false,
              :subtitle "A flexible SQL DB interface that really shines ✨",
              :tags [:clojure :nixos],
              :title "Using Directus as a CMS for my Blog"}
-            {:content "markdown/babashka-postgresql-backups.md",
+
+            {:resource-path "markdown/babashka-postgresql-backups.md",
              :category :blog-posts,
              :header-image "https://s3.stel.codes/e0122757-8024-44bc-aa9b-aee8948a8b25.jpeg",
              :id :babashka-tasks-for-postgresql-backups
              :sort 20,
-             :status :published,
+             :draft? false,
              :subtitle "Why write a Bash script when you can use Clojure?!",
              :tags [:clojure :babashka],
              :title "Creating Babashka tasks for postgresql backups"}
-            {:content "markdown/i3-or-sway-nixos.md",
+
+            {:resource-path "markdown/i3-or-sway-nixos.md",
              :category :blog-posts,
              :header-image "https://s3.stel.codes/4f795c40-8170-4d50-be64-2e29c50d294b.png",
              :id :i3-or-sway-why-not-both
              :sort 0,
-             :status :published,
+             :draft? false,
              :subtitle "How to setup a dual i3 + sway environment on NixOS",
              :tags [:nixos :i3 :sway :linux],
              :title "i3 or Sway? Why not Both?"}
 
             ;; Coding Projects
-            {:content "markdown/functional-news.md",
+            {:resource-path "markdown/functional-news.md",
              :category :coding-projects,
              :header-image "https://s3.stel.codes/42a71161-9162-44da-940a-23e94374834f.jpeg",
              :prod "https://news.stel.codes",
              :repo "https://github.com/stelcodes/functional-news",
              :id :functional-news
              :sort 20,
-             :status :published,
+             :draft? false,
              :tags [:clojure :java :scss],
              :title "Functional News (λn)"}
-            {:content "markdown/developer-blog.md",
+
+            {:resource-path "markdown/developer-blog.md",
              :category :coding-projects,
              :header-image "https://s3.stel.codes/2dd474b0-a397-4782-9e40-78834e604a18.png",
              :prod "https://stel.codes",
              :repo "https://github.com/stelcodes/dev-blog",
              :id :developer-blog
              :sort 10,
-             :status :published,
+             :draft? false,
              :tags [:clojure :java :scss],
              :title "Developer Blog"}
-            {:content "markdown/self-care-android-app.md",
+
+            {:resource-path "markdown/self-care-android-app.md",
              :category :coding-projects,
              :header-image "https://s3.stel.codes/70958400-950d-4bec-8fc0-062561fe9276.gif",
              :prod nil,
              :repo "https://github.com/stelcodes/self-care-android-app",
              :id :self-care-android-app
              :sort 0,
-             :status :published,
+             :draft? false,
              :tags [:java :android],
              :title "Self Care Android App"}
 
             ;; Educational Resources
-            {:content "markdown/getting-clojure-russ-olsen.md",
+            {:resource-path "markdown/getting-clojure-russ-olsen.md",
              :category :educational-media,
              :header-image "https://s3.stel.codes/83436048-b161-4298-be01-2c7bd007f8b6.jpeg",
              :id :getting-clojure
              :sort 20,
-             :status :published,
+             :draft? false,
              :subtitle "A truly excellent introduction to Clojure",
              :tags [:clojure :java],
              :title "Getting Clojure by Russ Olsen"}
-            {:content "markdown/grid-layout-css-eric-meyer.md",
+
+            {:resource-path "markdown/grid-layout-css-eric-meyer.md",
              :category :educational-media,
              :header-image "https://s3.stel.codes/4a5d0d74-a8ba-48df-97a3-ef09df00a504.jpeg",
              :id :grid-layout-in-css
              :sort 10,
              :source "https://www.oreilly.com/library/view/grid-layout-in/9781491930205",
-             :status :published,
+             :draft? false,
              :subtitle "A great reference for the ultimate CSS layout module",
              :tags [:css :scss],
              :title "Grid Layout in CSS by Eric Meyer"}],
