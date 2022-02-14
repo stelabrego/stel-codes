@@ -1,70 +1,79 @@
 (ns codes.stel.dev-blog.views
-  (:require [hiccup.page :as hp]
-            [hiccup2.core :refer [html raw]]
-            [hiccup.element :as he]
+  (:require [hiccup2.core :refer [html raw]]
+            [clojure.java.io :as io]
             [codes.stel.dev-blog.config :refer [config]]
             [codes.stel.dev-blog.state :as state]))
 
+(defn image
+  "Two-arity version is ambigious"
+  ([src] (image {} src ""))
+  ([opts-or-src src-or-alt]
+   (if (map? opts-or-src)
+     (image opts-or-src src-or-alt "")
+     (image {} opts-or-src src-or-alt)
+     ))
+  ([opts src alt] [:img (merge opts {:src src :alt alt})]))
+
+(defn unordered-list
+  ([items] (unordered-list {} items))
+  ([opts items]
+   [:ul opts (for [item items] [:li item])]))
 
 (defn header
-  []
-  (let [{:keys [twitter-uri github-uri email-address]} (state/get-general-information)]
+  [{:keys [general]}]
+  (let [{:keys [twitter github email]} general]
     [:header
-     [:nav (he/link-to {:id "brand"} "/" (he/image "https://s3.stel.codes/nixos-logo.png") [:span "stel.codes"])
-      (he/unordered-list {:id "social"}
-                         [(he/link-to github-uri "Github") (he/link-to twitter-uri "Twitter")
-                          (he/mail-to email-address "Email")])]]))
+     [:nav [:a {:id "brand" :href "/"} (image "https://s3.stel.codes/nixos-logo.png") [:span "stel.codes"]]
+      [:ul {:id "social"}
+       [:li [:a {:href github} "Github"]]
+       [:li [:a {:href twitter} "Twitter"]]
+       [:li [:a {:href email} "Email"]]]]]))
 
 (defn footer [] [:footer [:p "Stel Abrego 2021"]])
 
 (defn window
   [title body]
-  [:section.window
-   [:div.top (raw (slurp "resources/svg/bars.svg")) [:span.title title] (raw (slurp "resources/svg/bars.svg"))]
-   [:div.content body]])
+  (let [bars (raw (slurp (io/resource "svg/bars.svg")))]
+    [:section.window
+     [:div.top bars [:span.title title] bars]
+     [:div.content body]]))
 
 (defn tag-group
-  [tags]
-  [:p.tags (for [tag tags] (list "#" (he/link-to {:class "tag"} (state/tag-name->index-uri tag) tag)))])
+  [{:keys [id->info]} tags]
+  [:p.tags (for [tag tags]
+             (list "#" [:a {:class "tag" :href (-> (id->info tag) :uri)} tag]))])
 
 (defn window-list-item
-  [item]
-  (list (he/link-to {:class "title"} (:uri item) (:title item))
-        (when-let [subtitle (:subtitle item)] [:p.subtitle subtitle])
-        (when-let [tags (:tags item)] (tag-group tags))))
-
-(comment
-  "old types"
-  :note
-  [:uri :title :pitch :tags :type :hidden :repo :body]
-  "now I'm going to write out the new types in psuedo spec"
-  :general-information [:introduction :twitter-uri :github-uri]
-  :blog-post [:id :date-created :date-updated :sort :status :tags :slug :title :subtitle :body]
-  :educational-media [:id :date-created :date-updated :sort :status :tags :slug :title :subtitle :body :rating]
-  :coding-projects [:id :date-created :date-updated :sort :status :tags :slug :title :subtitle :body :production_uri
-                    :repository_uri])
+  [realized-site {:keys [uri title subtitle tags] :as _article}]
+  (list [:a {:class "title" :href uri} title]
+        (when subtitle [:p.subtitle subtitle])
+        (when (not-empty tags) (tag-group realized-site tags))))
 
 (defn home-content-window
-  [title more-uri pages]
-  (let [page-count (count pages)]
-    (when-not (empty? pages)
+  [{:keys [id->info] :as realized-site} category-id]
+  (let [{:keys [indexed-articles title uri]} (id->info category-id)]
+    (when-not (empty? indexed-articles)
       (window title
-              (list (->> pages
+              (list (->> indexed-articles
+                         id->info
                          (sort-by :sort)
                          (reverse)
                          (take 5)
-                         (map window-list-item)
-                         (he/unordered-list))
-                    (when (> page-count 5) (he/link-to {:class "more-link"} more-uri "more!")))))))
+                         (map (partial window-list-item realized-site))
+                         (unordered-list))
+                    (when (> (count indexed-articles) 5) [:a {:class "more-link" :href uri} "more!"]))))))
 
 (defn welcome-section
   []
-  (let [{:keys [introduction]} (state/get-general-information)]
-    [:section.welcome (he/image {:class "avatar"} "https://s3.stel.codes/avatar-small.png")
-     [:span.name "Stel Abrego, Software Developer"] (raw introduction)]))
+  [:section.welcome (image {:class "avatar"} "https://s3.stel.codes/avatar-small.png")
+   [:span.name "Stel Abrego, Software Developer"]
+   [:p "Hi! I'm a freelance software hacker with a focus on functional design and web technologies."]
+   [:p "Check out my projects, learning resources, and blog posts."]
+   ;; TODO fix CV link or render this from markdown
+   [:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]])
 
 (defn layout
-  [{:keys [title type]} & content]
+  [realized-site {:keys [title category] :as page} & content]
   (-> (html
         {:lang "en"}
         [:head [:title (if title (str title " | stel.codes") "stel.codes")] [:meta {:charset "utf-8"}]
@@ -77,73 +86,59 @@
          [:link {:href "/assets/icons/site.webmanifest", :rel "manifest"}]
          [:link {:color "#5bbad5", :href "/assets/icons/safari-pinned-tab.svg", :rel "mask-icon"}]
          [:link {:href "/assets/icons/favicon.ico", :rel "shortcut icon"}]
+         [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
          [:meta {:content "#da532c", :name "msapplication-TileColor"}]
          [:meta {:content "/assets/icons/browserconfig.xml", :name "msapplication-config"}]
-         [:meta {:content "#ffffff", :name "theme-color"}] (hp/include-css "/assets/css/main.css")
+         [:meta {:content "#ffffff", :name "theme-color"}]
          ;; Analytics
          (when (:prod config)
            [:script
             {:src "https://plausible.io/js/plausible.js", :data-domain "stel.codes", :defer "defer", :async "async"}])]
-        [:body (header) [:main {:class type} content] (footer)])
+        [:body (header realized-site) [:main {:class (name category)} content] (footer)])
       (str)))
 
 (defn render-generic
-  [page]
+  [realized-site {:keys [repo prod source category title subtitle tags header-image render-resource] :as page}]
   (layout page
           (welcome-section)
-          (window (state/kebab-case->lower-case (name (:type page)))
-                  [:article (when-let [img (:header-image page)] (he/image img)) [:h1 (:title page)]
-                   (when-let [subtitle (:subtitle page)] [:p.subtitle subtitle])
-                   (when (not-empty (:tags page)) (tag-group (:tags page)))
-                   (let [repo (:repository-uri page)
-                         prod (:production-uri page)
-                         media-source (:media-source page)
-                         display-top-links? (or repo prod media-source)]
-                     (when display-top-links?
-                       [:div.top-links (when repo [:span "🧙 " (he/link-to repo "Open Source Code Repo")])
-                        (when prod [:span "🌙 " (he/link-to prod "Live App Demo")])
-                        (when media-source [:span "🧑‍🎓 " (he/link-to media-source "Find it here!")])
-                        ])) (raw (:body page))
+          (window (state/kebab-case->lower-case (name category))
+                  [:article (when header-image (image header-image)) [:h1 title]
+                   (when subtitle [:p.subtitle subtitle])
+                   (when (not-empty tags) (tag-group realized-site tags))
+                   (when (or repo prod source)
+                     [:div.top-links (when repo [:span "🧙 " [:a {:href repo} "Open Source Code Repo"]])
+                      (when prod [:span "🌙 " [:a {:href prod} "Live App Demo"]])
+                      (when source [:span "🧑‍🎓 " [:a {:href source} "Find it here!"]])])
+                   (raw (render-resource))
                    [:div.circles (take 3 (repeat (raw (slurp "resources/svg/circle.svg"))))]])))
 
 (defn render-generic-index
-  [page]
-  (let [indexed-pages (:indexed-pages page)]
-    (layout page
-            (list (welcome-section) (window (:title page) (he/unordered-list (map window-list-item indexed-pages)))))))
+  [realized-site {:keys [title indexed-articles] :as page}]
+  (layout
+   realized-site
+   page
+   (list (welcome-section)
+         (window title
+                 (unordered-list
+                  (map (partial window-list-item realized-site) indexed-articles))))))
 
-(defmulti render :type)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Rendering multimethod declarations
 
-(defmethod render :default [page all-pages] (render-generic page))
+(defmulti render :category)
 
-(defmethod render :index [page all-pages] (render-generic-index page))
+(defmethod render :default [realized-site page] (render-generic realized-site page))
 
-(defn get-index-uri-for-pages
-  [pages]
-  (when pages
-    (->> pages
-         (first)
-         (:uri)
-         (re-find #"^/[^\/]*/"))))
+(defmethod render :index [realized-site page] (render-generic-index realized-site page))
 
 (defmethod render :home
-  [page {:keys [articles] :as realized-site}]
-  (let [
-        ;; coding-projects-pages (:coding-projects all-pages)
-        ;; coding-projects-index-uri (get-index-uri-for-pages coding-projects-pages)
-        ;; educational-media-pages (:educational-media all-pages)
-        ;; educational-media-index-uri (get-index-uri-for-pages educational-media-pages)
-        ;; blog-posts-pages (:blog-posts all-pages)
-        ;; blog-posts-index-uri (get-index-uri-for-pages blog-posts-pages)
-        {:keys [blog-posts educational-media coding-projects]} (group-by :category articles)
-        ]
-    (layout
-      page
-      (list (welcome-section)
-            (when coding-projects
-              (home-content-window "coding projects" (-> realized-site :tag-indicies ) coding-projects))
-            (when educational-media
-              (home-content-window "educational media" educational-media-index-uri educational-media))
-            (when blog-posts (home-content-window "blog posts" blog-posts-index-uri blog-posts))))))
+  [realized-site page]
+  (layout
+   realized-site
+   page
+   (list (welcome-section)
+         (home-content-window realized-site :coding-projects)
+         (home-content-window realized-site :educational-media)
+         (home-content-window realized-site :blog-posts))))
 
-(defmethod render :404 [page all-pages] (layout page [:h1 "404 ;-;"]))
+(defmethod render :404 [realized-site page] (layout realized-site page [:h1 "404 ;-;"]))
