@@ -57,29 +57,36 @@
                           (map :id))}))))
 
 (defn realize-articles
-  "Adds :uri and :render-markdown kv pairs to each article map in articles vector"
+  "Adds :uri and :render-markdown keys to each article map in articles vector"
   [articles]
-  (for [{:keys [category content id] :as article} articles]
+  (for [{:keys [category resource-path id] :as article} articles]
     (assoc article
            :uri (str "/" (name category) "/" (name id) "/")
            ;; I could render right here or I could just add a render function.
            ;; Having a render function makes it much easier to inspect the full
            ;; map output of this function in the repl
-           :render-markdown (fn render-markdown []
-                              (if-let [content-resource (io/resource content)]
-                                (md-to-html-string (slurp content-resource))
-                                (throw (ex-info "Missing content" {:article article})))))))
+           :render-resource (fn render-markdown []
+                              (if-let [resource (io/resource resource-path)]
+                                ;; TODO add support for other types of resources
+                                ;; based on filename suffix
+                                (md-to-html-string (slurp resource))
+                                (throw (ex-info "Missing resource" {:article article})))))))
 
 (defn realize-site
-  "Creates fully realized site datastructure."
-  ([] (realize-site (get-config)))
-  ([config]
-   (-> config
-       (update :articles realize-articles)
+  "Creates fully realized site datastructure with or without drafts."
+  ([] (realize-site (get-config) true))
+  ([include-drafts?] (realize-site (get-config) include-drafts?))
+  ([config include-drafts?]
+   ;; I'm using as-> here because the draft removal step affects the indicies.
+   ;; I could just redefine config in a let binding instead.
+    (as-> config $
+      ;; Remove drafts first if necessary
+       (if include-drafts? $ (update $ :articles #(remove :draft? %)))
+       ;; Realize the articles
+       (update $ :articles realize-articles)
        ;; Add tag indicies
-       (assoc :tag-indicies (create-tag-indices config))
+       (assoc $ :tag-indicies (create-tag-indices $))
        ;; Add category indicies
-       (assoc :category-indicies (create-category-indices config)))))
+       (assoc $ :category-indicies (create-category-indices $)))))
 
 (comment (realize-site))
-
