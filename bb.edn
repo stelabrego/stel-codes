@@ -1,7 +1,7 @@
 {:min-bb-version "0.4.0",
  :tasks {export (shell "clj -X:export"),
          format (when (seq *command-line-args*)
-                  (shell (str "zprint '{:style :community :width 100}' -w "
+                  (shell (str "zprint '{:style [:community :respect-bl] :width 100}' -w "
                               (clojure.string/join " " *command-line-args*)))),
          repl (shell "clj -M:repl"),
          sass (shell "npx sass --no-source-map --watch resources/scss:resources/public/assets/css"),
