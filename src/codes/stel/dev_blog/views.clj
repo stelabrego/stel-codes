@@ -18,7 +18,7 @@
 (defn unordered-list
   ([items] (unordered-list {} items))
   ([opts items]
-   (concat [:ul opts] (for [item items] [:li item]))))
+   (vec (concat [:ul opts] (for [item items] [:li item])))))
 
 (comment (= (unordered-list (list [:p "A"] [:p "B"] [:p "C"]))
             [:ul {} [:li [:p "A"]] [:li [:p "B"]] [:li [:p "C"]]])
