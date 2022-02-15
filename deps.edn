@@ -13,11 +13,14 @@
                                nrepl/nrepl {:mvn/version "0.8.3"},
                                ring/ring-core {:mvn/version "1.8.2"}},
                   :extra-paths ["dev"],
-                  :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]" "--interactive"]},
-           :runner {:extra-deps {com.cognitect/test-runner {:git/url "https://github.com/cognitect-labs/test-runner",
-                                                            :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}},
+                  :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"
+                              "--interactive"]},
+           :runner {:extra-deps {com.cognitect/test-runner
+                                 {:git/url "https://github.com/cognitect-labs/test-runner",
+                                  :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}},
                     :main-opts ["-m" "cognitect.test-runner" "-d" "test"]},
-           :test {:extra-deps {org.clojure/test.check {:mvn/version "1.0.0"}}, :extra-paths ["test"]},
+           :test {:extra-deps {org.clojure/test.check {:mvn/version "1.0.0"}},
+                  :extra-paths ["test"]},
            :webhook {:exec-fn codes.stel.dev-blog.http/listen}},
  :deps {camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"},
         com.cemerick/url {:mvn/version "0.1.1"},
@@ -28,7 +31,8 @@
         hiccup/hiccup {:mvn/version "2.0.0-alpha2"},
         http-kit/http-kit {:mvn/version "2.5.3"},
         markdown-clj/markdown-clj {:mvn/version "1.10.5"},
-        me.raynes/fs {:mvn/version "1.4.6"},
+        babashka/fs {:mvn/version "0.1.2"},
+        rum/rum {:mvn/version "0.12.8"}
         org.clojure/clojure {:mvn/version "1.10.1"},
         org.postgresql/postgresql {:mvn/version "42.2.17.jre7"},
         seancorfield/next.jdbc {:mvn/version "1.1.588"},
