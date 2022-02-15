@@ -298,6 +298,7 @@ section.welcome {
   justify-self: center;
   align-content: center;
   justify-content: center;
+  margin: 0.5rem 0;
   &, & a {
     color: color(grey, lighter);
   }
@@ -339,7 +340,7 @@ section.welcome {
         content: '';
         display: inline-block;
         position: absolute;
-        left: 0.5;
+        left: 0.5px;
         top: 30%;
         border: 17px solid transparent;
         border-right-color: change-color(color(grey,lightest), $alpha:.1);
