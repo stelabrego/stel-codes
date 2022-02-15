@@ -3,8 +3,8 @@
             [codes.stel.dev-blog.views :as views]
             [codes.stel.dev-blog.util :as util]
             [clojure.java.io :as io]
-            [me.raynes.fs :refer [copy-dir]]
-            [taoensso.timbre :as timbre :refer [info]]
+            [babashka.fs :as fs]
+            [taoensso.timbre :as log]
             [codes.stel.dev-blog.config :refer [get-config]]
             [markdown.core :refer [md-to-html-string]]))
 
@@ -57,68 +57,86 @@
                                 (md-to-html-string (slurp resource))
                                 (throw (ex-info "Missing resource" {:article article})))))))
 
+(defn gen-id->info [{:keys [articles tag-indicies category-indicies] :as world}]
+  (fn [id]
+    (or ;; Get top level value if present
+        (get world id)
+        ;; Else look in articles and indicies for a match
+        (as-> (concat articles tag-indicies category-indicies) $
+          (filter #(= id (:id %)) $)
+          (first $)
+          (if $ (assoc $ :id->info (gen-id->info world))
+            (throw (ex-info "Bad call to id->info" {:id id})))))))
+
+(comment (gen-id->info {}))
+
 (defn realize-world
   "Creates fully realized site datastructure with or without drafts."
   ([] (realize-world (get-config) true))
   ([include-drafts?] (realize-world (get-config) include-drafts?))
   ([config include-drafts?]
-   ;; I'm using as-> here because the draft removal step affects the indicies.
-   ;; I could just redefine config in a let binding instead.
-    (as-> config $
-      ;; Remove drafts first if necessary
-       (if include-drafts? $ (update $ :articles #(remove :draft? %)))
-       ;; Realize the articles
-       (update $ :articles realize-articles)
-       ;; Add tag indicies
-       (assoc $ :tag-indicies (create-tag-indices $))
-       ;; Add category indicies
-       (assoc $ :category-indicies (create-category-indices $)))))
+   ;; Remove drafts if necessary
+   (let [config (if include-drafts?
+                  config
+                  (update config :articles #(remove :draft? %)))]
+     (-> config
+     ;; Realize the articles
+     (update :articles realize-articles)
+     ;; Add tag indicies
+     (assoc :tag-indicies (create-tag-indices config))
+     ;; Add category indicies
+     (assoc :category-indicies (create-category-indices config))))))
 
-(comment (realize-world))
+(comment (realize-world)
+         (-> (realize-world) :category-indicies first))
 
-(defn id->info [{:keys [articles tag-indicies category-indicies]} id]
-  (->> (concat articles tag-indicies category-indicies)
-       (filter #(= id (:id %)))
-       (first)))
-
-(comment
- (concat [1 2 3])
- (id->info {:articles [{:id :poop :uri "/poop"}]} :poop))
-
-(defn generate-index
-  ([] (generate-index (realize-world)))
+(defn generate-page-list
+  ([] (generate-page-list (realize-world)))
   ([{:keys [articles tag-indicies category-indicies] :as world}]
    (->> [{:uri "/" :category :home} {:uri "/404/" :category :404}]
         (concat articles tag-indicies category-indicies)
-        ;; Add id->info lookup function to every page
-        (map #(assoc % :id->info (partial id->info world)))
-        (map #(vector (:uri %) (fn [_] (views/render (assoc % :world world)))))
-        (into {}))))
+        (map #(assoc % :id->info (gen-id->info world))))))
 
-(comment (doseq [[n f] (generate-index)]
+(comment (-> (generate-page-list) first)
+         (-> (generate-page-list) first
+             :id->info (apply [:general]))
+         (-> (generate-page-list) first
+             :id->info (apply [:clojure])
+             :id->info (apply [:coding-projects])))
+
+(defn generate-page-index
+  ([] (generate-page-index (generate-page-list)))
+  ([page-list]
+   (into {}
+    (map (fn [page] [(:uri page) (fn [_] (views/render page))]) page-list))))
+
+(comment (generate-page-index)
+         (doseq [[n f] (generate-page-index)]
            (println "rendering" n)
            (println (f nil))))
 
-(defn generic-export
+(defn export-site
   ([site-index target-dir]
    (let [assets (io/file (io/resource "public/assets"))]
-     (info "Building site...")
-     (fs)
+     (log/info "Building site...")
+     (fs/create-dirs target-dir)
      (stasis/empty-directory! target-dir)
      (stasis/export-pages site-index target-dir)
-     (copy-dir assets target-dir)
-     (info "Build successful")
-     (info (str "Located in " target-dir)))))
+     (fs/copy-tree assets (str target-dir "/assets"))
+     (log/info "Build successful")
+     (log/info (str "Located in " target-dir)))))
 
 (defn export-prod []
-  (generic-export (generate-index (realize-world)) "/dist/dev"))
+  (export-site (-> (realize-world false) generate-page-list generate-page-index) "dist/prod"))
+
+(comment (export-prod))
 
 (defn export-dev []
-  (generic-export (generate-index (realize-world)) "/dist/prod"))
+  (export-site (generate-page-index) "dist/dev"))
+
+(comment (export-dev))
 
 (defn export
   ([] (export-prod) (export-dev))
   ([_] (export)))
 
-(comment
-  (export-dev))
