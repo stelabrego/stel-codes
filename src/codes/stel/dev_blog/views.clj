@@ -77,12 +77,14 @@
 
 (defn welcome-section
   []
-  [:section.welcome (image {:class "avatar"} "https://s3.stel.codes/avatar-small.png")
+  [:section.welcome
+   (image {:class "avatar"} "https://s3.stel.codes/avatar-small.png")
    [:span.name "Stel Abrego, Software Developer"]
-   [:p "Hi! I'm a freelance software hacker with a focus on functional design and web technologies."]
-   [:p "Check out my projects, learning resources, and blog posts."]
-   ;; TODO fix CV link or render this from markdown
-   [:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]])
+   [:div.text
+    [:p "Hi! I'm a freelance software hacker with a focus on functional design and web technologies."]
+    [:p "Check out my projects, learning resources, and blog posts."]
+    ;; TODO fix CV link or render this from markdown
+    [:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]]])
 
 (defn layout
   [{:keys [title category] :as page} & content]
