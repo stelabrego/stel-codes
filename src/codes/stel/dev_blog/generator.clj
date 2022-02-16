@@ -25,6 +25,32 @@
                             (filter article-has-tag?)
                             (map :id))})))))
 
+(defn create-tag-index
+  ([] (create-tag-index (get-config)))
+  ([config]
+   (->> config
+        ;; {:foo {:tags [:bar :baz]} :bee {:tags [:baz :boo]}}
+        ;; Create a map shaped like tag -> [page-ids]
+        (reduce-kv
+         (fn [m id {:keys [tags]}]
+           ;; merge-with is awesome!
+           (if tags (merge-with into m (zipmap tags (repeat [id]))) m))
+         {})
+        ;; {:bar [:foo], :baz [:foo :bee], :boo [:bee]}
+        ;; Then change the val into a map with more info
+        (reduce-kv
+         (fn [m tag ids]
+           (assoc m tag {:pages ids :title (str "#" (name tag)) :uri (str "/tags/" (name tag) "/")}))
+         {})
+        ;; {:bar {:pages [:foo], :title "#bar", :uri "/tags/bar/"},
+        ;;  :baz {:pages [:foo :bee], :title "#baz", :uri "/tags/baz/"},
+        ;;  :boo {:pages [:bee], :title "#boo", :uri "/tags/boo/"}}
+        )))
+
+(comment
+ (create-tag-index {:foo {:tags [:bar :baz]} :moo {}})
+ (create-tag-index {:foo {:tags [:bar :baz]} :bee {:tags [:baz :boo]}}))
+
 (defn create-category-indices
   ([] (create-category-indices (get-config)))
   ([{:keys [articles] :as _config}]
@@ -35,14 +61,36 @@
       {:title (util/kebab-case->title-case category),
        :id category
        :category :index
-       :uri (str "/" (name category) "/"),
+       :uri (str "/" (name category) "/")
        :indexed-articles (->>
                           articles
                           (filter #(= category (:category %)))
                           (map :id))}))))
 
+
+(defn create-group-index
+  ([] (create-group-index (get-config)))
+  ([config]
+   (->> config
+        ;; {:foo {:group :blog-posts} :bee {:group :coding-projects}}
+        ;; Then create a map shaped like group -> [page-ids]
+        (reduce-kv
+         (fn [m id {:keys [group]}]
+           (if group (merge-with into m {group [id]}) m))
+         {})
+        ;; {:blog-posts [:foo], :coding-projects [:bee]}
+        ;; Then change the val into a map with more info
+        (reduce-kv
+         (fn [m group ids]
+           (assoc m group {:pages ids :title (util/kebab-case->title-case group) :uri (str "/" (name group) "/")}))
+         {}))))
+
+(comment
+ (create-group-index {:foo {:group :blog-posts}})
+ (create-group-index {:foo {:group :blog-posts} :bee {:group :coding-projects}}))
+
 (defn realize-articles
-  "Adds :uri and :render-markdown keys to each article map in articles vector"
+  "Adds :uri and :render-resource keys to each article map in articles vector"
   [articles]
   (for [{:keys [category resource-path id] :as article} articles]
     (assoc article
