@@ -1,8 +1,8 @@
 {:min-bb-version "0.4.0",
- :tasks {export (shell "clj -X:export"),
+ :tasks {export (shell "bb clojure -X:export"),
          format (when (seq *command-line-args*)
-                  (shell (str "zprint '{:style [:community :respect-bl] :width 100}' -w "
+                  (shell (str "zprint '{:style [:community :respect-bl :hiccup] :width 100}' -w "
                               (clojure.string/join " " *command-line-args*)))),
-         repl (shell "clj -M:repl"),
+         repl (shell "bb clojure -M:repl"),
          sass (shell "npx sass --no-source-map --watch resources/scss:resources/public/assets/css"),
-         webhook (shell "clj -X:webhook")}}
+         webhook (shell "bb clojure -X:webhook")}}
