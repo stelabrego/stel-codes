@@ -3,6 +3,6 @@
          format (when (seq *command-line-args*)
                   (shell (str "zprint '{:style [:community :respect-bl :hiccup] :width 100}' -w "
                               (clojure.string/join " " *command-line-args*)))),
-         repl (shell "bb clojure -M:repl"),
+         repl (shell "rlwrap bb clojure -M:repl"),
          sass (shell "npx sass --no-source-map --watch resources/scss:resources/public/assets/css"),
          webhook (shell "bb clojure -X:webhook")}}
