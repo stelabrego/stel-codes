@@ -9,7 +9,7 @@
 
 (defn dev-app
   []
-  (-> (stasis/serve-pages #(generator/generate-page-index))
+  (-> (stasis/serve-pages #(generator/generate-site-index))
       (wrap-resource "public")
       wrap-content-type))
 

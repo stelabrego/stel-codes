@@ -74,9 +74,8 @@
  {:resource "markdown/introduction.md"}
  ;; Could add :resource-type but we can infer based on filename
 
- :meta
+ :_meta
  {:domain "stel.codes",
   :email "stel@stel.codes",
   :github "https://github.com/stelcodes",
-  :twitter "https://twitter.com/stelstuff"}
- }
+  :twitter "https://twitter.com/stelstuff"}}

@@ -4,26 +4,10 @@
             [codes.stel.dev-blog.util :as util]
             [clojure.java.io :as io]
             [babashka.fs :as fs]
+            [clojure.string :as string]
             [taoensso.timbre :as log]
             [codes.stel.dev-blog.config :refer [get-config]]
             [markdown.core :refer [md-to-html-string]]))
-
-(defn create-tag-indices
-  ([] (create-tag-indices (get-config)))
-  ([{:keys [articles] :as _config}]
-  (let [tags (->> articles
-                  (mapcat :tags)
-                  (set))]
-    (for [tag tags]
-      (let [article-has-tag? (fn [article] (some #{tag} (:tags article)))]
-        {:title (str "#" (name tag)),
-         :id tag
-         :category :index
-         :uri (str "/tags/" (name tag) "/"),
-         :indexed-articles (->>
-                            articles
-                            (filter article-has-tag?)
-                            (map :id))})))))
 
 (defn create-tag-index
   ([] (create-tag-index (get-config)))
@@ -40,126 +24,136 @@
         ;; Then change the val into a map with more info
         (reduce-kv
          (fn [m tag ids]
-           (assoc m tag {:pages ids :title (str "#" (name tag)) :uri (str "/tags/" (name tag) "/")}))
+           (assoc m [:tags tag] {:index ids :title (str "#" (name tag)) :uri (str "/tags/" (name tag) "/")}))
          {})
-        ;; {:bar {:pages [:foo], :title "#bar", :uri "/tags/bar/"},
-        ;;  :baz {:pages [:foo :bee], :title "#baz", :uri "/tags/baz/"},
-        ;;  :boo {:pages [:bee], :title "#boo", :uri "/tags/boo/"}}
+        ;; {:bar {:index [:foo], :title "#bar", :uri "/tags/bar/"},
+        ;;  :baz {:index [:foo :bee], :title "#baz", :uri "/tags/baz/"},
+        ;;  :boo {:index [:bee], :title "#boo", :uri "/tags/boo/"}}
         )))
 
 (comment
+ (create-tag-index)
  (create-tag-index {:foo {:tags [:bar :baz]} :moo {}})
  (create-tag-index {:foo {:tags [:bar :baz]} :bee {:tags [:baz :boo]}}))
 
-(defn create-category-indices
-  ([] (create-category-indices (get-config)))
-  ([{:keys [articles] :as _config}]
-  (let [categories (->> articles
-                        (map :category)
-                        (set))]
-    (for [category categories]
-      {:title (util/kebab-case->title-case category),
-       :id category
-       :category :index
-       :uri (str "/" (name category) "/")
-       :indexed-articles (->>
-                          articles
-                          (filter #(= category (:category %)))
-                          (map :id))}))))
-
+(defn id->uri [id]
+  {:pre [(vector? id)]}
+  (str "/" (string/join "/" (map name id)) "/"))
 
 (defn create-group-index
   ([] (create-group-index (get-config)))
   ([config]
    (->> config
-        ;; {:foo {:group :blog-posts} :bee {:group :coding-projects}}
+        ;; {[:blog :foo] {:title "Foo"} [:projects :bee] {:title "Bee"}}
         ;; Then create a map shaped like group -> [page-ids]
         (reduce-kv
-         (fn [m id {:keys [group]}]
-           (if group (merge-with into m {group [id]}) m))
+         (fn [m id _]
+           (if (and (vector? id) (> (count id) 1))
+             (merge-with into m {(vec (butlast id)) [id]}) m))
          {})
-        ;; {:blog-posts [:foo], :coding-projects [:bee]}
+        ;; {:blog [[:blog :foo]], :projects [[:projects :bee]]}
         ;; Then change the val into a map with more info
         (reduce-kv
-         (fn [m group ids]
-           (assoc m group {:pages ids :title (util/kebab-case->title-case group) :uri (str "/" (name group) "/")}))
+         (fn [m group-id ids]
+           (assoc m group-id {:index ids :title (util/kebab-case->title-case (last group-id)) :uri (id->uri group-id)}))
          {}))))
 
 (comment
- (create-group-index {:foo {:group :blog-posts}})
+ (= (create-group-index {[:blog :foo] {:title "Foo"} [:blog :archive :baz] {:title "Baz"} [:projects :bee] {:title "Bee"}})
+    {[:blog]
+     {:index [[:blog :foo]], :title "Blog", :uri "/blog/"},
+     [:blog :archive]
+     {:index [[:blog :archive :baz]],
+      :title "Archive",
+      :uri "/blog/archive/"},
+     [:projects]
+     {:index [[:projects :bee]], :title "Projects", :uri "/projects/"}})
  (create-group-index {:foo {:group :blog-posts} :bee {:group :coding-projects}}))
 
-(defn realize-articles
+(defn realize-pages
   "Adds :uri and :render-resource keys to each article map in articles vector"
-  [articles]
-  (for [{:keys [category resource-path id] :as article} articles]
-    (assoc article
-           :uri (str "/" (name category) "/" (name id) "/")
-           ;; I could render right here or I could just add a render function.
-           ;; Having a render function makes it much easier to inspect the full
-           ;; map output of this function in the repl
-           :render-resource (fn render-markdown []
-                              (if-let [resource (io/resource resource-path)]
-                                ;; TODO add support for other types of resources
-                                ;; based on filename suffix
-                                (md-to-html-string (slurp resource))
-                                (throw (ex-info "Missing resource" {:article article})))))))
+  ([] (realize-pages (get-config)))
+  ([config]
+   (reduce-kv
+    (fn [m id {:keys [resource uri tags] :as v}]
+      (if (vector? id)
+        (assoc m id
+               (merge v {;; Turn the basic tags vector into a vector of page ids
+                         :tags (vec (map #(vector :tags %) tags))
+                         :uri (or uri (id->uri id))
+                         ;; TODO add support for other types of resources
+                         ;; based on filename suffix
+                         :render-resource (if resource
+                                            (if-let [resource-file (io/resource resource)]
+                                              (fn render-markdown []
+                                                (md-to-html-string (slurp resource-file)))
+                                              (throw (ex-info (str id ": Resource not found") {:id id})))
+                                            (constantly nil))}))
+        (assoc m id v)))
+    {} config)))
 
-(defn gen-id->info [{:keys [articles tag-indicies category-indicies] :as world}]
-  (fn [id]
-    (or ;; Get top level value if present
-        (get world id)
-        ;; Else look in articles and indicies for a match
-        (as-> (concat articles tag-indicies category-indicies) $
-          (filter #(= id (:id %)) $)
-          (first $)
-          (if $ (assoc $ :id->info (gen-id->info world))
-            (throw (ex-info "Bad call to id->info" {:id id})))))))
+(comment (realize-pages))
+
+(defn gen-id->info [realized-config]
+  (fn id->info [id]
+    (if-let [entity (get realized-config id)]
+        (assoc entity :id->info id->info)
+        (throw (ex-info (str "id->info error: id " id " not found")
+                        {:id id :realized-config realized-config})))))
 
 (comment (gen-id->info {}))
 
-(defn realize-world
-  "Creates fully realized site datastructure with or without drafts."
-  ([] (realize-world (get-config) true))
-  ([include-drafts?] (realize-world (get-config) include-drafts?))
-  ([config include-drafts?]
-   ;; Remove drafts if necessary
-   (let [config (if include-drafts?
-                  config
-                  (update config :articles #(remove :draft? %)))]
-     (-> config
-     ;; Realize the articles
-     (update :articles realize-articles)
-     ;; Add tag indicies
-     (assoc :tag-indicies (create-tag-indices config))
-     ;; Add category indicies
-     (assoc :category-indicies (create-category-indices config))))))
+;; Taken from https://clojuredocs.org/clojure.core/merge
+(defn deep-merge [a & maps]
+  (if (map? a)
+    (apply merge-with deep-merge a maps)
+    (apply merge-with deep-merge maps)))
 
-(comment (realize-world)
-         (-> (realize-world) :category-indicies first))
+(defn realize-config
+  "Creates fully realized site datastructure with or without drafts."
+  ([] (realize-config (get-config) true))
+  ([config-or-include-drafts?] (if (map? config-or-include-drafts?)
+                                 (realize-config config-or-include-drafts? true)
+                                 (realize-config (get-config) config-or-include-drafts?)))
+  ([config include-drafts?]
+   {:pre [(map? config) (boolean? include-drafts?)]}
+   ;; Allow users to define their own overrides via deep-merge
+   (->> config
+        (deep-merge {[] {:uri "/"} [:404] {:uri "/404/"}})
+        (deep-merge (create-group-index config))
+        (deep-merge (create-tag-index config))
+        realize-pages)))
+
+(comment (realize-config))
 
 (defn generate-page-list
-  ([] (generate-page-list (realize-world)))
-  ([{:keys [articles tag-indicies category-indicies] :as world}]
-   (->> [{:uri "/" :category :home} {:uri "/404/" :category :404}]
-        (concat articles tag-indicies category-indicies)
-        (map #(assoc % :id->info (gen-id->info world))))))
+  ([] (generate-page-list (realize-config)))
+  ([realized-config]
+   (->> realized-config
+        ;; If key is vector, then it is a page
+        (reduce-kv (fn [page-list id v]
+                     (if (vector? id)
+                       (conj page-list (assoc v :id id))
+                       page-list)) [])
+        (map #(assoc % :id->info (gen-id->info realized-config))))))
 
 (comment (-> (generate-page-list) first)
          (-> (generate-page-list) first
-             :id->info (apply [:general]))
+             :id->info (apply [:_meta]))
          (-> (generate-page-list) first
-             :id->info (apply [:clojure])
+             :id->info (apply [[:blog-posts :using-directus-cms]]))
+         (-> (generate-page-list) first
+             :id->info (apply [[:clojure]])
              :id->info (apply [:coding-projects])))
 
-(defn generate-page-index
-  ([] (generate-page-index (generate-page-list)))
+(defn generate-site-index
+  ([] (generate-site-index (generate-page-list)))
   ([page-list]
    (into {}
     (map (fn [page] [(:uri page) (fn [_] (views/render page))]) page-list))))
 
-(comment (generate-page-index)
-         (doseq [[n f] (generate-page-index)]
+(comment (generate-site-index)
+         (doseq [[n f] (generate-site-index)]
            (println "rendering" n)
            (println (f nil))))
 
@@ -175,12 +169,12 @@
      (log/info (str "Located in " target-dir)))))
 
 (defn export-prod []
-  (export-site (-> (realize-world false) generate-page-list generate-page-index) "dist/prod"))
+  (export-site (-> (get-config) (realize-config false) (generate-page-list) (generate-site-index)) "dist/prod"))
 
 (comment (export-prod))
 
 (defn export-dev []
-  (export-site (generate-page-index) "dist/dev"))
+  (export-site (generate-site-index) "dist/dev"))
 
 (comment (export-dev))
 

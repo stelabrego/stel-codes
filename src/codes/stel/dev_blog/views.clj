@@ -27,7 +27,7 @@
 
 (defn header
   [{:keys [id->info]}]
-  (let [{:keys [twitter github email]} (id->info :general)]
+  (let [{:keys [twitter github email]} (id->info :meta)]
     [:header
      [:nav [:a {:id "brand" :href "/"} (image "https://s3.stel.codes/nixos-logo.png") [:span "stel.codes"]]
       [:ul {:id "social"}
@@ -39,18 +39,18 @@
 
 (defn window
   [title body]
-  (let [bars (raw (slurp (io/resource "svg/bars.svg")))]
+  (let [bars (slurp (io/resource "svg/bars.svg"))]
     [:section.window
      [:div.top bars [:span.title title] bars]
      [:div.content body]]))
 
 (defn tag-group
-  [{:keys [id->info tags] :as page}]
-  ;; (println "tag-group tags: " tags)
-  ;; (doseq [tag tags] (println "idinfo: " (id->info tag)))
+  [{:keys [id->info tags]}]
+  {:pre [(vector? tags)]}
   [:p.tags
    (for [tag tags]
-     [:a {:class "tag" :href (-> tag id->info :uri)} (str "#" (name tag))])])
+     (let [{:keys [uri title]} (id->info tag)]
+       [:a {:class "tag" :href uri} title]))])
 
 (defn window-list-item
   [{:keys [uri title subtitle tags] :as page}]
@@ -59,21 +59,18 @@
         (when (not-empty tags) (tag-group page))))
 
 (defn home-content-window
-  [{:keys [id->info] :as page} category-id]
-  ;; (log/debug category-id)
-  ;; (log/debug "HOME CONTNET WINDOW" (id->info category-id))
-  (let [{:keys [indexed-articles title uri] :as z} (id->info category-id)]
-    (log/debug "HCW" z)
-    (when-not (empty? indexed-articles)
-      (window title
-              (list (->> indexed-articles
-                         (map id->info)
-                         ;; (sort-by :sort)
-                         ;; (reverse)
-                         ;; (take 5)
-                         (map window-list-item)
-                         (unordered-list))
-                    (when (> (count indexed-articles) 5) [:a {:class "more-link" :href uri} "more!"]))))))
+  "Expects a group index page"
+  [{:keys [id->info index title uri]}]
+  (when-not (empty? index)
+    (window title
+            (list (->> index
+                       (map id->info)
+                       (sort-by :sort)
+                       (reverse)
+                       (take 5)
+                       (map window-list-item)
+                       (unordered-list))
+                  (when (> (count index) 5) [:a {:class "more-link" :href uri} "more!"])))))
 
 (defn welcome-section
   []
@@ -87,7 +84,7 @@
     [:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]]])
 
 (defn layout
-  [{:keys [title category] :as page} & content]
+  [{:keys [title id] :as page} & content]
   (html5
    [:html
     [:head [:title (if title (str title " | stel.codes") "stel.codes")] [:meta {:charset "utf-8"}]
@@ -108,13 +105,13 @@
      (when nil
        [:script
         {:src "https://plausible.io/js/plausible.js", :data-domain "stel.codes", :defer "defer", :async "async"}])]]
-   [:body (header page) [:main {:class (name category)} content] (footer)]))
+   [:body (header page) [:main (when (= [] id) {:class "home"}) content] (footer)]))
 
 (defn render-generic
-  [{:keys [repo prod source category title subtitle tags header-image render-resource] :as page}]
+  [{:keys [repo prod source id title subtitle tags header-image render-resource] :as page}]
   (layout page
           (welcome-section)
-          (window (util/kebab-case->lower-case (name category))
+          (window (util/kebab-case->lower-case (if (> (count id) 1) (nth id (- (count id) 2)) (first id)))
                   [:article (when header-image (image header-image)) [:h1 title]
                    (when subtitle [:p.subtitle subtitle])
                    (when (not-empty tags) (tag-group page))
@@ -122,34 +119,31 @@
                      [:div.top-links (when repo [:span "🧙 " [:a {:href repo} "Open Source Code Repo"]])
                       (when prod [:span "🌙 " [:a {:href prod} "Live App Demo"]])
                       (when source [:span "🧑‍🎓 " [:a {:href source} "Find it here!"]])])
-                   (raw (render-resource))
-                   [:div.circles (take 3 (repeat (raw (slurp "resources/svg/circle.svg"))))]])))
+                   (render-resource)
+                   [:div.circles (take 3 (repeat (slurp "resources/svg/circle.svg")))]])))
 
 (defn render-generic-index
-  [{:keys [title indexed-articles] :as page}]
+  [{:keys [title index id->info] :as page}]
+  {:pre [(vector? index)]}
   (layout
    page
    (list (welcome-section)
          (window title
                  (unordered-list
-                  (map window-list-item indexed-articles))))))
+                  (->> index (map id->info) (map window-list-item)))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Rendering multimethod declarations
-
-(defmulti render :category)
-
-(defmethod render :index [page] (render-generic-index page))
-
-(defmethod render :home
-  [page]
+(defn render-home
+  [{:keys [id->info] :as page}]
   (layout
    page
    (list (welcome-section)
-         (home-content-window page :coding-projects)
-         (home-content-window page :educational-media)
-         (home-content-window page :blog-posts))))
+         (home-content-window (id->info [:coding-projects]))
+         (home-content-window (id->info [:educational-media]))
+         (home-content-window (id->info [:blog-posts])))))
 
-(defmethod render :404 [page] (layout page [:h1 "404 ;-;"]))
-
-(defmethod render :default [page] (render-generic page))
+(defn render [{:keys [id] :as page}]
+  (cond
+    (= [] id) (render-home page)
+    (= [:404] id) (layout page [:h1 "404 ;-;"])
+    (contains? page :index) (render-generic-index page)
+    :else (render-generic page)))
