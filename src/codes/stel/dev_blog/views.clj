@@ -39,7 +39,7 @@
 
 (defn window
   [title body]
-  (let [bars (slurp (io/resource "svg/bars.svg"))]
+  (let [bars (raw (slurp (io/resource "svg/bars.svg")))]
     [:section.window
      [:div.top bars [:span.title title] bars]
      [:div.content body]]))
@@ -85,27 +85,28 @@
 
 (defn layout
   [{:keys [title id] :as page} & content]
-  (html5
-   [:html
-    [:head [:title (if title (str title " | stel.codes") "stel.codes")] [:meta {:charset "utf-8"}]
-     [:meta {:http-equiv "X-UA-Compatible", :content "IE=edge"}]
-     [:meta {:name "viewport", :content "width=device-width, initial-scale=1.0"}]
-     ;; Icons
-     [:link {:href "/assets/icons/apple-touch-icon.png", :sizes "180x180", :rel "apple-touch-icon"}]
-     [:link {:href "/assets/icons/favicon-32x32.png", :sizes "32x32", :type "image/png", :rel "icon"}]
-     [:link {:href "/assets/icons/favicon-16x16.png", :sizes "16x16", :type "image/png", :rel "icon"}]
-     [:link {:href "/assets/icons/site.webmanifest", :rel "manifest"}]
-     [:link {:color "#5bbad5", :href "/assets/icons/safari-pinned-tab.svg", :rel "mask-icon"}]
-     [:link {:href "/assets/icons/favicon.ico", :rel "shortcut icon"}]
-     [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
-     [:meta {:content "#da532c", :name "msapplication-TileColor"}]
-     [:meta {:content "/assets/icons/browserconfig.xml", :name "msapplication-config"}]
-     [:meta {:content "#ffffff", :name "theme-color"}]
-     ;; Analytics
-     (when nil
-       [:script
-        {:src "https://plausible.io/js/plausible.js", :data-domain "stel.codes", :defer "defer", :async "async"}])]]
-   [:body (header page) [:main (when (= [] id) {:class "home"}) content] (footer)]))
+  (str "<!DOCTYPE html>"
+       (html
+        [:html
+         [:head [:title (if title (str title " | stel.codes") "stel.codes")] [:meta {:charset "utf-8"}]
+          [:meta {:http-equiv "X-UA-Compatible", :content "IE=edge"}]
+          [:meta {:name "viewport", :content "width=device-width, initial-scale=1.0"}]
+          ;; Icons
+          [:link {:href "/assets/icons/apple-touch-icon.png", :sizes "180x180", :rel "apple-touch-icon"}]
+          [:link {:href "/assets/icons/favicon-32x32.png", :sizes "32x32", :type "image/png", :rel "icon"}]
+          [:link {:href "/assets/icons/favicon-16x16.png", :sizes "16x16", :type "image/png", :rel "icon"}]
+          [:link {:href "/assets/icons/site.webmanifest", :rel "manifest"}]
+          [:link {:color "#5bbad5", :href "/assets/icons/safari-pinned-tab.svg", :rel "mask-icon"}]
+          [:link {:href "/assets/icons/favicon.ico", :rel "shortcut icon"}]
+          [:link {:href "/assets/css/main.css" :rel "stylesheet"}]
+          [:meta {:content "#da532c", :name "msapplication-TileColor"}]
+          [:meta {:content "/assets/icons/browserconfig.xml", :name "msapplication-config"}]
+          [:meta {:content "#ffffff", :name "theme-color"}]
+          ;; Analytics
+          (when nil
+            [:script
+             {:src "https://plausible.io/js/plausible.js", :data-domain "stel.codes", :defer "defer", :async "async"}])]]
+        [:body (header page) [:main (when (= [] id) {:class "home"}) content] (footer)])))
 
 (defn render-generic
   [{:keys [repo prod source id title subtitle tags header-image render-resource] :as page}]
@@ -120,7 +121,7 @@
                       (when prod [:span "🌙 " [:a {:href prod} "Live App Demo"]])
                       (when source [:span "🧑‍🎓 " [:a {:href source} "Find it here!"]])])
                    (render-resource)
-                   [:div.circles (take 3 (repeat (slurp "resources/svg/circle.svg")))]])))
+                   [:div.circles (take 3 (repeat (raw (slurp "resources/svg/circle.svg"))))]])))
 
 (defn render-generic-index
   [{:keys [title index id->info] :as page}]
