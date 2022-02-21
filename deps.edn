@@ -1,43 +1,8 @@
-{:aliases {:export {:exec-fn codes.stel.dev-blog.generator/export},
-           :jar {:exec-args {:aot false,
-                             ; :compile-ns [codes.stel.dev-blog],
-                             ; :main-class codes.stel.dev-blog,
-                             :artifact-id "dev-blog",
-                             :group-id "codes.stel",
-                             :jar "codes.stel.dev-blog.jar",
-                             :jar-type :uber,
-                             :version "0.1.0"},
-                 :exec-fn hf.depstar/jar,
-                 :extra-deps {seancorfield/depstar {:mvn/version "2.0.216"}}},
-           :repl {:extra-deps {cider/cider-nrepl {:mvn/version "0.25.2"},
-                               nrepl/nrepl {:mvn/version "0.8.3"},
-                               ring/ring-core {:mvn/version "1.8.2"}},
-                  :extra-paths ["dev"],
+{:aliases {:repl {:extra-deps {cider/cider-nrepl {:mvn/version "0.25.2"},
+                               nrepl/nrepl {:mvn/version "0.8.3"}},
                   :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"
-                              "--interactive"]},
-           :runner {:extra-deps {com.cognitect/test-runner
-                                 {:git/url "https://github.com/cognitect-labs/test-runner",
-                                  :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}},
-                    :main-opts ["-m" "cognitect.test-runner" "-d" "test"]},
-           :test {:extra-deps {org.clojure/test.check {:mvn/version "1.0.0"}},
-                  :extra-paths ["test"]},
-           :webhook {:exec-fn codes.stel.dev-blog.http/listen}},
- :deps {camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"},
-        com.cemerick/url {:mvn/version "0.1.1"},
-        com.fzakaria/slf4j-timbre {:mvn/version "0.3.21"},
-        com.taoensso/timbre {:mvn/version "5.1.2"},
-        com.zaxxer/HikariCP {:mvn/version "4.0.3"},
-        cprop/cprop {:mvn/version "0.1.18"},
-        hiccup/hiccup {:mvn/version "2.0.0-alpha2"},
-        http-kit/http-kit {:mvn/version "2.5.3"},
-        markdown-clj/markdown-clj {:mvn/version "1.10.5"},
-        babashka/fs {:mvn/version "0.1.2"},
-        rum/rum {:mvn/version "0.12.8"}
-        org.clojure/clojure {:mvn/version "1.10.1"},
-        org.postgresql/postgresql {:mvn/version "42.2.17.jre7"},
-        seancorfield/next.jdbc {:mvn/version "1.1.588"},
-        stasis/stasis {:mvn/version "2.5.1"}},
+                              "--interactive"]
+                  :extra-paths ["dev"]}}
+ :deps {nuzzle/nuzzle {:local/root "../nuzzle"}
+        org.clojure/clojure {:mvn/version "1.10.3"}}
  :paths ["src" "resources"]}
-
-;; sass --no-source-map
-;; resources/scss/main.scss:resources/public/assets/css/main.css
