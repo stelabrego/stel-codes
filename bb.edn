@@ -4,5 +4,8 @@
                   (shell (str "zprint '{:style [:community :respect-bl :hiccup] :width 100}' -w "
                               (clojure.string/join " " *command-line-args*)))),
          repl (shell "rlwrap bb clojure -M:repl"),
+         serve (if (seq *command-line-args*)
+                 (shell (str "caddy file-server --listen :3030 --root " (first *command-line-args*)))
+                 (shell "caddy file-server --listen :3030 --browse --root dist"))
          sass (shell "npx sass --no-source-map --watch resources/scss:resources/public/assets/css"),
          webhook (shell "bb clojure -X:webhook")}}
