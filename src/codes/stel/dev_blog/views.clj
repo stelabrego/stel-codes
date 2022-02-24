@@ -46,7 +46,7 @@
   {:pre [(vector? tags)]}
   [:p.tags
    (for [tag tags]
-     (let [{:keys [uri title]} (id->info tag)]
+     (let [{:keys [uri title]} (id->info [:tags tag])]
        [:a {:class "tag" :href uri} title]))])
 
 (defn window-list-item
