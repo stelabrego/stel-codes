@@ -6,7 +6,7 @@
 
 (def config {:site-config "edn/site.edn"
              :static-dir "public"
-             :render-fn views/render
+             :render-page views/render-page
              :target-dir "dist"})
 
 (defn start []

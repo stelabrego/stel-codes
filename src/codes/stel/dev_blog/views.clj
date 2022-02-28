@@ -105,7 +105,7 @@
        {:src "https://plausible.io/js/plausible.js", :data-domain "stel.codes", :defer "defer", :async "async"}])]
    [:body (header page) [:main (when (= [] id) {:class "home"}) content] (footer)]])
 
-(defn render-generic
+(defn render-generic-page
   [{:keys [repo prod source id title subtitle tags header-image render-content-fn] :as page}]
   (layout page
           (welcome-section)
@@ -120,7 +120,7 @@
                    (render-content-fn)
                    [:div.circles (take 3 (repeat (raw (slurp "resources/svg/circle.svg"))))]])))
 
-(defn render-generic-index
+(defn render-index-page
   [{:keys [title index id->info] :as page}]
   {:pre [(vector? index)]}
   (layout
@@ -130,7 +130,7 @@
                  (unordered-list
                   (->> index (map id->info) (map window-list-item)))))))
 
-(defn render-home
+(defn render-home-page
   [{:keys [id->info] :as page}]
   (layout
    page
@@ -139,9 +139,9 @@
          (home-content-window (id->info [:educational-media]))
          (home-content-window (id->info [:blog-posts])))))
 
-(defn render [{:keys [id] :as page}]
+(defn render-page [{:keys [id] :as page}]
   (cond
-    (= [] id) (render-home page)
+    (= [] id) (render-home-page page)
     (= [:404] id) (layout page [:h1 "404 ;-;"])
-    (contains? page :index) (render-generic-index page)
-    :else (render-generic page)))
+    (contains? page :index) (render-index-page page)
+    :else (render-generic-page page)))
