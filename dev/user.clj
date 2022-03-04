@@ -7,7 +7,12 @@
 (def config {:site-config "edn/site.edn"
              :static-dir "public"
              :render-page views/render-page
-             :target-dir "dist"})
+             :target-dir "dist"
+             :rss-opts
+             {:author "stel@stel.codes (Stel Abrego)"
+              :title "Stel Codes"
+              :description "Thoughts about programming and whatever else."
+              :link "https://stel.codes"}})
 
 (defn start []
   (nuzzle/start-server config))
