@@ -5,7 +5,6 @@
             [codes.stel.nuzzle.api :as nuzzle]))
 
 (def config {:site-config "edn/site.edn"
-             :remove-drafts? false
              :static-dir "public"
              :render-fn views/render
              :target-dir "dist"})
