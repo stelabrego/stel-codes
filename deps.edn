@@ -3,6 +3,7 @@
                   :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"
                               "--interactive"]
                   :extra-paths ["dev"]}}
- :deps {nuzzle/nuzzle {:local/root "../nuzzle"}
+ :deps {io.github.stelcodes/nuzzle {:git/tag "v0.1.0"
+                                    :git/sha "425693d4c768151572c3b9e0b0a831fa3a49a930"}
         org.clojure/clojure {:mvn/version "1.10.3"}}
  :paths ["src" "resources"]}
