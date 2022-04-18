@@ -4,9 +4,9 @@
             [codes.stel.dev-blog.views :as views]
             [codes.stel.nuzzle.api :as nuzzle]))
 
-(def config {:site-config "edn/site.edn"
+(def config {:site-data "edn/site.edn"
              :static-dir "public"
-             :render-page views/render-page
+             :render-webpage views/render-page
              :target-dir "dist"
              :rss-opts
              {:author "stel@stel.codes (Stel Abrego)"
