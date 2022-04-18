@@ -6,7 +6,7 @@
 
 (def config {:site-data "edn/site.edn"
              :static-dir "public"
-             :render-webpage views/render-page
+             :render-webpage views/render-webpage
              :target-dir "dist"
              :rss-opts
              {:author "stel@stel.codes (Stel Abrego)"

@@ -50,13 +50,13 @@
        [:a {:class "tag" :href uri} title]))])
 
 (defn window-list-item
-  [{:keys [uri title subtitle tags] :as page}]
+  [{:keys [uri title subtitle tags] :as webpage}]
   (list [:a {:class "title" :href uri} title]
         (when subtitle [:p.subtitle subtitle])
-        (when (not-empty tags) (tag-group page))))
+        (when (not-empty tags) (tag-group webpage))))
 
 (defn home-content-window
-  "Expects a group index page"
+  "Expects a group index webpage"
   [{:keys [id->info index title uri]}]
   (when-not (empty? index)
     (window title
@@ -81,7 +81,7 @@
     [:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]]])
 
 (defn layout
-  [{:keys [title id] :as page} & content]
+  [{:keys [title id] :as webpage} & content]
   [:html
    [:head
     [:title (if title (str title " | stel.codes") "stel.codes")]
@@ -103,16 +103,16 @@
     (when nil
       [:script
        {:src "https://plausible.io/js/plausible.js", :data-domain "stel.codes", :defer "defer", :async "async"}])]
-   [:body (header page) [:main (when (= [] id) {:class "home"}) content] (footer)]])
+   [:body (header webpage) [:main (when (= [] id) {:class "home"}) content] (footer)]])
 
-(defn render-generic-page
-  [{:keys [repo prod source id title subtitle tags header-image render-content] :as page}]
-  (layout page
+(defn render-generic-webpage
+  [{:keys [repo prod source id title subtitle tags header-image render-content] :as webpage}]
+  (layout webpage
           (welcome-section)
           (window (util/kebab-case->lower-case (if (> (count id) 1) (nth id (- (count id) 2)) (first id)))
                   [:article (when header-image (image header-image)) [:h1 title]
                    (when subtitle [:p.subtitle subtitle])
-                   (when (not-empty tags) (tag-group page))
+                   (when (not-empty tags) (tag-group webpage))
                    (when (or repo prod source)
                      [:div.top-links (when repo [:span "🧙 " [:a {:href repo} "Open Source Code Repo"]])
                       (when prod [:span "🌙 " [:a {:href prod} "Live App Demo"]])
@@ -120,28 +120,28 @@
                    (render-content)
                    [:div.circles (take 3 (repeat (raw (slurp "resources/svg/circle.svg"))))]])))
 
-(defn render-index-page
-  [{:keys [title index id->info] :as page}]
+(defn render-index-webpage
+  [{:keys [title index id->info] :as webpage}]
   {:pre [(vector? index)]}
   (layout
-   page
+   webpage
    (list (welcome-section)
          (window title
                  (unordered-list
                   (->> index (map id->info) (map window-list-item)))))))
 
-(defn render-home-page
-  [{:keys [id->info] :as page}]
+(defn render-homepage
+  [{:keys [id->info] :as webpage}]
   (layout
-   page
+   webpage
    (list (welcome-section)
          (home-content-window (id->info [:coding-projects]))
          (home-content-window (id->info [:educational-media]))
          (home-content-window (id->info [:blog-posts])))))
 
-(defn render-page [{:keys [id] :as page}]
+(defn render-webpage [{:keys [id] :as webpage}]
   (cond
-    (= [] id) (render-home-page page)
-    (= [:404] id) (layout page [:h1 "404 ;-;"])
-    (contains? page :index) (render-index-page page)
-    :else (render-generic-page page)))
+    (= [] id) (render-homepage webpage)
+    (= [:404] id) (layout webpage [:h1 "404 ;-;"])
+    (contains? webpage :index) (render-index-webpage webpage)
+    :else (render-generic-webpage webpage)))
