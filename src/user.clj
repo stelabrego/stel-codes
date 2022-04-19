@@ -16,8 +16,8 @@
 (defn start []
   (nuzzle/start-server config))
 
-(defn inspect []
-  (pprint (nuzzle/inspect config)))
+(defn realize []
+  (pprint (nuzzle/realize config)))
 
 (defn export []
   (nuzzle/export (assoc config :remove-drafts? true)))
