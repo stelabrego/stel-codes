@@ -23,8 +23,8 @@
             [:ul {:class "foo"} [:li [:p "A"]] [:li [:p "B"]] [:li [:p "C"]]]))
 
 (defn header
-  [{:keys [id->data]}]
-  (let [{:keys [twitter github email]} (id->data :meta)]
+  [{:keys [get-site-data]}]
+  (let [{:keys [twitter github email]} (get-site-data :meta)]
     [:header
      [:nav [:a {:id "brand" :href "/"} (image "https://s3.stel.codes/nixos-logo.png") [:span "stel.codes"]]
       [:ul {:id "social"}
@@ -42,11 +42,11 @@
      [:div.content body]]))
 
 (defn tag-group
-  [{:keys [id->data tags]}]
+  [{:keys [get-site-data tags]}]
   {:pre [(vector? tags)]}
   [:p.tags
    (for [tag tags]
-     (let [{:keys [uri title]} (id->data [:tags tag])]
+     (let [{:keys [uri title]} (get-site-data [:tags tag])]
        [:a {:class "tag" :href uri} title]))])
 
 (defn window-list-item
@@ -57,11 +57,11 @@
 
 (defn home-content-window
   "Expects a group index webpage"
-  [{:keys [id->data index title uri]}]
+  [{:keys [get-site-data index title uri]}]
   (when-not (empty? index)
     (window title
             (list (->> index
-                       (map id->data)
+                       (map get-site-data)
                        (sort-by :sort)
                        (reverse)
                        (take 5)
@@ -121,23 +121,23 @@
                    [:div.circles (take 3 (repeat (raw (slurp "svg/circle.svg"))))]])))
 
 (defn render-index-webpage
-  [{:keys [title index id->data] :as webpage}]
+  [{:keys [title index get-site-data] :as webpage}]
   {:pre [(vector? index)]}
   (layout
    webpage
    (list (welcome-section)
          (window title
                  (unordered-list
-                  (->> index (map id->data) (map window-list-item)))))))
+                  (->> index (map get-site-data) (map window-list-item)))))))
 
 (defn render-homepage
-  [{:keys [id->data] :as webpage}]
+  [{:keys [get-site-data] :as webpage}]
   (layout
    webpage
    (list (welcome-section)
-         (home-content-window (id->data [:coding-projects]))
-         (home-content-window (id->data [:educational-media]))
-         (home-content-window (id->data [:blog-posts])))))
+         (home-content-window (get-site-data [:coding-projects]))
+         (home-content-window (get-site-data [:educational-media]))
+         (home-content-window (get-site-data [:blog-posts])))))
 
 (defn render-webpage [{:keys [id] :as webpage}]
   (cond
