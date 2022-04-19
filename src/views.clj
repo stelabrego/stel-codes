@@ -123,21 +123,19 @@
 (defn render-index-webpage
   [{:keys [title index get-site-data] :as webpage}]
   {:pre [(vector? index)]}
-  (layout
-   webpage
-   (list (welcome-section)
-         (window title
-                 (unordered-list
-                  (->> index (map get-site-data) (map window-list-item)))))))
+  (layout webpage
+          (welcome-section)
+          (window title
+                  (unordered-list
+                   (->> index (map get-site-data) (map window-list-item))))))
 
 (defn render-homepage
   [{:keys [get-site-data] :as webpage}]
-  (layout
-   webpage
-   (list (welcome-section)
-         (home-content-window (get-site-data [:coding-projects]))
-         (home-content-window (get-site-data [:educational-media]))
-         (home-content-window (get-site-data [:blog-posts])))))
+  (layout webpage
+          (welcome-section)
+          (home-content-window (get-site-data [:coding-projects]))
+          (home-content-window (get-site-data [:educational-media]))
+          (home-content-window (get-site-data [:blog-posts]))))
 
 (defn render-webpage [{:keys [id] :as webpage}]
   (cond
