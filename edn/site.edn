@@ -2,6 +2,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Webpage Maps
 
+;; Homepage
+{:id []}
+
 ;; Blog Posts
 {:id [:blog-posts :using-directus-cms]
  :content "markdown/using-directus-cms.md",

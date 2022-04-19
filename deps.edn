@@ -2,9 +2,9 @@
  {:repl {:extra-deps {cider/cider-nrepl {:mvn/version "0.25.2"}
                       nrepl/nrepl {:mvn/version "0.8.3"}}
          :main-opts ["-m" "nrepl.cmdline" "--middleware"
-                     "[cider.nrepl/cider-middleware]" "--interactive"]
-         :extra-paths ["dev"]}}
- :deps {io.github.stelcodes/nuzzle {:git/tag "v0.1.0"
-                                    :git/sha "425693d4c768151572c3b9e0b0a831fa3a49a930"}
-        org.clojure/clojure {:mvn/version "1.10.3"}}
- :paths ["src" "resources"]}
+                     "[cider.nrepl/cider-middleware]" "--interactive"]}}
+ :deps {io.github.stelcodes/nuzzle
+        {:local/root "../nuzzle"}
+        ;;{:git/sha "604aef1038fd14ad32f4935f2a5a4aaa001b75e4"}
+        org.clojure/clojure {:mvn/version "1.11.1"}}
+ :paths ["src"]}

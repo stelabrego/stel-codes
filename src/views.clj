@@ -1,4 +1,4 @@
-(ns codes.stel.dev-blog.views
+(ns views
   (:require [codes.stel.nuzzle.hiccup :refer [raw]]
             [clojure.java.io :as io]
             [codes.stel.nuzzle.util :as util]))
@@ -36,7 +36,7 @@
 
 (defn window
   [title body]
-  (let [bars (raw (slurp (io/resource "svg/bars.svg")))]
+  (let [bars (raw (slurp "svg/bars.svg"))]
     [:section.window
      [:div.top bars [:span.title title] bars]
      [:div.content body]]))
@@ -118,7 +118,7 @@
                       (when prod [:span "🌙 " [:a {:href prod} "Live App Demo"]])
                       (when source [:span "🧑‍🎓 " [:a {:href source} "Find it here!"]])])
                    (render-content)
-                   [:div.circles (take 3 (repeat (raw (slurp "resources/svg/circle.svg"))))]])))
+                   [:div.circles (take 3 (repeat (raw (slurp "svg/circle.svg"))))]])))
 
 (defn render-index-webpage
   [{:keys [title index id->info] :as webpage}]

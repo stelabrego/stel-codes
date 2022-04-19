@@ -1,13 +1,12 @@
 (ns user
   (:require [clojure.pprint :refer [pprint]]
             [clojure.repl :as repl]
-            [codes.stel.dev-blog.views :as views]
+            [views :as views]
             [codes.stel.nuzzle.api :as nuzzle]))
 
 (def config {:site-data "edn/site.edn"
-             :static-dir "public"
+             :static-dir "static"
              :render-webpage views/render-webpage
-             :target-dir "dist"
              :rss-opts
              {:author "stel@stel.codes (Stel Abrego)"
               :title "Stel Codes"
