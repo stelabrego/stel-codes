@@ -68,12 +68,11 @@ a {
   color: color(blue, darker);
 }
 
-pre {
-  overflow: scroll;
-}
-
 code {
   font-size: 1rem;
+  pre {
+    padding: 1rem;
+  }
 }
 
 %beveled {
@@ -406,7 +405,7 @@ article {
     }
   }
   p {
-    margin: 0 0 1rem;
+    margin: 0.5rem 0 0.5rem;
     line-height: 2;
   }
   h1 {
@@ -420,19 +419,12 @@ article {
   h1, h2, h3 {
     font-weight: 600;
   }
-  pre {
-    font-size: 1rem;
-    background: color(grey, codeblock);
-    padding: 1rem;
-    border-radius: 5px;
-    overflow: auto;
-    margin: .2rem .1rem 1rem .1rem;
-  }
   code {
     background: color(grey, codeblock);
+    font-size: 1rem;
+    overflow: auto;
     border-radius: 5px;
-    padding: 0 .2rem;
-    // font-size: .95rem;
+    margin: 1rem 0;
   }
   ul {
     margin-bottom: 1rem;
