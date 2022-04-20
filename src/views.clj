@@ -71,13 +71,13 @@
 (defn welcome-section
   []
   [:section.welcome
-   (image {:class "avatar"} "https://s3.stel.codes/avatar-small.png")
+   (image {:class "avatar"} "https://user-images.githubusercontent.com/22163194/164172131-9086a741-caa7-4811-b5b0-96e3d0f93b7f.png")
    [:span.name "Stel Abrego, Software Developer"]
    [:div.text
     [:p "Hi! I'm a freelance software hacker with a focus on functional design and web technologies."]
     [:p "Check out my projects, learning resources, and blog posts."]
     ;; TODO fix CV link or render this from markdown
-    [:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]]])
+    #_[:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]]])
 
 (defn layout
   [{:keys [title id] :as webpage} & content]

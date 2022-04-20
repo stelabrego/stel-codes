@@ -7,7 +7,7 @@
 (def config {:site-data "edn/site.edn"
              :static-dir "static"
              :render-webpage views/render-webpage
-             ;; :chroma-style "emacs"
+             :chroma-style "dracula"
              :rss-opts
              {:author "stel@stel.codes (Stel Abrego)"
               :title "Stel Codes"

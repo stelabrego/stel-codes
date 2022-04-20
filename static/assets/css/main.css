@@ -88,37 +88,46 @@ th:not([align]) {
   font-style: normal;
 }
 /* https://blog.yipl.com.np/defining-color-palette-in-sass-with-variables-6464c3c3b5e5 */
+svg.bars {
+  fill: #282a36;
+}
+
 body {
   display: grid;
   grid-template-rows: max-content minmax(min-content, 1fr) max-content;
   font-family: "Verdana", sans-serif;
   min-height: 100vh;
-  background-color: #674dbb;
+  background-color: #282a3b;
   background-image: url("/assets/img/wallpaper.svg");
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
+  color: #efefef;
 }
 
 a {
-  color: #496FBC;
+  color: #a4dbe8;
 }
 
 code {
   font-size: 1rem;
+  overflow: auto;
+  border-radius: 5px;
 }
 code pre {
   padding: 1rem;
+  border-radius: 5px;
+  overflow: auto;
 }
 
 main section.window .content, main section.window, nav {
-  box-shadow: inset 0 -1px 5px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(0, 0, 0, 0.2);
   /*top internal highlight*/
   border-radius: 4px;
 }
 
 nav {
-  background-color: #d8d8d8;
+  background-color: #485376;
   font-family: "virtue", sans-serif;
   display: grid;
   grid-template-columns: max-content 1fr max-content;
@@ -126,13 +135,12 @@ nav {
   align-items: center;
 }
 nav a {
-  color: #050505;
+  color: #efefef;
   height: 30px;
   text-decoration: none;
 }
 nav a:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  color: initial;
+  background-color: #343d57;
 }
 nav #brand {
   grid-area: brand;
@@ -167,6 +175,14 @@ main {
   grid-auto-flow: row;
   grid-template-rows: auto auto 1fr;
   grid-gap: 20px;
+}
+main.home section.window .content ul {
+  margin: 0;
+  list-style: inside none;
+}
+main.home section.window .content ul li {
+  border-bottom: 1px solid rgba(175, 175, 175, 0.5);
+  padding: 0.7rem;
 }
 @media (max-width: 800px) {
   main {
@@ -208,7 +224,7 @@ main.home {
 main section.window {
   display: inline-block;
   padding: 0 0.5rem 0.5rem 0.5rem;
-  background-color: #d8d8d8;
+  background-color: #485376;
 }
 main section.window .top {
   font-family: "virtue", sans-serif;
@@ -229,22 +245,20 @@ main section.window .top svg {
   width: 100%;
 }
 main section.window .content {
-  background-color: #efefef;
+  background-color: #282a3b;
+  color: #efefef;
   display: grid;
 }
 main section.window .content blockquote {
-  background: #e3e3e3;
+  background: #5b6996;
   font-family: monospace;
   margin: 0.5rem 0.2rem 1rem 0.2rem;
-  border-left: 5px solid #c398fe;
+  border-left: 5px solid #ebf489;
   padding: 0.5rem;
 }
 main section.window .content ul {
-  list-style-position: inside;
-}
-main section.window .content ul li {
-  padding: 0.7rem;
-  border-bottom: 1px solid rgba(175, 175, 175, 0.5);
+  list-style: square outside;
+  margin: 0 2rem;
 }
 main section.window .content ul li:last-child {
   border-bottom: none;
@@ -253,20 +267,20 @@ main section.window .content ul li a:hover {
   text-decoration: underline solid currentcolor 1px;
 }
 main section.window .content ul li .title {
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.3rem;
   display: block;
+  font-size: 1.1rem;
 }
 main section.window .content ul li .subtitle {
-  color: #3b4351;
   font-size: 0.9rem;
   padding-left: 0.5rem;
   margin-left: 0.5rem;
-  border-left: 1px dashed #3b4351;
+  border-left: 2px solid #4be273;
 }
 main section.window .content .tags {
   padding-left: 0.5rem;
   margin-left: 0.5rem;
-  border-left: 1px dashed #3b4351;
+  border-left: 2px solid #4be273;
 }
 main section.window .content .tags .tag {
   display: inline-block;
@@ -274,7 +288,6 @@ main section.window .content .tags .tag {
   margin-right: 0.5rem;
 }
 main section.window .content .tags, main section.window .content .tags a {
-  color: #3b4351;
   font-size: 0.9rem;
 }
 main section.window .content .more-link {
@@ -328,7 +341,7 @@ section.welcome img.avatar {
 }
 section.welcome div.text {
   grid-area: text;
-  background-color: rgba(245, 245, 245, 0.1);
+  background-color: #485376;
   border-radius: 30px;
   justify-self: start;
   padding: 1rem 0rem;
@@ -353,7 +366,7 @@ section.welcome div.text p {
     left: 0.5px;
     top: 30%;
     border: 17px solid transparent;
-    border-right-color: rgba(245, 245, 245, 0.1);
+    border-right-color: #485376;
     border-left: 0;
     margin-left: -17px;
   }
@@ -393,14 +406,13 @@ article img {
   border: 1px solid gray;
 }
 article .subtitle {
-  color: #3b4351;
   font-style: italic;
   margin-left: 0.2rem;
 }
 article .top-links {
   display: inline-block;
   justify-self: start;
-  background: #674dbb;
+  background: #485376;
   border-radius: 15px;
   padding: 0 1rem;
   margin-bottom: 2rem;
@@ -409,15 +421,12 @@ article .top-links span {
   margin: 0.6rem;
   display: inline-block;
 }
-article .top-links a {
-  color: #f5f5f5;
-}
 article p {
   margin: 0.5rem 0 0.5rem;
   line-height: 2;
 }
 article h1 {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   margin: 1.3rem 0 1rem;
 }
 article h2 {
@@ -428,9 +437,8 @@ article h1, article h2, article h3 {
   font-weight: 600;
 }
 article code {
-  background: #e3e3e3;
-  font-size: 1rem;
-  overflow: auto;
+  background: #3e4153;
+  padding: 0.2rem;
   border-radius: 5px;
   margin: 1rem 0;
 }
@@ -443,7 +451,7 @@ article .circles {
   justify-self: center;
 }
 article .circles svg {
-  fill: #c9d4fd;
+  fill: #4be273;
   margin: 0 1rem;
   width: 20px;
   stroke-opacity: 0;
@@ -459,10 +467,8 @@ footer p {
   margin: 0 auto;
   padding: 0.5rem;
   opacity: 0.5;
-  color: #f5f5f5;
   text-align: center;
 }
 footer p a {
-  color: #f5f5f5;
   text-decoration: underline;
 }

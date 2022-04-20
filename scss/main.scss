@@ -24,6 +24,21 @@
     @return null;
 }
 
+$draculafg: #efefef;
+$draculabg: #282a36;
+$draculabg2: #282a3b;
+$draculagrey: #5b6996;
+$draculablue: #7bcbde;
+$draculayellow: #ebf489;
+$draculagreen: #4be273;
+$draculapink: #ab5a8e;
+$windowbg: darken($draculagrey, 10);
+$linkcolor: lighten($draculablue, 10);
+
+svg.bars {
+  fill: $draculabg;
+}
+
 $palette: (
     black: (
         base: #050505
@@ -57,21 +72,27 @@ body {
   grid-template-rows: max-content minmax(min-content, 1fr) max-content;
   font-family: "Verdana", sans-serif;
   min-height: 100vh;
-  background-color: color(violet,darker);
+  // background-color: color(violet,darker);
+  background-color: $draculabg2;
   background-image: url("/assets/img/wallpaper.svg");
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
+  color: $draculafg;
 }
 
 a {
-  color: color(blue, darker);
+  color: $linkcolor;
 }
 
 code {
   font-size: 1rem;
+  overflow: auto;
+  border-radius: 5px;
   pre {
     padding: 1rem;
+    border-radius: 5px;
+    overflow: auto;
   }
 }
 
@@ -79,8 +100,8 @@ code {
   box-shadow:
     // 0 1px 2px #fff, /*bottom external highlight*/
     // 0 -1px 1px #666, /*top external shadow*/
-    inset 0 -1px 5px rgba(0,0,0,0.4), /*bottom internal shadow*/
-    inset 0 1px 1px rgba(255,255,255,0.8); /*top internal highlight*/
+    inset 0 -1px 1px rgba(0,0,0,0.2), /*bottom internal shadow*/
+    inset 0 1px 1px rgba(0,0,0,0.2); /*top internal highlight*/
   border-radius: 4px;
 }
 
@@ -91,19 +112,18 @@ code {
 
 nav {
   @extend %beveled;
-  background-color: color(grey, light);
+  background-color: $windowbg;
   font-family: 'virtue', sans-serif;
   display: grid;
   grid-template-columns: max-content 1fr max-content;
   grid-template-areas: "brand . social";
   align-items: center;
   a {
-    color: color(black, base);
+    color: $draculafg;
     height: 30px;
     text-decoration: none;
     &:hover {
-      background-color: rgba(0,0,0,.1);
-      color: initial;
+      background-color: darken($draculagrey, 20);
     }
   }
   #brand {
@@ -136,6 +156,14 @@ nav {
 
 
 main {
+  &.home section.window .content ul {
+    margin: 0;
+    list-style: inside none;
+    li {
+      border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.5);
+      padding: .7rem;
+    }
+  }
   padding: 1rem;
   @media (max-width: 800px) {
     & {
@@ -196,7 +224,7 @@ main {
     // max-width: 600px;
     // max-height: 400px;
     padding: 0 .5rem .5rem .5rem;
-    background-color: color(grey, light);
+    background-color: $windowbg;
     .top {
       font-family: 'virtue', sans-serif;
       display: grid;
@@ -218,20 +246,22 @@ main {
     }
     .content {
       @extend %beveled;
-      background-color: color(grey,lighter);
+      background-color: $draculabg2;
+      color: $draculafg;
       display: grid;
       blockquote {
-        background: color(grey, codeblock);
+        background: $draculagrey;
         font-family: monospace;
         margin: .5rem .2rem 1rem .2rem;
-        border-left: 5px solid color(violet, base);
+        border-left: 5px solid $draculayellow;
         padding: .5rem;
       }
       ul {
-        list-style-position: inside;
+        list-style: square outside;
+        margin: 0 2rem;
         li {
-          padding: .7rem;
-          border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.5);
+          // padding: .7rem;
+          // border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.5);
           &:last-child {
             border-bottom: none;
           }
@@ -239,22 +269,23 @@ main {
             text-decoration: underline solid currentcolor 1px;
           }
           .title {
-            margin-bottom: .2rem;
+            margin-bottom: .3rem;
             display: block;
+            font-size: 1.1rem;
           }
           .subtitle {
-            color: color(grey, dark);
+            // color: color(grey, dark);
             font-size: .9rem;
             padding-left: .5rem;
             margin-left: .5rem;
-            border-left: 1px dashed color(grey, dark);
+            border-left: 2px solid $draculagreen;
           }
         }
       }
       .tags {
         padding-left: .5rem;
         margin-left: .5rem;
-        border-left: 1px dashed color(grey, dark);
+        border-left: 2px solid $draculagreen;
         .tag {
           display: inline-block;
           padding-bottom: .2rem;
@@ -263,7 +294,7 @@ main {
           margin-right: .5rem;
         }
         &, a {
-          color: color(grey, dark);
+          // color: color(grey, dark);
           font-size: .9rem;
         }
       }
@@ -320,7 +351,8 @@ section.welcome {
   div.text {
     grid-area: text;
     // max-width: 500px;
-    background-color: change-color(color(grey,lightest), $alpha:.1);
+    // background-color: change-color(color(grey,lightest), $alpha:.1);
+    background-color: $windowbg;
     border-radius: 30px;
     justify-self: start;
     padding: 1rem 0rem;
@@ -342,7 +374,7 @@ section.welcome {
         left: 0.5px;
         top: 30%;
         border: 17px solid transparent;
-        border-right-color: change-color(color(grey,lightest), $alpha:.1);
+        border-right-color: $windowbg;
         border-left: 0;
         // border-bottom: 0;
         margin-left: -17px;
@@ -382,7 +414,7 @@ article {
     border: 1px solid gray;
   }
   .subtitle {
-    color: color(grey, dark);
+    // color: color(grey, dark);
     font-style: italic;
     margin-left: .2rem;
   }
@@ -390,7 +422,7 @@ article {
     display: inline-block;
     // width: max-content;
     justify-self: start;
-    background: color(violet,darker);
+    background: $windowbg;
     border-radius: 15px;
     padding: 0 1rem;
     margin-bottom: 2rem;
@@ -401,7 +433,7 @@ article {
     }
 
     a {
-      color: color(grey, lightest);
+      // color: color(grey, lightest);
     }
   }
   p {
@@ -409,7 +441,7 @@ article {
     line-height: 2;
   }
   h1 {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     margin: 1.3rem 0 1rem;
   }
   h2 {
@@ -420,9 +452,9 @@ article {
     font-weight: 600;
   }
   code {
-    background: color(grey, codeblock);
-    font-size: 1rem;
-    overflow: auto;
+    // background: color(grey, codeblock);
+    background: lighten($draculabg, 10);
+    padding: .2rem;
     border-radius: 5px;
     margin: 1rem 0;
   }
@@ -434,7 +466,7 @@ article {
     margin: 2rem 0 1rem;
     justify-self: center;
     svg {
-      fill: color(blue, light);
+      fill: $draculagreen;
       margin: 0 1rem;
       width: 20px;
       stroke-opacity: 0;
@@ -451,11 +483,11 @@ footer {
     margin: 0 auto;
     padding: .5rem;
     opacity: 0.5;
-    color: color(grey, lightest);
+    // color: color(grey, lightest);
     text-align: center;
     // border-bottom: 1px solid change-color(color(grey, lightest), $alpha: .5);
     a {
-      color: color(grey, lightest);
+      // color: color(grey, lightest);
       text-decoration: underline;
     }
   }
