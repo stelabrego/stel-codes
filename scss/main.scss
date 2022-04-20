@@ -156,14 +156,6 @@ nav {
 
 
 main {
-  &.home section.window .content ul {
-    margin: 0;
-    list-style: inside none;
-    li {
-      border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.5);
-      padding: .7rem;
-    }
-  }
   padding: 1rem;
   @media (max-width: 800px) {
     & {
@@ -259,6 +251,14 @@ main {
       ul {
         list-style: square outside;
         margin: 0 2rem;
+        &.index-list {
+          margin: 0;
+          list-style: inside none;
+          li {
+            border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.5);
+            padding: .7rem;
+          }
+        }
         li {
           // padding: .7rem;
           // border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.5);

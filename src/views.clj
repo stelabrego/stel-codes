@@ -48,13 +48,13 @@
      (let [{:keys [uri title]} (get-site-data [:tags tag])]
        [:a {:class "tag" :href uri} title]))])
 
-(defn window-list-item
+(defn window-index-item
   [{:keys [uri title subtitle tags] :as webpage}]
   (list [:a {:class "title" :href uri} title]
         (when subtitle [:p.subtitle subtitle])
         (when (not-empty tags) (tag-group webpage))))
 
-(defn home-content-window
+(defn truncated-index-window
   "Expects a group index webpage"
   [{:keys [get-site-data index title uri]}]
   (when-not (empty? index)
@@ -64,12 +64,16 @@
                        (sort-by :sort)
                        (reverse)
                        (take 5)
-                       (map window-list-item)
-                       (unordered-list))
+                       (map window-index-item)
+                       (unordered-list {:class "index-list"}))
                   (when (> (count index) 5) [:a {:class "more-link" :href uri} "more!"])))))
 
-(defn welcome-section
-  []
+(defn index-window [{:keys [title index get-site-data]}]
+  (window title
+          (unordered-list {:class "index-list"}
+           (->> index (map get-site-data) (map window-index-item)))))
+
+(defn welcome-section []
   [:section.welcome
    (image {:class "avatar"} "https://user-images.githubusercontent.com/22163194/164172131-9086a741-caa7-4811-b5b0-96e3d0f93b7f.png")
    [:span.name "Stel Abrego, Software Developer"]
@@ -120,21 +124,18 @@
                    [:div.circles (take 3 (repeat (raw (slurp "svg/circle.svg"))))]])))
 
 (defn render-index-webpage
-  [{:keys [title index get-site-data] :as webpage}]
-  {:pre [(vector? index)]}
+  [webpage]
   (layout webpage
           (welcome-section)
-          (window title
-                  (unordered-list
-                   (->> index (map get-site-data) (map window-list-item))))))
+          (index-window webpage)))
 
 (defn render-homepage
   [{:keys [get-site-data] :as webpage}]
   (layout webpage
           (welcome-section)
-          (home-content-window (get-site-data [:coding-projects]))
-          (home-content-window (get-site-data [:educational-media]))
-          (home-content-window (get-site-data [:blog-posts]))))
+          (truncated-index-window (get-site-data [:coding-projects]))
+          (truncated-index-window (get-site-data [:educational-media]))
+          (truncated-index-window (get-site-data [:blog-posts]))))
 
 (defn render-webpage [{:keys [id] :as webpage}]
   (cond

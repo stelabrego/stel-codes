@@ -176,14 +176,6 @@ main {
   grid-template-rows: auto auto 1fr;
   grid-gap: 20px;
 }
-main.home section.window .content ul {
-  margin: 0;
-  list-style: inside none;
-}
-main.home section.window .content ul li {
-  border-bottom: 1px solid rgba(175, 175, 175, 0.5);
-  padding: 0.7rem;
-}
 @media (max-width: 800px) {
   main {
     padding: 0.2rem;
@@ -259,6 +251,14 @@ main section.window .content blockquote {
 main section.window .content ul {
   list-style: square outside;
   margin: 0 2rem;
+}
+main section.window .content ul.index-list {
+  margin: 0;
+  list-style: inside none;
+}
+main section.window .content ul.index-list li {
+  border-bottom: 1px solid rgba(175, 175, 175, 0.5);
+  padding: 0.7rem;
 }
 main section.window .content ul li:last-child {
   border-bottom: none;
