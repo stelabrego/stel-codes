@@ -4,7 +4,7 @@ In the past this was Python, but since I began falling head over heels for Cloju
 
 Typically, Babashka executes code inside of standard `.clj` files. As of version `0.4.0`, Babashka ships with a feature called "tasks" which executes Clojure code inside of the `bb.edn` file which Babashka uses for configuration. For example, a `bb.edn` file with a simple task that removes a local directory called `target` could look like this:
 
-```
+```clojure
 {:min-bb-version "0.4.0",
  :tasks {clean (do (println "Removing target folder.")
                    (babashka.fs/delete-tree "target"))}}
@@ -30,7 +30,7 @@ clojure -M test.clj  2.85s user 0.15s system 188% cpu 1.594 total
 
 So after playing around with Babashka for a while, I decided to write some Babashka tasks that could backup and restore my databases for me. Here's what I came up with:
 
-```
+```clojure
 ; run `bb backup` to backup database
 ; run `bb restore` to restore latest backup
 
