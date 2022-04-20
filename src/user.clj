@@ -2,11 +2,12 @@
   (:require [clojure.pprint :refer [pprint]]
             [clojure.repl :as repl]
             [views :as views]
-            [codes.stel.nuzzle.api :as nuzzle]))
+            [nuzzle.api :as nuzzle]))
 
 (def config {:site-data "edn/site.edn"
              :static-dir "static"
              :render-webpage views/render-webpage
+             ;; :chroma-style "emacs"
              :rss-opts
              {:author "stel@stel.codes (Stel Abrego)"
               :title "Stel Codes"
@@ -21,5 +22,3 @@
 
 (defn export []
   (nuzzle/export (assoc config :remove-drafts? true)))
-
-

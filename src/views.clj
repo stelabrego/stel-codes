@@ -1,7 +1,6 @@
 (ns views
-  (:require [codes.stel.nuzzle.hiccup :refer [raw]]
-            [clojure.java.io :as io]
-            [codes.stel.nuzzle.util :as util]))
+  (:require [nuzzle.hiccup :refer [raw]]
+            [nuzzle.util :as util]))
 
 (defn image
   "Two-arity version is ambigious"
