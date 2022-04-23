@@ -1,0 +1,108 @@
+{:static-dir "static"
+ :render-webpage views/render-webpage
+ :highlight-style "dracula"
+ :rss-opts
+ {:author "stel@stel.codes (Stel Abrego)"
+  :title "Stel Codes"
+  :description "Thoughts about programming and whatever else."
+  :link "https://stel.codes"}
+ :site-data
+ [
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Webpage Maps
+
+  ;; Homepage
+  {:id []}
+
+  ;; Blog Posts
+  {:id [:blog-posts :using-directus-cms]
+   :content "markdown/using-directus-cms.md",
+   :header-image "https://s3.stel.codes/d34014fb-a41f-41ed-b8ee-540a0dd35640.jpeg",
+   :sort 10,
+   :draft? false,
+   :subtitle "A flexible SQL DB interface that really shines ✨",
+   :tags [:clojure :nixos],
+   :rss true
+   :title "Using Directus as a CMS for my Blog"}
+
+  {:id [:blog-posts :babashka-tasks-for-postgresql-backups]
+   :content "markdown/babashka-postgresql-backups.md",
+   :header-image "https://s3.stel.codes/e0122757-8024-44bc-aa9b-aee8948a8b25.jpeg",
+   :sort 20,
+   :draft? false,
+   :subtitle "Why write a Bash script when you can use Clojure?!",
+   :tags [:clojure :babashka],
+   :rss true
+   :title "Creating Babashka tasks for postgresql backups"}
+
+  {:id [:blog-posts :i3-or-sway-why-not-both]
+   :content "markdown/i3-or-sway-nixos.md",
+   :header-image "https://s3.stel.codes/4f795c40-8170-4d50-be64-2e29c50d294b.png",
+   :sort 0,
+   :draft? false,
+   :subtitle "How to setup a dual i3 + sway environment on NixOS",
+   :tags [:nixos :i3 :sway :linux],
+   :rss true
+   :title "i3 or Sway? Why not Both?"}
+
+  ;; Coding Projects
+  {:id [:coding-projects :functional-news]
+   :content "markdown/functional-news.md",
+   :header-image "https://s3.stel.codes/42a71161-9162-44da-940a-23e94374834f.jpeg",
+   :prod "https://news.stel.codes",
+   :repo "https://github.com/stelcodes/functional-news",
+   :sort 20,
+   :draft? false,
+   :tags [:clojure :java :scss],
+   :title "Functional News (λn)"}
+
+  {:id [:coding-projects :developer-blog]
+   :content "markdown/developer-blog.md",
+   :header-image "https://s3.stel.codes/2dd474b0-a397-4782-9e40-78834e604a18.png",
+   :prod "https://stel.codes",
+   :repo "https://github.com/stelcodes/dev-blog",
+   :sort 10,
+   :draft? false,
+   :tags [:clojure :java :scss],
+   :title "Developer Blog"}
+
+  {:id [:coding-projects :self-care-android-app]
+   :content "markdown/self-care-android-app.md",
+   :header-image "https://s3.stel.codes/70958400-950d-4bec-8fc0-062561fe9276.gif",
+   :prod nil,
+   :repo "https://github.com/stelcodes/self-care-android-app",
+   :sort 0,
+   :draft? false,
+   :tags [:java :android],
+   :title "Self Care Android App"}
+
+  ;; Educational Resources
+  {:id [:educational-media :getting-clojure]
+   :content "markdown/getting-clojure-russ-olsen.md",
+   :header-image "https://s3.stel.codes/83436048-b161-4298-be01-2c7bd007f8b6.jpeg",
+   :sort 20,
+   :draft? false,
+   :subtitle "A truly excellent introduction to Clojure",
+   :tags [:clojure :java],
+   :title "Getting Clojure by Russ Olsen"}
+
+  {:id [:educational-media :grid-layout-in-css]
+   :content "markdown/grid-layout-css-eric-meyer.md",
+   :header-image "https://s3.stel.codes/4a5d0d74-a8ba-48df-97a3-ef09df00a504.jpeg",
+   :sort 10,
+   :source "https://www.oreilly.com/library/view/grid-layout-in/9781491930205",
+   :draft? false,
+   :subtitle "A great reference for the ultimate CSS layout module",
+   :tags [:css :scss],
+   :title "Grid Layout in CSS by Eric Meyer"}
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Metadata Maps
+  {:id :meta
+   :domain "stel.codes",
+   :email "stel@stel.codes",
+   :github "https://github.com/stelcodes",
+   :twitter "https://twitter.com/stelstuff"}
+
+  ]
+ }
