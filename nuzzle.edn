@@ -2,8 +2,7 @@
  :render-webpage views/render-webpage
  :highlight-style "dracula"
  :rss-opts
- {:author "stel@stel.codes (Stel Abrego)"
-  :title "Stel Codes"
+ {:title "Stel Codes"
   :description "Thoughts about programming and whatever else."
   :link "https://stel.codes"}
  :site-data
@@ -22,7 +21,7 @@
    :draft? false,
    :subtitle "A flexible SQL DB interface that really shines ✨",
    :tags [:clojure :nixos],
-   :rss true
+   :rss? true
    :title "Using Directus as a CMS for my Blog"}
 
   {:id [:blog-posts :babashka-tasks-for-postgresql-backups]
@@ -32,7 +31,7 @@
    :draft? false,
    :subtitle "Why write a Bash script when you can use Clojure?!",
    :tags [:clojure :babashka],
-   :rss true
+   :rss? true
    :title "Creating Babashka tasks for postgresql backups"}
 
   {:id [:blog-posts :i3-or-sway-why-not-both]
@@ -42,7 +41,7 @@
    :draft? false,
    :subtitle "How to setup a dual i3 + sway environment on NixOS",
    :tags [:nixos :i3 :sway :linux],
-   :rss true
+   :rss? true
    :title "i3 or Sway? Why not Both?"}
 
   ;; Coding Projects
