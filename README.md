@@ -13,7 +13,9 @@ This repo serves as a comprehensive example of how to use Nuzzle. These files do
 
 ## Development Workflow
 
-To develop my site, I start an nREPL with `bb repl` which invokes `clj -M:repl` which starts Clojure using the `:repl` alias in `deps.edn`. This starts an nREPL and loads `src/user` which requires the `nuzzle.api` namespace and defines a few handy functions. Once I'm in the REPL, I start the Nuzzle development server with `(start)`. After that, I can edit `nuzzle.edn` and the next response from the server will reflect the changes. I redefine the Hiccup-generating functions via nREPL with my personal favorite nREPL editor client [Conjure](https://github.com/olical/conjure), and these changes will also be reflected on the next page load. To hot-reload the CSS as well, I run `bb sass` in another terminal pane which invokes the NPM sass-compiler package `sass`,  This creates an **extremely** fast feedback loop for all aspects of my static site while I'm developing.
+To develop my site, I start an nREPL with `bb repl` which invokes `clj -M:repl` which starts Clojure using the `:repl` alias in `deps.edn`. This starts an nREPL and loads `src/user.clj` which requires the `nuzzle.api` namespace and defines a few handy functions. Once I'm in the REPL, I start the Nuzzle development server with `(start)`. After that, I can edit `nuzzle.edn` and the next response from the server will reflect the changes. I redefine the Hiccup-generating functions via nREPL with my favorite nREPL editor client [Conjure](https://github.com/olical/conjure), and the new functions are used on the next page load. To hot-reload the CSS as well, I run `bb sass` in another terminal pane which invokes the NPM sass-compiler package `sass`. It watches for changes in the `scss` directory and recompiles the CSS whenever something changes.
+
+These techniques create an **extremely** fast feedback loop for all aspects of my static site while I'm developing.
 
 ## Exporting the Site
 
