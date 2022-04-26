@@ -109,7 +109,7 @@
    [:body (header webpage) [:main (when (= [] id) {:class "home"}) content] (footer)]])
 
 (defn render-generic-webpage
-  [{:keys [repo prod source id title subtitle tags header-image render-content] :as webpage}]
+  [{:keys [repo prod source id title subtitle tags header-image render-markdown] :as webpage}]
   (layout webpage
           (welcome-section)
           (window (util/kebab-case->lower-case (if (> (count id) 1) (nth id (- (count id) 2)) (first id)))
@@ -120,7 +120,7 @@
                      [:div.top-links (when repo [:span "🧙 " [:a {:href repo} "Open Source Code Repo"]])
                       (when prod [:span "🌙 " [:a {:href prod} "Live App Demo"]])
                       (when source [:span "🧑‍🎓 " [:a {:href source} "Find it here!"]])])
-                   (render-content)
+                   (render-markdown)
                    [:div.circles (take 3 (repeat (raw (slurp "svg/circle.svg"))))]])))
 
 (defn render-index-webpage
