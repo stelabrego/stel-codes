@@ -1,13 +1,10 @@
 (ns user
   (:require [clojure.pprint :refer [pprint]]
             [clojure.repl :as repl]
-            [nuzzle.api :as nuzzle]))
+            [nuzzle.api :as nuzz]))
 
-(defn start []
-  (nuzzle/start-server))
+(defn serve [] (nuzz/serve))
 
-(defn realize []
-  (pprint (nuzzle/realize)))
+(defn realize [] (pprint (nuzz/realize)))
 
-(defn export []
-  (nuzzle/export :remove-drafts? true))
+(defn export [] (nuzz/export :remove-drafts? true))
