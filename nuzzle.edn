@@ -1,7 +1,7 @@
 {:static-dir "static"
  :render-webpage views/render-webpage
  :highlight-style "dracula"
- :rss-opts
+ :rss-channel
  {:title "Stel Codes"
   :description "Thoughts about programming and whatever else."
   :link "https://stel.codes"}
