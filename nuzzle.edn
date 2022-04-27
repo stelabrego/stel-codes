@@ -1,4 +1,4 @@
-{:static-dir "static"
+{:overlay-dir "overlay"
  :render-webpage views/render-webpage
  :highlight-style "dracula"
  :rss-channel
