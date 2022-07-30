@@ -8,8 +8,8 @@
  :render-webpage views/render-webpage
  :rss-channel
  {:title "Stel Codes"
-  :link "https://stel.codes"}
-  :description "Thoughts about programming and whatever else."
+  :link "https://stel.codes"
+  :description "Thoughts about programming and whatever else."}
 
  :site-data
  #{
