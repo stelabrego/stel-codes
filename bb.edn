@@ -4,4 +4,4 @@
          serve (if (seq *command-line-args*)
                  (shell (str "caddy file-server --listen :3030 --root " (first *command-line-args*)))
                  (shell "caddy file-server --listen :3030 --browse --root dist"))
-         sass (shell "npx sass --no-source-map --watch scss:static/assets/css")}}
+         sass (shell "npx sass --no-source-map --watch scss:overlay/assets/css")}}
