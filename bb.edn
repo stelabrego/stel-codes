@@ -1,5 +1,5 @@
 {:min-bb-version "0.4.0",
- :tasks {deploy (shell "rsync --archive --verbose --human-readable --progress --delete out/ stel.codes:/www/dev-blog-published")
+ :tasks {deploy (shell "rsync --archive --verbose --human-readable --progress --delete out/ suicune:/var/www/stel.codes")
          repl (shell "rlwrap bb clojure -M:repl")
          serve (if (seq *command-line-args*)
                  (shell (str "caddy file-server --listen :3030 --root " (first *command-line-args*)))
