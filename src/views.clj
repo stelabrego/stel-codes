@@ -44,7 +44,7 @@
 
 (defn tag-group
   [{:keys [get-site-data tags]}]
-  {:pre [(vector? tags)]}
+  {:pre [(set? tags)]}
   [:p.tags
    (for [tag tags]
      (let [{:keys [uri title]} (get-site-data [:tags tag])]
