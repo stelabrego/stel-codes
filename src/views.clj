@@ -21,11 +21,13 @@
          (= (unordered-list {:class "foo"} (list [:p "A"] [:p "B"] [:p "C"]))
             [:ul {:class "foo"} [:li [:p "A"]] [:li [:p "B"]] [:li [:p "C"]]]))
 
+(def os-logo-uri "https://user-images.githubusercontent.com/22163194/171326988-478d1722-b895-4852-a1e4-5689c736b635.svg")
+
 (defn header
   [{:keys [get-site-data]}]
   (let [{:keys [twitter github email]} (get-site-data :meta)]
     [:header
-     [:nav [:a {:id "brand" :href "/"} (image "https://s3.stel.codes/nixos-logo.png") [:span "stel.codes"]]
+     [:nav [:a {:id "brand" :href "/"} (image os-logo-uri) [:span "stel.codes"]]
       [:ul {:id "social"}
        [:li [:a {:href github} "Github"]]
        [:li [:a {:href twitter} "Twitter"]]

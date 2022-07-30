@@ -1,6 +1,6 @@
 I've been using [Sway](https://swaywm.org) on [NixOS](https://nixos.org) for about 6 months, and I love it. But some sofware doesn't yet play nice with it. After having major issues with [OBS Studio](https://obsproject.com/)'s Wayland support, I decided to switch to [i3](https://i3wm.org), Sway's spiritual ancestor. But I wanted to know, could I have the option of choosing either one? I discovered the answer is yes! You definitely can.
 
-![An old school computer window diagram](https://s3.stel.codes/ad669870-9bf9-46e9-bc8d-96d670a8cd86.png)
+![An old school computer window diagram](https://user-images.githubusercontent.com/22163194/171310217-61bccaf8-8a02-41f1-a01b-53d991e3e5f0.png)
 
 ## A Window into What I'm Talking About
 
