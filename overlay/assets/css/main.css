@@ -87,7 +87,6 @@ th:not([align]) {
   font-weight: normal;
   font-style: normal;
 }
-/* https://blog.yipl.com.np/defining-color-palette-in-sass-with-variables-6464c3c3b5e5 */
 svg.bars {
   fill: #282a36;
 }
@@ -95,7 +94,7 @@ svg.bars {
 body {
   display: grid;
   grid-template-rows: max-content minmax(min-content, 1fr) max-content;
-  font-family: "Verdana", sans-serif;
+  font-family: mono, "Verdana", sans-serif;
   min-height: 100vh;
   background-color: #282a3b;
   background-image: url("/assets/img/wallpaper.svg");
@@ -106,18 +105,7 @@ body {
 }
 
 a {
-  color: #a4dbe8;
-}
-
-code {
-  font-size: 1rem;
-  overflow: auto;
-  border-radius: 5px;
-}
-code pre {
-  padding: 1rem;
-  border-radius: 5px;
-  overflow: auto;
+  color: #ddc6ff;
 }
 
 main section.window .content, main section.window, nav {
@@ -127,7 +115,7 @@ main section.window .content, main section.window, nav {
 }
 
 nav {
-  background-color: #485376;
+  background-color: #3b435c;
   font-family: "virtue", sans-serif;
   display: grid;
   grid-template-columns: max-content 1fr max-content;
@@ -150,7 +138,7 @@ nav #brand {
   align-content: center;
 }
 nav #brand img {
-  width: 30px;
+  width: 23px;
   margin-right: 0.5rem;
 }
 nav #brand span {
@@ -216,7 +204,7 @@ main.home {
 main section.window {
   display: inline-block;
   padding: 0 0.5rem 0.5rem 0.5rem;
-  background-color: #485376;
+  background-color: #3b435c;
 }
 main section.window .top {
   font-family: "virtue", sans-serif;
@@ -257,7 +245,7 @@ main section.window .content ul.index-list {
   list-style: inside none;
 }
 main section.window .content ul.index-list li {
-  border-bottom: 1px solid rgba(175, 175, 175, 0.5);
+  border-bottom: 1px solid #3b435c;
   padding: 0.7rem;
 }
 main section.window .content ul li:last-child {
@@ -275,12 +263,12 @@ main section.window .content ul li .subtitle {
   font-size: 0.9rem;
   padding-left: 0.5rem;
   margin-left: 0.5rem;
-  border-left: 2px solid #4be273;
+  border-left: 2px solid #ab5a8e;
 }
 main section.window .content .tags {
   padding-left: 0.5rem;
   margin-left: 0.5rem;
-  border-left: 2px solid #4be273;
+  border-left: 2px solid #ab5a8e;
 }
 main section.window .content .tags .tag {
   display: inline-block;
@@ -292,7 +280,7 @@ main section.window .content .tags, main section.window .content .tags a {
 }
 main section.window .content .more-link {
   margin: 1rem 1rem 1rem 1.5rem;
-  border: 1px solid #674dbb;
+  border: 1px solid color(violet, darker);
   padding: 0.3rem;
   font-size: 0.9rem;
   text-align: center;
@@ -301,8 +289,8 @@ main section.window .content .more-link {
   border-radius: 5px;
 }
 main section.window .content .more-link:hover {
-  background: #674dbb;
-  color: #efefef;
+  background: color(violet, darker);
+  color: color(grey, lighter);
 }
 
 section.welcome {
@@ -318,9 +306,6 @@ section.welcome {
   justify-content: center;
   margin: 0.5rem 0;
   align-items: center;
-}
-section.welcome, section.welcome a {
-  color: #efefef;
 }
 @media (min-width: 500px) {
   section.welcome {
@@ -341,7 +326,7 @@ section.welcome img.avatar {
 }
 section.welcome div.text {
   grid-area: text;
-  background-color: #485376;
+  background-color: #3b435c;
   border-radius: 30px;
   justify-self: start;
   padding: 1rem 0rem;
@@ -366,7 +351,7 @@ section.welcome div.text p {
     left: 0.5px;
     top: 30%;
     border: 17px solid transparent;
-    border-right-color: #485376;
+    border-right-color: #3b435c;
     border-left: 0;
     margin-left: -17px;
   }
@@ -395,6 +380,9 @@ article {
     padding: 1rem 1rem;
   }
 }
+article .content a {
+  color: #4be273;
+}
 article img {
   max-width: 100%;
   max-height: 500px;
@@ -403,7 +391,6 @@ article img {
   align-self: center;
   border-radius: 5px;
   justify-self: center;
-  border: 1px solid gray;
 }
 article .subtitle {
   font-style: italic;
@@ -412,7 +399,7 @@ article .subtitle {
 article .top-links {
   display: inline-block;
   justify-self: start;
-  background: #485376;
+  background: #333545;
   border-radius: 15px;
   padding: 0 1rem;
   margin-bottom: 2rem;
@@ -441,6 +428,15 @@ article code {
   padding: 0.2rem;
   border-radius: 5px;
   margin: 1rem 0;
+  font-size: 1rem;
+}
+article code.code-block {
+  display: block;
+  overflow: scroll;
+  padding: 1rem;
+}
+article pre {
+  overflow: scroll;
 }
 article ul {
   margin-bottom: 1rem;
@@ -451,7 +447,7 @@ article .circles {
   justify-self: center;
 }
 article .circles svg {
-  fill: #4be273;
+  fill: #ab5a8e;
   margin: 0 1rem;
   width: 20px;
   stroke-opacity: 0;

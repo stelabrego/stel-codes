@@ -8,22 +8,6 @@
     font-style: normal;
 }
 
-/* https://blog.yipl.com.np/defining-color-palette-in-sass-with-variables-6464c3c3b5e5 */
-@function color($color,$tone){
-    // @warn map-get($palette,$color);
-    @if map-has-key($palette,$color){
-        $color: map-get($palette,$color);
-            @if map-has-key($color,$tone){
-                $tone: map-get($color,$tone);
-                @return $tone;
-            }
-            @warn "unknown tone `#{$tone}` in color";
-            @return null;
-    }
-    @warn "unknown color `#{$color}` in palette";
-    @return null;
-}
-
 $draculafg: #efefef;
 $draculabg: #282a36;
 $draculabg2: #282a3b;
@@ -31,46 +15,24 @@ $draculagrey: #5b6996;
 $draculablue: #7bcbde;
 $draculayellow: #ebf489;
 $draculagreen: #4be273;
+$mintgreen: #84fbc3;
 $draculapink: #ab5a8e;
-$windowbg: darken($draculagrey, 10);
-$linkcolor: lighten($draculablue, 10);
+// $windowbg: darken($draculagrey, 10);
+$windowbg: #3b435c;
+$codebg: lighten($draculabg, 5);
+// $linkcolor: #e2e9b7;
+// $linkcolor: #ebbeff;
+$linkcolor: #ddc6ff;
+// $linkcolor: lighten($draculayellow, 12);
 
 svg.bars {
   fill: $draculabg;
 }
 
-$palette: (
-    black: (
-        base: #050505
-    ),
-    grey: (
-        darker: #2a303b,
-        dark: #3b4351,
-        base: #798496,
-        baselight: #a4abb7,
-        light: #d8d8d8,
-        codeblock: #e3e3e3,
-        lighter: #efefef,
-        lightest: #f5f5f5
-    ),
-    violet: (
-        darker: #674dbb,
-        dark: #996ddb,
-        base: #c398fe,
-        light: #e2ccfe
-    ),
-    blue: (
-        darker: #496FBC,
-        dark: #537dd5,
-        base: #8baafe,
-        light: #c9d4fd
-    )
-);
-
 body {
   display: grid;
   grid-template-rows: max-content minmax(min-content, 1fr) max-content;
-  font-family: "Verdana", sans-serif;
+  font-family: mono, "Verdana", sans-serif;
   min-height: 100vh;
   // background-color: color(violet,darker);
   background-color: $draculabg2;
@@ -85,16 +47,6 @@ a {
   color: $linkcolor;
 }
 
-code {
-  font-size: 1rem;
-  overflow: auto;
-  border-radius: 5px;
-  pre {
-    padding: 1rem;
-    border-radius: 5px;
-    overflow: auto;
-  }
-}
 
 %beveled {
   box-shadow:
@@ -133,7 +85,7 @@ nav {
     grid-auto-flow: column;
     align-content:center;
     img {
-      width: 30px;
+      width: 23px;
       margin-right: .5rem;
     }
     span {
@@ -255,7 +207,7 @@ main {
           margin: 0;
           list-style: inside none;
           li {
-            border-bottom: 1px solid adjust-color(color(gray, lighter), $lightness: -25%, $alpha: -.5);
+            border-bottom: 1px solid $windowbg;
             padding: .7rem;
           }
         }
@@ -278,14 +230,14 @@ main {
             font-size: .9rem;
             padding-left: .5rem;
             margin-left: .5rem;
-            border-left: 2px solid $draculagreen;
+            border-left: 2px solid $draculapink;
           }
         }
       }
       .tags {
         padding-left: .5rem;
         margin-left: .5rem;
-        border-left: 2px solid $draculagreen;
+        border-left: 2px solid $draculapink;
         .tag {
           display: inline-block;
           padding-bottom: .2rem;
@@ -329,9 +281,6 @@ section.welcome {
   align-content: center;
   justify-content: center;
   margin: 0.5rem 0;
-  &, & a {
-    color: color(grey, lighter);
-  }
   @media (min-width: 500px) {
     grid-template-areas: "avatar name"
                          "avatar   text";
@@ -403,6 +352,9 @@ article {
       padding: 1rem 1rem;
     }
   }
+  .content a {
+    color: $draculagreen;
+  }
   img {
     max-width: 100%;
     max-height: 500px;
@@ -411,7 +363,6 @@ article {
     align-self: center;
     border-radius: 5px;
     justify-self: center;
-    border: 1px solid gray;
   }
   .subtitle {
     // color: color(grey, dark);
@@ -422,7 +373,7 @@ article {
     display: inline-block;
     // width: max-content;
     justify-self: start;
-    background: $windowbg;
+    background: $codebg;
     border-radius: 15px;
     padding: 0 1rem;
     margin-bottom: 2rem;
@@ -453,10 +404,19 @@ article {
   }
   code {
     // background: color(grey, codeblock);
-    background: lighten($draculabg, 5);
+    background: $codebg;
     padding: .2rem;
     border-radius: 5px;
     margin: 1rem 0;
+    font-size: 1rem;
+  }
+  code.code-block {
+    display: block;
+    overflow: scroll;
+    padding: 1rem;
+  }
+  pre {
+    overflow: scroll;
   }
   ul {
     margin-bottom: 1rem;
@@ -466,7 +426,7 @@ article {
     margin: 2rem 0 1rem;
     justify-self: center;
     svg {
-      fill: $draculagreen;
+      fill: $draculapink;
       margin: 0 1rem;
       width: 20px;
       stroke-opacity: 0;
