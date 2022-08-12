@@ -1,6 +1,13 @@
 (ns views
-  (:require [nuzzle.hiccup :refer [raw]]
-            [nuzzle.util :as util]))
+  (:require
+   [clojure.string :as str]
+   [nuzzle.hiccup :refer [raw]]))
+
+(defn kebab-case->lower-case
+  [s]
+  (->> (str/split (name s) #"-")
+       (map str/lower-case)
+       (str/join " ")))
 
 (defn image
   "Two-arity version is ambigious"
@@ -21,13 +28,13 @@
          (= (unordered-list {:class "foo"} (list [:p "A"] [:p "B"] [:p "C"]))
             [:ul {:class "foo"} [:li [:p "A"]] [:li [:p "B"]] [:li [:p "C"]]]))
 
-(def os-logo-uri "https://user-images.githubusercontent.com/22163194/171326988-478d1722-b895-4852-a1e4-5689c736b635.svg")
+(def os-logo-url "https://user-images.githubusercontent.com/22163194/171326988-478d1722-b895-4852-a1e4-5689c736b635.svg")
 
 (defn header
-  [{:keys [get-site-data]}]
-  (let [{:keys [twitter github email]} (get-site-data :meta)]
+  [{:nuzzle/keys [get-config]}]
+  (let [{:keys [twitter github email]} (get-config :meta)]
     [:header
-     [:nav [:a {:id "brand" :href "/"} (image os-logo-uri) [:span "stel.codes"]]
+     [:nav [:a {:id "brand" :href "/"} (image os-logo-url) [:span "stel.codes"]]
       [:ul {:id "social"}
        [:li [:a {:href github} "Github"]]
        [:li [:a {:href twitter} "Twitter"]]
@@ -43,37 +50,37 @@
      [:div.content body]]))
 
 (defn tag-group
-  [{:keys [get-site-data tags]}]
+  [{:nuzzle/keys [get-config tags]}]
   {:pre [(set? tags)]}
   [:p.tags
    (for [tag tags]
-     (let [{:keys [uri title]} (get-site-data [:tags tag])]
-       [:a {:class "tag" :href uri} title]))])
+     (let [{:nuzzle/keys [url title]} (get-config [:tags tag])]
+       [:a {:class "tag" :href url} title]))])
 
 (defn window-index-item
-  [{:keys [uri title subtitle tags] :as webpage}]
-  (list [:a {:class "title" :href uri} title]
+  [{:nuzzle/keys [url title tags] :keys [subtitle] :as page}]
+  (list [:a {:class "title" :href url} title]
         (when subtitle [:p.subtitle subtitle])
-        (when (not-empty tags) (tag-group webpage))))
+        (when (not-empty tags) (tag-group page))))
 
 (defn truncated-index-window
-  "Expects a group index webpage"
-  [{:keys [get-site-data index title uri]}]
+  "Expects a group index page"
+  [{:nuzzle/keys [get-config index title url]}]
   (when-not (empty? index)
     (window title
             (list (->> index
-                       (map get-site-data)
+                       (map get-config)
                        (sort-by :sort)
                        (reverse)
                        (take 5)
                        (map window-index-item)
                        (unordered-list {:class "index-list"}))
-                  (when (> (count index) 5) [:a {:class "more-link" :href uri} "more!"])))))
+                  (when (> (count index) 5) [:a {:class "more-link" :href url} "more!"])))))
 
-(defn index-window [{:keys [title index get-site-data]}]
+(defn index-window [{:nuzzle/keys [title index get-config]}]
   (window title
           (unordered-list {:class "index-list"}
-           (->> index (map get-site-data) (map window-index-item)))))
+           (->> index (map get-config) (map window-index-item)))))
 
 (defn welcome-section []
   [:section.welcome
@@ -86,7 +93,7 @@
     #_[:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]]])
 
 (defn layout
-  [{:keys [title id] :as webpage} & content]
+  [{:nuzzle/keys [title page-key] :as page} & content]
   [:html
    [:head
     [:title (if title (str title " | stel.codes") "stel.codes")]
@@ -108,16 +115,17 @@
     (when nil
       [:script
        {:src "https://plausible.io/js/plausible.js", :data-domain "stel.codes", :defer "defer", :async "async"}])]
-   [:body (header webpage) [:main (when (= [] id) {:class "home"}) content] (footer)]])
+   [:body (header page) [:main (when (= [] page-key) {:class "home"}) content] (footer)]])
 
-(defn render-generic-webpage
-  [{:keys [repo prod source id title subtitle tags header-image render-content] :as webpage}]
-  (layout webpage
+(defn render-generic-page
+  [{:nuzzle/keys [page-key title tags render-content]
+    :keys [repo prod source subtitle header-image] :as page}]
+  (layout page
           (welcome-section)
-          (window (util/kebab-case->lower-case (if (> (count id) 1) (nth id (- (count id) 2)) (first id)))
+          (window (kebab-case->lower-case (if (> (count page-key) 1) (nth page-key (- (count page-key) 2)) (first page-key)))
                   [:article (when header-image (image header-image)) [:h1 title]
                    (when subtitle [:p.subtitle subtitle])
-                   (when (not-empty tags) (tag-group webpage))
+                   (when (not-empty tags) (tag-group page))
                    (when (or repo prod source)
                      [:div.top-links (when repo [:span "🧙 " [:a {:href repo} "Open Source Code Repo"]])
                       (when prod [:span "🌙 " [:a {:href prod} "Live App Demo"]])
@@ -125,23 +133,23 @@
                    (render-content)
                    [:div.circles (take 3 (repeat (raw (slurp "svg/circle.svg"))))]])))
 
-(defn render-index-webpage
-  [webpage]
-  (layout webpage
+(defn render-index-page
+  [page]
+  (layout page
           (welcome-section)
-          (index-window webpage)))
+          (index-window page)))
 
 (defn render-homepage
-  [{:keys [get-site-data] :as webpage}]
-  (layout webpage
+  [{:nuzzle/keys [get-config] :as page}]
+  (layout page
           (welcome-section)
-          (truncated-index-window (get-site-data [:coding-projects]))
-          (truncated-index-window (get-site-data [:educational-media]))
-          (truncated-index-window (get-site-data [:blog-posts]))))
+          (truncated-index-window (get-config [:coding-projects]))
+          (truncated-index-window (get-config [:educational-media]))
+          (truncated-index-window (get-config [:blog-posts]))))
 
-(defn render-webpage [{:keys [id] :as webpage}]
+(defn render-page [{:nuzzle/keys [page-key] :as page}]
   (cond
-    (= [] id) (render-homepage webpage)
-    (= [:404] id) (layout webpage [:h1 "404 ;-;"])
-    (contains? webpage :index) (render-index-webpage webpage)
-    :else (render-generic-webpage webpage)))
+    (= [] page-key) (render-homepage page)
+    (= [:404] page-key) (layout page [:h1 "404 ;-;"])
+    (contains? page :index) (render-index-page page)
+    :else (render-generic-page page)))

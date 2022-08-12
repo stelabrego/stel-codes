@@ -19,4 +19,4 @@ These techniques create an **extremely** fast feedback loop for all aspects of m
 
 ## Exporting the Site
 
-When I want to export the site, I run `(export)` in the REPL which is defined in `src/user.clj`. To double check that everything looks right, I run `bb serve` which invokes [Caddy](https://github.com/caddyserver/caddy) to start a static site server. I make sure the website looks alright, and then I run `bb deploy` which invokes `rsync` to copy the static site onto a remote server where it can served from a publicly available IP address.
+When I want to publish the site, I run `(publish)` in the REPL which is defined in `src/user.clj`. To double check that everything looks right, I run `bb serve` which invokes [Caddy](https://github.com/caddyserver/caddy) to start a static site server. I make sure the website looks alright, and then I run `bb deploy` which invokes `rsync` to copy the static site onto a remote server where it can served from a publicly available IP address.
