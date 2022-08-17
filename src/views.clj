@@ -80,7 +80,7 @@
 (defn index-window [{:nuzzle/keys [title index get-config]}]
   (window title
           (unordered-list {:class "index-list"}
-           (->> index (map get-config) (map window-index-item)))))
+                          (->> index (map get-config) (map window-index-item)))))
 
 (defn welcome-section []
   [:section.welcome
@@ -147,9 +147,9 @@
           (truncated-index-window (get-config [:educational-media]))
           (truncated-index-window (get-config [:blog-posts]))))
 
-(defn render-page [{:nuzzle/keys [page-key] :as page}]
+(defn render-page [{:nuzzle/keys [page-key index] :as page}]
   (cond
     (= [] page-key) (render-homepage page)
     (= [:404] page-key) (layout page [:h1 "404 ;-;"])
-    (contains? page :index) (render-index-page page)
+    index (render-index-page page)
     :else (render-generic-page page)))

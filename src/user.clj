@@ -1,11 +1,11 @@
 (ns user
+  #_{:clj-kondo/ignore [:use]}
   (:use clojure.repl)
-  (:require [clojure.pprint :refer [pprint]]
-            [clojure.repl :as repl]
-            [nuzzle.api :as nuzz]))
+  (:require
+   [nuzzle.api :as nuzz]))
 
 (defn serve [] (nuzz/serve :nuzzle/build-drafts? true))
 
-(defn realize [] (pprint (nuzz/realize)))
+(defn diff [] (nuzz/transform-diff))
 
 (defn publish [] (nuzz/publish))

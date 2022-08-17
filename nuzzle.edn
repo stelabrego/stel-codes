@@ -1,14 +1,12 @@
 {:nuzzle/overlay-dir "overlay"
  :nuzzle/base-url "https://stel.codes"
  :nuzzle/sitemap? true
+ :nuzzle/author-registry {:stel {:name "Stel Abrego" :email "stel@stel.codes" :url "https://stel.codes"}}
  :nuzzle/syntax-highlighter
  {:provider :chroma
   :style "dracula"}
  :nuzzle/render-page views/render-page
- :nuzzle/rss-channel
- {:title "Stel Codes"
-  :link "https://stel.codes"
-  :description "Thoughts about programming and whatever else."}
+ :nuzzle/atom-feed {:title "Stel Codes"}
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Page Entries
@@ -21,36 +19,40 @@
  {:nuzzle/content "markdown/using-directus-cms.md"
   :nuzzle/draft? false
   :nuzzle/tags #{:clojure :nixos}
-  :nuzzle/rss? true
+  :nuzzle/feed? true
+  :nuzzle/author :stel
   :nuzzle/title "Using Directus as a CMS for my Blog"
   :header-image "https://user-images.githubusercontent.com/22163194/171312351-c9d6c835-f94b-45a4-8b8a-096bcdcf2084.jpeg"
   :sort 10
-  :subtitle "A flexible SQL DB interface that really shines ✨"}
+  :nuzzle/subtitle "A flexible SQL DB interface that really shines ✨"}
 
  [:blog-posts :babashka-tasks-for-postgresql-backups]
  {:nuzzle/content "markdown/babashka-postgresql-backups.md"
   :nuzzle/draft? false
   :nuzzle/tags #{:clojure :babashka}
-  :nuzzle/rss? true
+  :nuzzle/feed? true
+  :nuzzle/author :stel
   :nuzzle/title "Creating Babashka tasks for postgresql backups"
   :header-image "https://user-images.githubusercontent.com/22163194/171311927-dae60651-bedb-4a35-82f3-e4c48a8d6661.svg"
   :sort 20
-  :subtitle "Why write a Bash script when you can use Clojure?!"}
+  :nuzzle/subtitle "Why write a Bash script when you can use Clojure?!"}
 
  [:blog-posts :i3-or-sway-why-not-both]
  {:nuzzle/content "markdown/i3-or-sway-nixos.md"
   :nuzzle/draft? false
   :nuzzle/tags #{:nixos :i3 :sway :linux}
-  :nuzzle/rss? true
+  :nuzzle/feed? true
+  :nuzzle/author :stel
   :nuzzle/title "i3 or Sway? Why not Both?"
   :header-image "https://user-images.githubusercontent.com/22163194/171310246-ac140e63-0eff-4e19-9837-3263649512a0.png"
   :sort 0
-  :subtitle "How to setup a dual i3 + sway environment on NixOS"}
+  :nuzzle/subtitle "How to setup a dual i3 + sway environment on NixOS"}
 
  ;; Coding Projects
  [:coding-projects :functional-news]
  {:nuzzle/content "markdown/functional-news.md"
   :nuzzle/draft? false
+  :nuzzle/author :stel
   :nuzzle/tags #{:clojure :java :scss}
   :nuzzle/title "Functional News (λn)"
   :header-image "https://user-images.githubusercontent.com/22163194/171310275-06701d92-9d90-44a5-88c1-3a7ff25c534f.jpeg"
@@ -61,6 +63,7 @@
  [:coding-projects :developer-blog]
  {:nuzzle/content "markdown/developer-blog.md"
   :nuzzle/draft? false
+  :nuzzle/author :stel
   :nuzzle/tags #{:clojure :java :scss}
   :nuzzle/title "Developer Blog"
   :prod "https://stel.codes"
@@ -85,7 +88,7 @@
   :nuzzle/title "Getting Clojure by Russ Olsen"
   :header-image "https://user-images.githubusercontent.com/22163194/171310185-dd9b6cc6-d140-4873-8665-abd540110efc.jpeg"
   :sort 20
-  :subtitle "A truly excellent introduction to Clojure"}
+  :nuzzle/subtitle "A truly excellent introduction to Clojure"}
 
  [:educational-media :grid-layout-in-css]
  {:nuzzle/content "markdown/grid-layout-css-eric-meyer.md"
@@ -95,7 +98,7 @@
   :header-image "https://user-images.githubusercontent.com/22163194/171310232-4e09ec6e-0b18-4827-bddf-21d1b52ffea7.jpeg"
   :sort 10
   :source "https://www.oreilly.com/library/view/grid-layout-in/9781491930205"
-  :subtitle "A great reference for the ultimate CSS layout module"}
+  :nuzzle/subtitle "A great reference for the ultimate CSS layout module"}
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Metadata Maps
