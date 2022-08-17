@@ -96,7 +96,7 @@ body {
   grid-template-rows: max-content minmax(min-content, 1fr) max-content;
   font-family: mono, "Verdana", sans-serif;
   min-height: 100vh;
-  background-color: #282a3b;
+  background-color: #262833;
   background-image: url("/assets/img/wallpaper.svg");
   background-attachment: fixed;
   background-size: cover;
@@ -109,8 +109,7 @@ a {
 }
 
 main section.window .content, main section.window, nav {
-  box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(0, 0, 0, 0.2);
-  /*top internal highlight*/
+  box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(0, 0, 0, 0.2); /*top internal highlight*/
   border-radius: 4px;
 }
 
@@ -225,7 +224,7 @@ main section.window .top svg {
   width: 100%;
 }
 main section.window .content {
-  background-color: #282a3b;
+  background-color: #262833;
   color: #efefef;
   display: grid;
 }
