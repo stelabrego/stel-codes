@@ -3,5 +3,5 @@
          repl (shell "rlwrap bb clojure -M:repl")
          serve (if (seq *command-line-args*)
                  (shell (str "caddy file-server --listen :3030 --root " (first *command-line-args*)))
-                 (shell "caddy file-server --listen :3030 --browse --root dist"))
+                 (shell "caddy file-server --listen :3030 --browse --root out"))
          sass (shell "npx sass --no-source-map --watch scss:overlay/assets/css")}}
