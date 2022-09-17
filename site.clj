@@ -64,7 +64,7 @@
 
 (defn window
   [title body]
-  (let [bars (hiccup/raw-html (slurp "svg/bars.svg"))]
+  (let [bars (hiccup/raw-html (slurp "images/bars.svg"))]
     [:section.window
      [:div.top bars [:span.title title] bars]
      [:div.content body]]))
@@ -149,7 +149,7 @@
                       (when prod [:span "🌙 " [:a {:href prod} "Live App Demo"]])
                       (when source [:span "🧑‍🎓 " [:a {:href source} "Find it here!"]])])
                    (render-content)
-                   [:div.circles (take 3 (repeat (hiccup/raw-html (slurp "svg/circle.svg"))))]])))
+                   [:div.circles (take 3 (repeat (hiccup/raw-html (slurp "images/circle.svg"))))]])))
 
 (defn render-index-page
   [page]
@@ -182,7 +182,7 @@
        [:blog-posts :using-directus-cms]
        {:nuzzle/title "Using Directus as a CMS for my Blog"
         :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "markdown/using-directus-cms.md")
+        :nuzzle/render-content (md-content "content/using-directus-cms.md")
         :nuzzle/tags #{:clojure :nixos}
         :nuzzle/feed? true
         :nuzzle/author stel
@@ -193,7 +193,7 @@
        [:blog-posts :babashka-tasks-for-postgresql-backups]
        {:nuzzle/title "Creating Babashka tasks for postgresql backups"
         :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "markdown/babashka-postgresql-backups.md")
+        :nuzzle/render-content (md-content "content/babashka-postgresql-backups.md")
         :nuzzle/tags #{:clojure :babashka}
         :nuzzle/feed? true
         :nuzzle/author stel
@@ -204,7 +204,7 @@
        [:blog-posts :i3-or-sway-why-not-both]
        {:nuzzle/title "i3 or Sway? Why not Both?"
         :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "markdown/i3-or-sway-nixos.md")
+        :nuzzle/render-content (md-content "content/i3-or-sway-nixos.md")
         :nuzzle/tags #{:nixos :i3 :sway :linux}
         :nuzzle/feed? true
         :nuzzle/author stel
@@ -220,7 +220,7 @@
        [:coding-projects :functional-news]
        {:nuzzle/title "Functional News (λn)"
         :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "markdown/functional-news.md")
+        :nuzzle/render-content (md-content "content/functional-news.md")
         :nuzzle/author stel
         :nuzzle/tags #{:clojure :java :scss}
         :header-image "https://user-images.githubusercontent.com/22163194/171310275-06701d92-9d90-44a5-88c1-3a7ff25c534f.jpeg"
@@ -231,7 +231,7 @@
        [:coding-projects :developer-blog]
        {:nuzzle/title "Developer Blog"
         :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "markdown/developer-blog.md")
+        :nuzzle/render-content (md-content "content/developer-blog.md")
         :nuzzle/author stel
         :nuzzle/tags #{:clojure :java :scss}
         :prod "https://stel.codes"
@@ -241,7 +241,7 @@
        [:coding-projects :self-care-android-app]
        {:nuzzle/title "Self Care Android App"
         :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "markdown/self-care-android-app.md")
+        :nuzzle/render-content (md-content "content/self-care-android-app.md")
         :nuzzle/tags #{:java :android}
         :header-image "https://user-images.githubusercontent.com/22163194/171310260-aefcd541-54c3-4269-b643-2af7f50337e2.gif"
         :prod nil
@@ -256,7 +256,7 @@
        [:educational-media :getting-clojure]
        {:nuzzle/title "Getting Clojure by Russ Olsen"
         :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "markdown/getting-clojure-russ-olsen.md")
+        :nuzzle/render-content (md-content "content/getting-clojure-russ-olsen.md")
         :nuzzle/tags #{:clojure :java}
         :header-image "https://user-images.githubusercontent.com/22163194/171310185-dd9b6cc6-d140-4873-8665-abd540110efc.jpeg"
         :sort 20
@@ -265,7 +265,7 @@
        [:educational-media :grid-layout-in-css]
        {:nuzzle/title "Grid Layout in CSS by Eric Meyer"
         :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "markdown/grid-layout-css-eric-meyer.md")
+        :nuzzle/render-content (md-content "content/grid-layout-css-eric-meyer.md")
         :nuzzle/tags #{:css :scss}
         :header-image "https://user-images.githubusercontent.com/22163194/171310232-4e09ec6e-0b18-4827-bddf-21d1b52ffea7.jpeg"
         :sort 10
