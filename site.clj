@@ -1,11 +1,11 @@
 (ns site
   (:require
    [clojure.string :as str]
-   [nuzzle.api :as nuzz]
+   [nuzzle.core :as nuzz]
    [nuzzle.hiccup :as hiccup]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Reused static values
+;; Some random static values
 
 (def base-url "https://stel.codes")
 
@@ -288,8 +288,13 @@
 
 (comment (pages))
 
-(defn serve [_]
-  (nuzz/serve #'pages :overlay-dir "public"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions to use from Clojure CLI
 
+;; clj -T:site develop
+(defn develop [_]
+  (nuzz/develop #'pages :overlay-dir "public"))
+
+;; clj -T:site publish
 (defn publish [_]
   (nuzz/publish pages :base-url base-url :atom-feed {:title "Stel Codes"} :overlay-dir "public"))
