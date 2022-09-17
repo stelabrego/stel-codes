@@ -1,6 +1,7 @@
 {:nuzzle/overlay-dir "overlay"
  :nuzzle/base-url "https://stel.codes"
  :nuzzle/sitemap? true
+ ;; :nuzzle/ignore-pages #{[:blog-posts]}
  :nuzzle/author-registry {:stel {:name "Stel Abrego" :email "stel@stel.codes" :url "https://stel.codes"}}
  :nuzzle/syntax-highlighter
  {:provider :chroma
@@ -24,7 +25,7 @@
   :nuzzle/title "Using Directus as a CMS for my Blog"
   :header-image "https://user-images.githubusercontent.com/22163194/171312351-c9d6c835-f94b-45a4-8b8a-096bcdcf2084.jpeg"
   :sort 10
-  :nuzzle/subtitle "A flexible SQL DB interface that really shines ✨"}
+  :subtitle "A flexible SQL DB interface that really shines ✨"}
 
  [:blog-posts :babashka-tasks-for-postgresql-backups]
  {:nuzzle/content "markdown/babashka-postgresql-backups.md"
@@ -35,7 +36,7 @@
   :nuzzle/title "Creating Babashka tasks for postgresql backups"
   :header-image "https://user-images.githubusercontent.com/22163194/171311927-dae60651-bedb-4a35-82f3-e4c48a8d6661.svg"
   :sort 20
-  :nuzzle/subtitle "Why write a Bash script when you can use Clojure?!"}
+  :subtitle "Why write a Bash script when you can use Clojure?!"}
 
  [:blog-posts :i3-or-sway-why-not-both]
  {:nuzzle/content "markdown/i3-or-sway-nixos.md"
@@ -46,7 +47,7 @@
   :nuzzle/title "i3 or Sway? Why not Both?"
   :header-image "https://user-images.githubusercontent.com/22163194/171310246-ac140e63-0eff-4e19-9837-3263649512a0.png"
   :sort 0
-  :nuzzle/subtitle "How to setup a dual i3 + sway environment on NixOS"}
+  :subtitle "How to setup a dual i3 + sway environment on NixOS"}
 
  ;; Coding Projects
  [:coding-projects :functional-news]
@@ -88,7 +89,7 @@
   :nuzzle/title "Getting Clojure by Russ Olsen"
   :header-image "https://user-images.githubusercontent.com/22163194/171310185-dd9b6cc6-d140-4873-8665-abd540110efc.jpeg"
   :sort 20
-  :nuzzle/subtitle "A truly excellent introduction to Clojure"}
+  :subtitle "A truly excellent introduction to Clojure"}
 
  [:educational-media :grid-layout-in-css]
  {:nuzzle/content "markdown/grid-layout-css-eric-meyer.md"
@@ -98,7 +99,7 @@
   :header-image "https://user-images.githubusercontent.com/22163194/171310232-4e09ec6e-0b18-4827-bddf-21d1b52ffea7.jpeg"
   :sort 10
   :source "https://www.oreilly.com/library/view/grid-layout-in/9781491930205"
-  :nuzzle/subtitle "A great reference for the ultimate CSS layout module"}
+  :subtitle "A great reference for the ultimate CSS layout module"}
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  ;; Metadata Maps
