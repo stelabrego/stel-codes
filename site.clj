@@ -292,4 +292,4 @@
   (nuzz/serve #'pages :overlay-dir "public"))
 
 (defn publish [_]
-  (nuzz/publish pages :atom-feed {:title "Stel Codes"} :overlay-dir "public"))
+  (nuzz/publish pages :base-url base-url :atom-feed {:title "Stel Codes"} :overlay-dir "public"))
