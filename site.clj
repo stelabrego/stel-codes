@@ -20,9 +20,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Utils
 
-(defn md-content [md-path]
-  (fn [_page] (-> md-path slurp nuzz/parse-md)))
-
 (defn kebab-case->lower-case
   [s]
   (->> (str/split (name s) #"-")
@@ -164,6 +161,19 @@
           (truncated-index-window (get-pages [:coding-projects]))
           (truncated-index-window (get-pages [:educational-media]))
           (truncated-index-window (get-pages [:blog-posts]))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Content
+
+(def hiccup-transformations
+  {:code #(hiccup/highlight-code % :chroma {:style :dracula})})
+
+(defn md-content [md-path]
+  (fn [_page] (-> md-path
+                  slurp
+                  nuzz/parse-md
+                  (hiccup/transform-hiccup hiccup-transformations))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Pages
