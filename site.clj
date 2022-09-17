@@ -288,7 +288,7 @@
 
 (comment (pages))
 
-(defn develop [_]
+(defn serve [_]
   (nuzz/serve #'pages :overlay-dir "public"))
 
 (defn publish [_]
