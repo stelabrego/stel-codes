@@ -288,7 +288,5 @@
 (defn develop [_]
   (nuzz/serve #'pages :overlay-dir "public"))
 
-(comment (*1))
-
 (defn publish [_]
-  (nuzz/publish pages))
+  (nuzz/publish pages :atom-feed {:title "Stel Codes"} :overlay-dir "public"))
