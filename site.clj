@@ -108,7 +108,7 @@
     #_[:p "If you're interested in hiring me, here's my CV I also offer virtual tutoring for coding students."]]])
 
 (defn layout
-  [{:nuzzle/keys [title url] :as page} & content]
+  [{:nuzzle/keys [title url] :as _page} & content]
   [:html
    [:head
     [:title (if title (str title " | stel.codes") "stel.codes")]
@@ -130,7 +130,10 @@
     (when nil
       [:script
        {:src "https://plausible.io/js/plausible.js", :data-domain "stel.codes", :defer "defer", :async "async"}])]
-   [:body (header) [:main (when (= [] url) {:class "home"}) content] (footer)]])
+   [:body
+    (header)
+    [:main (when (= [] url) {:class "home"}) content]
+    (footer)]])
 
 (defn render-generic-page
   [{:nuzzle/keys [url title tags render-content]
