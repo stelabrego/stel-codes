@@ -1,4 +1,4 @@
 {:aliases
- {:site {:extra-deps {io.github.stelcodes/nuzzle {:local/root "../nuzzle/main"}}
+ {:site {:extra-deps {codes.stel/nuzzle {:mvn/version "RELEASE"}}
          :extra-paths ["."]
          :ns-default site}}}

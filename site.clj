@@ -181,120 +181,134 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Pages
 
-(defn pages []
-  (-> {;; Homepage
-       []
-       {:nuzzle/title "Home"
-        :nuzzle/render-page render-homepage}
+(def pages
+  {;; Homepage
+   []
+   {:nuzzle/title "Home"
+    :nuzzle/render-page render-homepage}
 
-       ;; Blog Posts
-       [:blog-posts]
-       {:nuzzle/title "Blog Posts"
-        :nuzzle/render-page render-index-page}
+   ;; Blog Posts
+   [:blog-posts]
+   {:nuzzle/title "Blog Posts"
+    :nuzzle/render-page render-index-page
+    :nuzzle/index :children}
 
-       [:blog-posts :using-directus-cms]
-       {:nuzzle/title "Using Directus as a CMS for my Blog"
-        :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "content/using-directus-cms.md")
-        :nuzzle/tags #{:clojure :nixos}
-        :nuzzle/feed? true
-        :nuzzle/author stel
-        :header-image "https://user-images.githubusercontent.com/22163194/171312351-c9d6c835-f94b-45a4-8b8a-096bcdcf2084.jpeg"
-        :sort 10
-        :subtitle "A flexible SQL DB interface that really shines ✨"}
+   [:blog-posts :using-directus-cms]
+   {:nuzzle/title "Using Directus as a CMS for my Blog"
+    :nuzzle/render-page render-generic-page
+    :nuzzle/render-content (md-content "content/using-directus-cms.md")
+    :nuzzle/tags #{:clojure :nixos}
+    :nuzzle/feed? true
+    :nuzzle/author stel
+    :header-image "https://user-images.githubusercontent.com/22163194/171312351-c9d6c835-f94b-45a4-8b8a-096bcdcf2084.jpeg"
+    :sort 10
+    :subtitle "A flexible SQL DB interface that really shines ✨"}
 
-       [:blog-posts :babashka-tasks-for-postgresql-backups]
-       {:nuzzle/title "Creating Babashka tasks for postgresql backups"
-        :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "content/babashka-postgresql-backups.md")
-        :nuzzle/tags #{:clojure :babashka}
-        :nuzzle/feed? true
-        :nuzzle/author stel
-        :header-image "https://user-images.githubusercontent.com/22163194/171311927-dae60651-bedb-4a35-82f3-e4c48a8d6661.svg"
-        :sort 20
-        :subtitle "Why write a Bash script when you can use Clojure?!"}
+   [:blog-posts :babashka-tasks-for-postgresql-backups]
+   {:nuzzle/title "Creating Babashka tasks for postgresql backups"
+    :nuzzle/render-page render-generic-page
+    :nuzzle/render-content (md-content "content/babashka-postgresql-backups.md")
+    :nuzzle/tags #{:clojure :babashka}
+    :nuzzle/feed? true
+    :nuzzle/author stel
+    :header-image "https://user-images.githubusercontent.com/22163194/171311927-dae60651-bedb-4a35-82f3-e4c48a8d6661.svg"
+    :sort 20
+    :subtitle "Why write a Bash script when you can use Clojure?!"}
 
-       [:blog-posts :i3-or-sway-why-not-both]
-       {:nuzzle/title "i3 or Sway? Why not Both?"
-        :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "content/i3-or-sway-nixos.md")
-        :nuzzle/tags #{:nixos :i3 :sway :linux}
-        :nuzzle/feed? true
-        :nuzzle/author stel
-        :header-image "https://user-images.githubusercontent.com/22163194/171310246-ac140e63-0eff-4e19-9837-3263649512a0.png"
-        :sort 0
-        :subtitle "How to setup a dual i3 + sway environment on NixOS"}
+   [:blog-posts :i3-or-sway-why-not-both]
+   {:nuzzle/title "i3 or Sway? Why not Both?"
+    :nuzzle/render-page render-generic-page
+    :nuzzle/render-content (md-content "content/i3-or-sway-nixos.md")
+    :nuzzle/tags #{:nixos :i3 :sway :linux}
+    :nuzzle/feed? true
+    :nuzzle/author stel
+    :header-image "https://user-images.githubusercontent.com/22163194/171310246-ac140e63-0eff-4e19-9837-3263649512a0.png"
+    :sort 0
+    :subtitle "How to setup a dual i3 + sway environment on NixOS"}
 
-       ;; Coding Projects
-       [:coding-projects]
-       {:nuzzle/title "Coding Projects"
-        :nuzzle/render-page render-index-page}
+   ;; Coding Projects
+   [:coding-projects]
+   {:nuzzle/title "Coding Projects"
+    :nuzzle/render-page render-index-page
+    :nuzzle/index :children}
 
-       [:coding-projects :functional-news]
-       {:nuzzle/title "Functional News (λn)"
-        :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "content/functional-news.md")
-        :nuzzle/author stel
-        :nuzzle/tags #{:clojure :java :scss}
-        :header-image "https://user-images.githubusercontent.com/22163194/171310275-06701d92-9d90-44a5-88c1-3a7ff25c534f.jpeg"
-        :prod "https://news.stel.codes"
-        :repo "https://github.com/stelcodes/functional-news"
-        :sort 20}
+   [:coding-projects :functional-news]
+   {:nuzzle/title "Functional News (λn)"
+    :nuzzle/render-page render-generic-page
+    :nuzzle/render-content (md-content "content/functional-news.md")
+    :nuzzle/author stel
+    :nuzzle/tags #{:clojure :java :scss}
+    :header-image "https://user-images.githubusercontent.com/22163194/171310275-06701d92-9d90-44a5-88c1-3a7ff25c534f.jpeg"
+    :prod "https://news.stel.codes"
+    :repo "https://github.com/stelcodes/functional-news"
+    :sort 20}
 
-       [:coding-projects :developer-blog]
-       {:nuzzle/title "Developer Blog"
-        :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "content/developer-blog.md")
-        :nuzzle/author stel
-        :nuzzle/tags #{:clojure :java :scss}
-        :prod "https://stel.codes"
-        :repo "https://github.com/stelcodes/dev-blog"
-        :sort 10}
+   [:coding-projects :developer-blog]
+   {:nuzzle/title "Developer Blog"
+    :nuzzle/render-page render-generic-page
+    :nuzzle/render-content (md-content "content/developer-blog.md")
+    :nuzzle/author stel
+    :nuzzle/tags #{:clojure :java :scss}
+    :prod "https://stel.codes"
+    :repo "https://github.com/stelcodes/dev-blog"
+    :sort 10}
 
-       [:coding-projects :self-care-android-app]
-       {:nuzzle/title "Self Care Android App"
-        :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "content/self-care-android-app.md")
-        :nuzzle/tags #{:java :android}
-        :header-image "https://user-images.githubusercontent.com/22163194/171310260-aefcd541-54c3-4269-b643-2af7f50337e2.gif"
-        :prod nil
-        :repo "https://github.com/stelcodes/self-care-android-app"
-        :sort 0}
+   [:coding-projects :self-care-android-app]
+   {:nuzzle/title "Self Care Android App"
+    :nuzzle/render-page render-generic-page
+    :nuzzle/render-content (md-content "content/self-care-android-app.md")
+    :nuzzle/tags #{:java :android}
+    :header-image "https://user-images.githubusercontent.com/22163194/171310260-aefcd541-54c3-4269-b643-2af7f50337e2.gif"
+    :prod nil
+    :repo "https://github.com/stelcodes/self-care-android-app"
+    :sort 0}
 
-       ;; Educational Resources
-       [:educational-media]
-       {:nuzzle/title "Educational Media"
-        :nuzzle/render-page render-index-page}
+   ;; Educational Resources
+   [:educational-media]
+   {:nuzzle/title "Educational Media"
+    :nuzzle/render-page render-index-page
+    :nuzzle/index :children}
 
-       [:educational-media :getting-clojure]
-       {:nuzzle/title "Getting Clojure by Russ Olsen"
-        :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "content/getting-clojure-russ-olsen.md")
-        :nuzzle/tags #{:clojure :java}
-        :header-image "https://user-images.githubusercontent.com/22163194/171310185-dd9b6cc6-d140-4873-8665-abd540110efc.jpeg"
-        :sort 20
-        :subtitle "A truly excellent introduction to Clojure"}
+   [:educational-media :getting-clojure]
+   {:nuzzle/title "Getting Clojure by Russ Olsen"
+    :nuzzle/render-page render-generic-page
+    :nuzzle/render-content (md-content "content/getting-clojure-russ-olsen.md")
+    :nuzzle/tags #{:clojure :java}
+    :header-image "https://user-images.githubusercontent.com/22163194/171310185-dd9b6cc6-d140-4873-8665-abd540110efc.jpeg"
+    :sort 20
+    :subtitle "A truly excellent introduction to Clojure"}
 
-       [:educational-media :grid-layout-in-css]
-       {:nuzzle/title "Grid Layout in CSS by Eric Meyer"
-        :nuzzle/render-page render-generic-page
-        :nuzzle/render-content (md-content "content/grid-layout-css-eric-meyer.md")
-        :nuzzle/tags #{:css :scss}
-        :header-image "https://user-images.githubusercontent.com/22163194/171310232-4e09ec6e-0b18-4827-bddf-21d1b52ffea7.jpeg"
-        :sort 10
-        :source "https://www.oreilly.com/library/view/grid-layout-in/9781491930205"
-        :subtitle "A great reference for the ultimate CSS layout module"}}
-      (nuzz/add-tag-pages render-index-page)))
+   [:educational-media :grid-layout-in-css]
+   {:nuzzle/title "Grid Layout in CSS by Eric Meyer"
+    :nuzzle/render-page render-generic-page
+    :nuzzle/render-content (md-content "content/grid-layout-css-eric-meyer.md")
+    :nuzzle/tags #{:css :scss}
+    :header-image "https://user-images.githubusercontent.com/22163194/171310232-4e09ec6e-0b18-4827-bddf-21d1b52ffea7.jpeg"
+    :sort 10
+    :source "https://www.oreilly.com/library/view/grid-layout-in/9781491930205"
+    :subtitle "A great reference for the ultimate CSS layout module"}
+
+   [:tags]
+   {:nuzzle/title "Tags"
+    :nuzzle/render-page render-index-page
+    :nuzzle/index :children}})
 
 (comment (pages))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to use from Clojure CLI
 
+(def tag-pages {:render-page #'render-index-page
+                :create-title #(str "#" (name %))})
+
 ;; clj -T:site develop
 (defn develop [_]
-  (nuzz/develop #'pages :overlay-dir "public"))
+  (nuzz/develop #'pages {:overlay-dir "public"
+                         :tag-pages tag-pages}))
 
 ;; clj -T:site publish
 (defn publish [_]
-  (nuzz/publish pages :base-url base-url :atom-feed {:title "Stel Codes"} :overlay-dir "public"))
+  (nuzz/publish pages {:base-url base-url
+                       :atom-feed {:title "Stel Codes"}
+                       :tag-pages tag-pages
+                       :overlay-dir "public"}))
