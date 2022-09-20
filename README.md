@@ -12,7 +12,11 @@ The code in this repo builds my personal blog which is hosted at [stel.codes](ht
 
 To develop my site, I call `clj -T:site develop`. This calls `nuzzle.core/develop` which starts dual development servers. One server is the website server which calls the `:nuzzle/render-page` function for each page I request in the browser, and the other is an nREPL server that chooses a random available port and writes an `.nrepl-port` file to the current working directory so I can quickly jump into my editor and start reloading functions in `site.clj`. I don't even need to refresh the page because I use the `:refresh-interval` option for `nuzzle.core/develop` to load some javascript that automatically refreshes the page at the given interval.
 
+### Content
+
 The content of the site is stored in the `content` directory in Markdown files. Every request to the development website server will get the most recent version of these files because every request triggers a new call to the page's `:nuzzle/render-page` function. I can edit the Markdown and see the website update automatically when using the `:refresh-interval` option.
+
+### Stylesheets
 
 I keep the static assets of the website in the `public` directory and use the `:overlay-dir` option to include them in the static site generation. I like writing CSS as SCSS, so I run `bb sass` in another terminal pane which invokes the NPM sass-compiler package `sass` to watch for changes in the `styles` directory and replace the CSS in the `public` directory when an SCSS file changes. Again, I don't even need to refresh the browser to see the changes take place when using the `:refresh-interval` option.
 
