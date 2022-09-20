@@ -293,8 +293,6 @@
     :nuzzle/render-page render-index-page
     :nuzzle/index :children}})
 
-(comment (pages))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to use from Clojure CLI
 
